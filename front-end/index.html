@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Plataforma educacional para estágios da ETEC. Divulgue vagas, acesse informações sobre o programa de estágio e conheça alunos estagiando.">
+    <meta name="keywords" content="estágio, ETEC, educação, vagas de emprego, programa de estágio, alunos estagiários">
+    <meta name="author" content="ETEC - Centro Paula Souza">
+    <!-- Adições para SEO e acessibilidade -->
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="ETEC Estágios - Plataforma Educacional de Oportunidades">
+    <meta property="og:description" content="Plataforma educacional para estágios da ETEC. Divulgue vagas, acesse informações sobre o programa de estágio e conheça alunos estagiando.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.exemplo.com/etec-estagios">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Font Awesome para ícones adicionais -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous">
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <title>ETEC Estágios - Plataforma Educacional de Oportunidades</title>
+    
+    <!-- Custom CSS Embedded -->
+    <style>
+        /* Custom CSS - Otimizado para Integração com Bootstrap e Foco Educacional */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+        * {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        #main {
+            min-height: 100vh;
+            width: 100vw;
+        }
+
+        .header {
+            height: 18vh;
+            width: 100%;
+            background: #b00000 /* Gradiente para um visual mais dinâmico e educacional */
+        }
+
+        .header .logo-etec {
+            height: 110px;
+        }
+
+        .header .logo-app {
+            height: 110px;
+        }
+
+        .header .estudante {
+            top: 10px;
+            height: 150%;
+            width: auto;
+            max-height: none;
+            max-width: none;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Seção Hero Adicionada: Introdução Educacional - Largura Máxima */
+        .hero {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 60px 0;
+            text-align: center;
+            color: #333;
+            width: 100%;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #b00000;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            overflow: visible;
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+
+        @media (max-width: 991.98px) {
+            .hero .col-lg-8 {
+                padding-left: 24px !important;
+                padding-right: 24px !important;
+            }
+            .hero p {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+        }
+
+        /* Imagem estudante responsiva para telas menores */
+        @media (max-width: 767.98px) {
+            .hero-estudante-img {
+                display: block;
+                margin: 0 auto 20px auto;
+                max-width: 180px;
+                width: 80%;
+                height: auto;
+            }
+            .header .estudante {
+                display: none !important;
+            }
+        }
+        @media (min-width: 768px) {
+            .hero-estudante-img {
+                display: none;
+            }
+        }
+
+        /* Conteúdo Principal: Usando Bootstrap Grid para Responsividade */
+        .content {
+            padding: 60px 0;
+            background-color: #fff;
+        }
+
+        .content-card {
+            height: 200px; /* Tamanho diminuído */
+            max-width: 200px; /* Largura diminuída e fixa para centralização */
+            margin: 0 auto; /* Centraliza as cards */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px; /* Padding reduzido */
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #b00000;
+            color: white;
+            text-decoration: none;
+        }
+
+        .content-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+
+        .content-card img {
+            height: 120px; /* Tamanho da imagem diminuído */
+            width: auto;
+            margin: 0 auto 10px auto; /* Margem reduzida */
+            display: block;
+            max-width: 100%;
+            border-radius: 10px;
+        }
+
+        .content-card p {
+            font-weight: 600;
+            font-size: 0.8rem; /* Fonte ligeiramente menor */
+            line-height: 1;
+            margin: 0;
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+
+        /* Seção de Destaques Adicionada: Estatísticas ou Benefícios Educacionais */
+        .highlights {
+            background-color: #f8f9fa;
+            padding: 60px 0;
+        }
+
+        .highlight-card {
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .highlight-card i {
+            font-size: 3rem;
+            color: #b00000;
+            margin-bottom: 20px;
+        }
+
+        .highlight-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .highlight-card p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .footer {
+            width: 100%;
+            gap: 20px;
+            background-color: #fff; /* Fundo claro para contraste educacional */
+            padding: 40px 0 20px;
+        }
+
+        /* Botões do footer: Otimizados para acessibilidade e responsividade */
+        .footer button {
+            height: 55px;
+            width: 160px;
+            border: none;
+            white-space: nowrap !important;
+            text-align: center;
+            overflow: hidden;
+            font-weight: 600;
+            border-radius: 50px; /* Mais arredondado para botões de call-to-action */
+        }
+
+        /* Ajuste específico para o botão "SOU EMPRESA" */
+        .footer .btn-empresa {
+            background-color: #6c757d !important;
+            border-color: #6c757d !important;
+            color: white !important;
+            width: 180px !important;
+        }
+
+        /* Footer Expandido: Links Adicionais para Sobre, Contato, etc. */
+        .footer-links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .footer-links a {
+            color: #6c757d;
+            margin: 0 15px;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #b00000;
+        }
+
+        .social-icons {
+            margin-top: 15px;
+        }
+
+        .social-icons a {
+            color: #6c757d;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #b00000;
+        }
+
+        /* Bootstrap Overrides and Custom Responsiveness */
+        .bg-danger {
+            background-color: #b00000 !important;
+        }
+
+        .btn-danger {
+            background-color: #b00000 !important;
+            border-color: #b00000 !important;
+            color: white !important;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d !important;
+            border-color: #6c757d !important;
+            color: white !important;
+        }
+
+        /* Ajustes para Responsividade com Bootstrap */
+        @media (max-width: 767.98px) {
+            .header .logo-etec {
+                height: 70px;
+                position: static !important;
+                right: auto !important;
+                max-height: 100% !important;
+            }
+
+            .header {
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                overflow: hidden !important;
+                height: auto;
+                padding: 20px 0;
+            }
+
+            .header img {
+                margin: 0 15px;
+                max-height: 100% !important;
+                object-fit: contain;
+            }
+
+            .header .estudante {
+                visibility: hidden;
+                position: static !important;
+                height: 0 !important;
+                max-height: 0 !important;
+                opacity: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+            }
+
+            .header .logo-app {
+                height: 70px;
+                max-height: 100% !important;
+                object-fit: contain;
+            }
+
+            .hero {
+                padding: 40px 0;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            /* ALTERAÇÃO CRÍTICA: Alinhar as três divs em colunas lado a lado */
+            #content .row {
+                display: flex !important;
+                flex-direction: row !important;
+                justify-content: center !important;
+                flex-wrap: nowrap !important;
+            }
+
+            #content .row > div {
+                flex: 0 0 33.333333% !important;
+                max-width: 33.333333% !important;
+            }
+
+            .content-card {
+                height: 180px !important;
+                max-width: none !important;
+                width: 90% !important;
+                margin: 0 auto !important;
+                padding: 12px !important;
+            }
+
+            .content-card img {
+                height: 100px;
+                margin-bottom: 8px !important;
+            }
+
+            .content-card p {
+                font-size: 0.75rem;
+            }
+
+            .footer {
+                flex-direction: column;
+                gap: 15px;
+                align-items: center !important;
+                padding-bottom: 20px;
+            }
+
+            .footer a {
+                margin: 0 !important;
+                width: 100%;
+                max-width: 220px;
+                display: flex;
+                justify-content: center;
+            }
+
+            .footer button {
+                width: 220px !important;
+                height: 55px !important;
+                font-size: 0.9rem !important;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .footer .btn-empresa {
+                width: 220px !important;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .footer-links a {
+                margin: 5px 0;
+            }
+
+            .social-icons a {
+                margin: 0 8px;
+            }
+        }
+
+        /* Extra small devices - Compacto e acessível */
+        @media (max-width: 575.98px) {
+            .header {
+                height: auto !important;
+                min-height: 50px !important;
+                padding: 15px 0;
+            }
+
+            .header .logo-app,
+            .header .logo-etec {
+                height: 60px !important;
+                max-height: 80% !important;
+                object-fit: contain;
+            }
+
+            /* Para telas muito pequenas, voltar para o layout de coluna */
+            #content .row {
+                flex-direction: column !important;
+                flex-wrap: wrap !important;
+            }
+
+            #content .row > div {
+                flex: 0 0 100% !important;
+                max-width: 100% !important;
+                margin-bottom: 20px;
+                line-height: 1;
+            }
+            
+
+            .content-card {
+                max-width: 85px !important;
+                width: 90% !important;
+                height: 85px !important;
+                padding: 4px !important;
+            }
+
+            .content-card img {
+                height: 80px !important;
+                margin-bottom: 5px !important;
+            }
+
+            .content-card p {
+                font-size: 0.7rem !important;
+                line-height: 1.2;
+            }
+
+            .highlight-card {
+                margin-bottom: 20px;
+            }
+        }
+
+        /* Adições para acessibilidade educacional */
+        .content-card:focus {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+
+        .footer button:focus {
+            outline: 2px solid #b00000;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div id="main" class="d-flex flex-column min-vh-100">
+        <!-- Header - Reformulado com gradiente para apelo visual educacional -->
+        <header class="header d-flex justify-content-center align-items-center position-relative overflow-hidden">
+            <img src="../img/logo-app.png" class="logo-app" alt="Logo da Plataforma de Estágios ETEC" loading="lazy">
+            <img src="../img/logo.png" class="logo-etec position-absolute end-0 me-4" alt="Logo ETEC - Centro Paula Souza" loading="lazy">
+            <img src="../img/estudante.png" class="estudante position-absolute start-0 ms-4" alt="Ilustração de estudante em estágio" loading="lazy">
+        </header>
+
+        <!-- Seção Hero: Introdução Educacional - Largura Máxima, sem botão -->
+        <section class="hero">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 mx-auto px-3">
+                    <h1>Bem-vindo à Plataforma de Estágios ETEC</h1>
+                    <p>Descubra oportunidades de estágio que impulsionam sua carreira. Conectamos alunos talentosos com empresas inovadoras, promovendo o aprendizado prático e o desenvolvimento profissional.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Seção de Destaques: Benefícios Educacionais -->
+        <section class="highlights">
+            <div class="container">
+                <div class="row justify-content-center g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="highlight-card">
+                            <i class="fas fa-users"></i>
+                            <h3>Alunos Conectados</h3>
+                            <p>Conecte-se com milhares de alunos talentosos da ETEC prontos para contribuir em sua empresa.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="highlight-card">
+                            <i class="fas fa-briefcase"></i>
+                            <h3>Oportunidades Reais</h3>
+                            <p>Divulgue vagas de estágio e encontre o perfil ideal para impulsionar seu negócio.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="highlight-card">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h3>Desenvolvimento Profissional</h3>
+                            <p>Apoie o crescimento de jovens profissionais através de experiências práticas e educativas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer - Reformulado com fundo claro e botões mais acessíveis -->
+        <footer class="footer d-flex justify-content-center align-items-center pb-4 pt-3 mt-auto">
+            <a href="login_aluno.html" class="me-3" aria-label="Acessar como aluno">
+                <button class="btn btn-danger rounded-pill fw-semibold px-4 py-2">SOU ALUNO</button>
+            </a>
+            <a href="login_empresa.html" class="me-3" aria-label="Acessar como empresa">
+                <button class="btn btn-empresa rounded-pill fw-semibold px-4 py-2">SOU EMPRESA</button>
+            </a>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

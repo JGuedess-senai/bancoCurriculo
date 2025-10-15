@@ -1,0 +1,118 @@
+<?php
+include("conexao.php");
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Função simples para sanitizar texto
+    function san($v) {
+        return trim(htmlspecialchars((string)$v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
+    }
+
+    // Recebe e sanitiza os dados do formulário
+    $nome = isset($_POST['nome']) ? san($_POST['nome']) : '';
+    $idade = isset($_POST['idade']) ? (int) $_POST['idade'] : null;
+    $telefone = isset($_POST['telefone']) ? san($_POST['telefone']) : '';
+    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+    $curso = isset($_POST['curso']) ? san($_POST['curso']) : '';
+    $periodo = isset($_POST['periodo']) ? san($_POST['periodo']) : '';
+    $ano_ingresso = isset($_POST['ano_ingresso']) ? (int) $_POST['ano_ingresso'] : null;
+    $turno = isset($_POST['turno']) ? san($_POST['turno']) : '';
+    $objetivo = isset($_POST['objetivo']) ? san($_POST['objetivo']) : '';
+    $habilidades = isset($_POST['habilidades']) ? san($_POST['habilidades']) : '';
+    $experiencia = isset($_POST['experiencia']) ? san($_POST['experiencia']) : '';
+    $cursos = isset($_POST['cursos']) ? san($_POST['cursos']) : '';
+
+    // Validações básicas
+    if (empty($nome)) {
+        echo "<script>alert('O campo Nome é obrigatório.'); window.history.back();</script>";
+        exit;
+    }
+    if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "<script>alert('Email inválido.'); window.history.back();</script>";
+        exit;
+    }
+
+    // Upload do arquivo (currículo) - somente PDF até 5MB
+    $nomeArquivo = "";
+    if (isset($_FILES['curriculo']) && $_FILES['curriculo']['error'] !== UPLOAD_ERR_NO_FILE) {
+        $file = $_FILES['curriculo'];
+
+        if ($file['error'] !== UPLOAD_ERR_OK) {
+            echo "<script>alert('Erro no upload do arquivo. Código: " . $file['error'] . "'); window.history.back();</script>";
+            exit;
+        }
+
+        // Limite de 5 MB
+        $maxSize = 5 * 1024 * 1024;
+        if ($file['size'] > $maxSize) {
+            echo "<script>alert('Arquivo muito grande. Máximo permitido: 5 MB.'); window.history.back();</script>";
+            exit;
+        }
+
+        // Verifica MIME via finfo
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->file($file['tmp_name']);
+        $allowed = ['application/pdf'];
+        if (!in_array($mime, $allowed, true)) {
+            echo "<script>alert('Formato inválido. Envie apenas arquivos PDF.'); window.history.back();</script>";
+            exit;
+        }
+
+        // Cria pasta de uploads (caminho absoluto)
+        $uploadDir = __DIR__ . '/uploads/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        // Gera nome seguro e único
+        $ext = '.pdf';
+        $novoNome = time() . '_' . bin2hex(random_bytes(8)) . $ext;
+        $destino = $uploadDir . $novoNome;
+
+        if (!move_uploaded_file($file['tmp_name'], $destino)) {
+            echo "<script>alert('Falha ao salvar o arquivo no servidor.'); window.history.back();</script>";
+            exit;
+        }
+
+        // Armazenar apenas o nome do arquivo no banco
+        $nomeArquivo = $novoNome;
+    }
+
+    // Prepara o SQL
+    $sql = "INSERT INTO curriculos 
+        (nome, idade, telefone, email, curso, periodo, ano_ingresso, turno, objetivo, habilidades, experiencia, cursos, curriculo) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    // Preparar statement usando a conexão criada em conexao.php ($conexao)
+    $stmt = $conexao->prepare($sql);
+    if ($stmt === false) {
+        die('Erro ao preparar statement: ' . $conexao->error);
+    }
+
+    // Usar todos como strings para simplicidade (será convertido pelo MySQL conforme necessário)
+    $types = str_repeat('s', 13);
+    $stmt->bind_param(
+        $types,
+        $nome,
+        $idade,
+        $telefone,
+        $email,
+        $curso,
+        $periodo,
+        $ano_ingresso,
+        $turno,
+        $objetivo,
+        $habilidades,
+        $experiencia,
+        $cursos,
+        $nomeArquivo
+    );
+
+    if ($stmt->execute()) {
+        echo "<script>alert('Currículo enviado com sucesso!'); window.location.href='../front-end/painel_aluno.html';</script>";
+    } else {
+        echo "Erro ao salvar: " . $stmt->error;
+    }
+
+    $stmt->close();
+    $conexao->close();
+}
+?>
