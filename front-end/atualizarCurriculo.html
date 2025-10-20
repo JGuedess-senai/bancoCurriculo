@@ -986,7 +986,7 @@
                         <label class="form-check-label">Autorizo o compartilhamento do meu currículo com empresas parceiras.</label>
                     </div> -->
 
-                    <button type="submit" class="btn-submit">Enviar para Análise</button>
+                    <button type="submit" class="btn-submit">Atualizar Informações</button>
                 </form>
             </div>
         </main>
@@ -1287,6 +1287,63 @@
                 }
             });
         });
+    </script>
+    <script>
+        // --- Prefill do formulário de atualizarCurriculo ---
+        (function prefillCurriculo() {
+            const form = document.getElementById('form');
+            if (!form) return;
+
+            fetch('../back-end/get_curriculo.php', { method: 'GET', credentials: 'include' })
+                .then(response => {
+                    if (response.status === 401) {
+                        window.location.href = 'login_aluno.html';
+                        return null;
+                    }
+                    if (response.status === 404) return null; // sem currículo
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data) return;
+                    // Mapear campos esperados para os inputs pelo name
+                    const mapping = ['nome', 'idade', 'telefone', 'email', 'curso', 'periodo', 'ano_ingresso', 'turno', 'objetivo', 'habilidades', 'experiencia', 'cursos'];
+                    mapping.forEach(key => {
+                        const el = form.querySelector('[name="' + key + '"]');
+                        if (el) {
+                            if (el.tagName.toLowerCase() === 'input' || el.tagName.toLowerCase() === 'textarea' || el.tagName.toLowerCase() === 'select') {
+                                el.value = data[key] ?? '';
+                            }
+                        }
+                    });
+
+                    // Se houver arquivo de currículo armazenado, mostrar link
+                    if (data.curriculo) {
+                        const container = document.createElement('div');
+                        container.className = 'mb-3';
+                        const label = document.createElement('label');
+                        label.className = 'form-label';
+                        label.textContent = 'Currículo Atual:';
+                        const a = document.createElement('a');
+                        a.href = '../back-end/uploads/' + data.curriculo;
+                        a.target = '_blank';
+                        a.rel = 'noopener noreferrer';
+                        a.textContent = 'Abrir PDF existente';
+                        a.className = 'btn btn-outline-danger btn-sm';
+                        container.appendChild(label);
+                        container.appendChild(document.createElement('br'));
+                        container.appendChild(a);
+
+                        // Inserir antes do input file
+                        const fileInput = form.querySelector('input[type=file][name=curriculo]');
+                        if (fileInput && fileInput.parentNode) {
+                            fileInput.parentNode.insertBefore(container, fileInput);
+                        } else {
+                            form.appendChild(container);
+                        }
+                    }
+                })
+                .catch(err => console.error('Erro ao carregar currículo:', err));
+        })();
     </script>
 </body>
 

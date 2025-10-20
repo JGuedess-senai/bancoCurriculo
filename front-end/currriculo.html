@@ -772,30 +772,61 @@
       window.location.href = 'atualizarCurriculo.html';
     }
 
-    // Dados falsos para simulação
-    const dadosFalsos = {
-      nome: "João Silva",
-      idade: "22",
-      telefone: "(11) 98765-4321",
-      email: "joao.silva@example.com",
-      curso: "Desenvolvimento de Sistemas",
-      periodo: "2º módulo",
-      ano_ingresso: "2022",
-      turno: "Tarde",
-      objetivo: "Desenvolver carreira em programação web, focando em front-end e inovação tecnológica.",
-      habilidades: "HTML, CSS, JavaScript, Python, React JS",
-      experiencia: "Estágio em desenvolvimento front-end por 6 meses na empresa XYZ, onde criei interfaces responsivas e colaborei em projetos de e-commerce.",
-      cursos: "Curso de React JS online (2023); Certificação em Python pela Plataforma A (2022)."
-    };
-
+    // Carregar curriculo real do backend e renderizar
     document.addEventListener('DOMContentLoaded', function () {
-      document.getElementById('curriculoNome').textContent = dadosFalsos.nome;
-      document.getElementById('curriculoContato').textContent = `Idade: ${dadosFalsos.idade} | Telefone: ${dadosFalsos.telefone} | E-mail: ${dadosFalsos.email}`;
-      document.getElementById('curriculoEducacao').textContent = `Curso: ${dadosFalsos.curso} | Período: ${dadosFalsos.periodo} | Ano de Ingresso: ${dadosFalsos.ano_ingresso} | Turno: ${dadosFalsos.turno}`;
-      document.getElementById('curriculoObjetivo').textContent = dadosFalsos.objetivo;
-      document.getElementById('curriculoHabilidades').innerHTML = dadosFalsos.habilidades.split(',').map(item => `<li>${item.trim()}</li>`).join('');
-      document.getElementById('curriculoExperiencia').textContent = dadosFalsos.experiencia;
-      document.getElementById('curriculoCursos').textContent = dadosFalsos.cursos;
+      fetch('../back-end/get_curriculo.php', { method: 'GET', credentials: 'include' })
+        .then(response => {
+          if (response.status === 401) {
+            // redireciona para o login caso não autenticado
+            window.location.href = 'login_aluno.html';
+            return null;
+          }
+          if (response.status === 404) {
+            return null; // sem curriculo ainda
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (!data) {
+            // Exibir mensagem amigável quando não houver currículo
+            document.getElementById('curriculoNome').textContent = 'Nenhum currículo encontrado';
+            document.getElementById('curriculoContato').textContent = 'Crie seu currículo em "Criar Currículo" ou atualize em "Atualizar Currículo".';
+            document.getElementById('curriculoEducacao').textContent = '';
+            document.getElementById('curriculoObjetivo').textContent = '';
+            document.getElementById('curriculoHabilidades').innerHTML = '';
+            document.getElementById('curriculoExperiencia').textContent = '';
+            document.getElementById('curriculoCursos').textContent = '';
+            return;
+          }
+
+          // Preencher campos com os dados retornados
+          document.getElementById('curriculoNome').textContent = data.nome || '';
+          document.getElementById('curriculoContato').textContent = `Idade: ${data.idade || ''} | Telefone: ${data.telefone || ''} | E-mail: ${data.email || ''}`;
+          document.getElementById('curriculoEducacao').textContent = `Curso: ${data.curso || ''} | Período: ${data.periodo || ''} | Ano de Ingresso: ${data.ano_ingresso || ''} | Turno: ${data.turno || ''}`;
+          document.getElementById('curriculoObjetivo').textContent = data.objetivo || '';
+          document.getElementById('curriculoHabilidades').innerHTML = (data.habilidades || '').split(',').filter(Boolean).map(item => `<li>${item.trim()}</li>`).join('');
+          document.getElementById('curriculoExperiencia').textContent = data.experiencia || '';
+          document.getElementById('curriculoCursos').textContent = data.cursos || '';
+
+          // Mostrar link para o PDF se existir
+          if (data.curriculo) {
+            const cont = document.getElementById('curriculoContainer');
+            const linkWrap = document.createElement('div');
+            linkWrap.className = 'mb-3 text-center';
+            const a = document.createElement('a');
+            a.href = '../back-end/uploads/' + data.curriculo;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.className = 'btn btn-outline-danger';
+            a.textContent = 'Abrir PDF do Currículo';
+            linkWrap.appendChild(a);
+            cont.insertBefore(linkWrap, cont.firstChild);
+          }
+        })
+        .catch(err => {
+          console.error('Erro ao carregar currículo:', err);
+          document.getElementById('curriculoNome').textContent = 'Erro ao carregar currículo';
+        });
     });
 
     // Sidebar e dropdown scripts (copiados do painel_aluno)

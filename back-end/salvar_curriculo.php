@@ -1,5 +1,6 @@
 <?php
 include("conexao.php");
+session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Função simples para sanitizar texto
@@ -77,42 +78,106 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $nomeArquivo = $novoNome;
     }
 
-    // Prepara o SQL
-    $sql = "INSERT INTO curriculos 
-        (nome, idade, telefone, email, curso, periodo, ano_ingresso, turno, objetivo, habilidades, experiencia, cursos, curriculo) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    // Preparar statement usando a conexão criada em conexao.php ($conexao)
-    $stmt = $conexao->prepare($sql);
-    if ($stmt === false) {
-        die('Erro ao preparar statement: ' . $conexao->error);
+    // Determine o email do aluno autenticado (se disponível na sessão)
+    $emailAluno = '';
+    if (isset($_SESSION['aluno'])) {
+        $alunoId = intval($_SESSION['aluno']);
+        $s = $conexao->prepare("SELECT email FROM alunos WHERE id = ? LIMIT 1");
+        $s->bind_param("i", $alunoId);
+        $s->execute();
+        $res = $s->get_result();
+        if ($r = $res->fetch_assoc()) {
+            $emailAluno = $r['email'];
+        }
+        $s->close();
     }
 
-    // Usar todos como strings para simplicidade (será convertido pelo MySQL conforme necessário)
-    $types = str_repeat('s', 13);
-    $stmt->bind_param(
-        $types,
-        $nome,
-        $idade,
-        $telefone,
-        $email,
-        $curso,
-        $periodo,
-        $ano_ingresso,
-        $turno,
-        $objetivo,
-        $habilidades,
-        $experiencia,
-        $cursos,
-        $nomeArquivo
-    );
+    // Se não há email do aluno na sessão, usamos o email enviado no formulário (fallback)
+    $emailParaSalvar = !empty($emailAluno) ? $emailAluno : $email;
+
+    // Verificar se já existe um currículo para esse email (fazer update)
+    $check = $conexao->prepare("SELECT id FROM curriculos WHERE email = ? ORDER BY data_envio DESC LIMIT 1");
+    $check->bind_param("s", $emailParaSalvar);
+    $check->execute();
+    $resCheck = $check->get_result();
+
+    $params = [
+        'nome' => $nome,
+        'idade' => $idade,
+        'telefone' => $telefone,
+        'email' => $emailParaSalvar,
+        'curso' => $curso,
+        'periodo' => $periodo,
+        'ano_ingresso' => $ano_ingresso,
+        'turno' => $turno,
+        'objetivo' => $objetivo,
+        'habilidades' => $habilidades,
+        'experiencia' => $experiencia,
+        'cursos' => $cursos,
+        'curriculo' => $nomeArquivo
+    ];
+
+    if ($rowCheck = $resCheck->fetch_assoc()) {
+        // Atualizar o registro existente
+        $idExistente = intval($rowCheck['id']);
+        $sql = "UPDATE curriculos SET nome = ?, idade = ?, telefone = ?, email = ?, curso = ?, periodo = ?, ano_ingresso = ?, turno = ?, objetivo = ?, habilidades = ?, experiencia = ?, cursos = ?, curriculo = ? WHERE id = ?";
+        $stmt = $conexao->prepare($sql);
+        if ($stmt === false) {
+            die('Erro ao preparar statement: ' . $conexao->error);
+        }
+        $types = 'sissssissssssi';
+        $stmt->bind_param(
+            $types,
+            $params['nome'],
+            $params['idade'],
+            $params['telefone'],
+            $params['email'],
+            $params['curso'],
+            $params['periodo'],
+            $params['ano_ingresso'],
+            $params['turno'],
+            $params['objetivo'],
+            $params['habilidades'],
+            $params['experiencia'],
+            $params['cursos'],
+            $params['curriculo'],
+            $idExistente
+        );
+
+    } else {
+        // Inserir novo registro
+        $sql = "INSERT INTO curriculos (nome, idade, telefone, email, curso, periodo, ano_ingresso, turno, objetivo, habilidades, experiencia, cursos, curriculo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $conexao->prepare($sql);
+        if ($stmt === false) {
+            die('Erro ao preparar statement: ' . $conexao->error);
+        }
+        $types = 'sissssissssss';
+        $stmt->bind_param(
+            $types,
+            $params['nome'],
+            $params['idade'],
+            $params['telefone'],
+            $params['email'],
+            $params['curso'],
+            $params['periodo'],
+            $params['ano_ingresso'],
+            $params['turno'],
+            $params['objetivo'],
+            $params['habilidades'],
+            $params['experiencia'],
+            $params['cursos'],
+            $params['curriculo']
+        );
+    }
 
     if ($stmt->execute()) {
-        echo "<script>alert('Currículo enviado com sucesso!'); window.location.href='../front-end/painel_aluno.html';</script>";
+        echo "<script>alert('Currículo salvo com sucesso!'); window.location.href='../front-end/painel_aluno.html';</script>";
     } else {
         echo "Erro ao salvar: " . $stmt->error;
     }
 
     $stmt->close();
+    $check->close();
     $conexao->close();
 }
 ?>
