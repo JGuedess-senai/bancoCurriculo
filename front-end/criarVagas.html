@@ -101,7 +101,7 @@
         .profile-section {
             margin-top: auto;
             position: relative;
-            padding: 0 25px 25px;
+            padding: 0 15px 25px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             overflow: visible;
         }
@@ -893,6 +893,11 @@
                     </div>
 
                     <div class="mb-3">
+                        <label class="form-label">Carga Horária:</label>
+                        <textarea class="form-control" name="requisitos" rows="3" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
                         <label class="form-label">Salário (R$):</label>
                         <input type="text" class="form-control" id="salario" name="salario" oninput="validarSalario()">
                     </div>
@@ -903,24 +908,21 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Tipo de Vaga:</label>
+                        <label class="form-label">Curso de Preferência:</label>
                         <select class="form-select" name="tipo" required>
                             <option value="">Selecione</option>
-                            <option>Estágio</option>
-                            <option>CLT</option>
-                            <option>PJ</option>
-                            <option>Freelancer</option>
+                            <option>Administração</option>
+                            <option>Agropecuária</option>
+                            <option>Desenvolvimento de Sistemas</option>
+                            <option>Informática</option>
+                            <option>Recursos Humanos</option>
+                            <option>Zootecnia</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Data de Expiração:</label>
                         <input type="date" class="form-control" name="data_expiracao" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Upload de Imagem da Vaga (opcional):</label>
-                        <input type="file" class="form-control" name="imagem" accept="image/*">
                     </div>
 
                     <button type="submit" class="btn-submit">Criar Vaga</button>
