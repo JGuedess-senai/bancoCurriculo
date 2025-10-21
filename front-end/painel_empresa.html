@@ -384,11 +384,12 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       border: none;
-    }
-
-    .stats-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 40px rgba(255, 0, 0, 0.2);
+      /* manter estrutura de card padrão e garantir que ocupe altura disponível via .h-100 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
     }
 
     .stats-card i {
@@ -407,6 +408,12 @@
     .stats-card p {
       color: #ccc;
       font-size: 1.1rem;
+      margin: 0;
+    }
+
+    .stats-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(255, 0, 0, 0.2);
     }
 
     .action-card {
@@ -536,31 +543,50 @@
     }
 
     /* ----- responsivo ----- */
-    @media (max-width: 900px) {
-
-      /* Ajustado o breakpoint para acomodar o novo width (era 860px) */
+    @media (max-width: 1199.98px) {
       .sidebar {
         width: 250px;
       }
-
-      /* Proporcional ao aumento */
       .content {
         margin-left: 250px;
-        padding: 24px;
+        padding: 30px;
+      }
+
+      .custom-dropdown .custom-dropdown-menu {
+        left: auto !important;
+        right: -20px !important;
+        width: 200px;
+        min-width: 200px;
+      }
+
+      /* Igualar altura dos action-cards em telas <= 1199px */
+      .action-card {
+        min-height: 260px; /* ajuste se quiser aumentar/diminuir */
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+      }
+      .action-card .card-body {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
       }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 991.98px) {
       .sidebar {
         width: 100%;
         height: auto;
         position: relative;
         box-shadow: none;
+        display: none !important;
       }
 
       .content {
         margin-left: 0;
         padding: 20px;
+        margin-top: 0;
       }
 
       .stats-card,
@@ -570,11 +596,79 @@
 
       .profile-section .dropdown-menu {
         position: static;
-        /* Em mobile, dropdown inline para evitar issues */
         top: auto;
         margin-top: 10px;
         box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
       }
+
+      /* Ajustes para mobile */
+      .content h1 {
+        font-size: 2rem;
+      }
+
+      .content p {
+        font-size: 16px;
+      }
+
+      .stats-card {
+        padding: 20px;
+      }
+
+      .stats-card i {
+        font-size: 2.5rem;
+      }
+
+      .stats-card h3 {
+        font-size: 1.5rem;
+      }
+
+      .action-card {
+        padding: 20px;
+      }
+
+      .img-boas-vindas-desktop {
+        max-width: 120px !important;
+      }
+
+      .navbar-logo-mobile {
+        height: 50px !important;
+      }
+    }
+
+    @media (max-width: 575.98px) {
+      .content {
+        padding: 15px;
+      }
+
+      .content h1 {
+        font-size: 1.75rem;
+      }
+
+      .stats-card,
+      .action-card {
+        padding: 15px;
+      }
+
+      .btn-modern {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+
+      .modal-dialog {
+        margin: 10px;
+      }
+    }
+
+    /* Logo na navbar mobile (copiado do painel_aluno) */
+    .navbar-logo-mobile {
+      height: 80px;
+      width: auto;
+      transition: transform 0.3s ease;
+      filter: brightness(1.1);
+    }
+
+    .navbar-logo-mobile:hover {
+      transform: scale(1.1);
     }
   </style>
 </head>
@@ -632,7 +726,7 @@
       aria-labelledby="sidebarOffcanvasLabel">
       <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="sidebarOffcanvasLabel">Área da Empresa</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">
         <ul class="list-unstyled">
@@ -676,33 +770,52 @@
     <main class="content">
       <div class="row mb-5">
         <div class="col-12">
-          <h1>Bem-vindo à sua área de Empresa!</h1>
-          <p>Aqui você pode consultar currículo, acompanhar seus candidatos de estágio e atualizar suas informações.
-            Vamos começar!</p>
+          <!-- Layout desktop: textos à esquerda, imagem à direita -->
+          <div class="d-none d-lg-flex align-items-center justify-content-center mb-4" style="gap: 32px;">
+            <div>
+              <h1 class="display-4 mb-3">Bem-vindo à sua área de Empresa!</h1>
+              <p class="lead">Aqui você pode consultar currículo, acompanhar seus candidatos de estágio e atualizar suas informações. Vamos começar!</p>
+            </div>
+            <img src="../img/logo3.png" alt="etec-conecta"
+              style="max-width: 230px; width: 100%; height: auto; flex-shrink: 0; margin-bottom: 15px;"
+              class="img-boas-vindas-desktop">
+          </div>
+
+          <!-- Layout mobile/tablet: textos normais -->
+          <div class="d-block d-lg-none">
+            <h1 class="display-4 mb-3">Bem-vindo à sua área de Empresa!</h1>
+            <p class="lead">Aqui você pode consultar currículo, acompanhar seus candidatos de estágio e atualizar suas informações. Vamos começar!</p>
+          </div>
         </div>
       </div>
 
       <!-- Seção de Estatísticas (Cards Modernos) -->
       <div class="row mb-5">
         <div class="col-md-4 mb-4">
-          <div class="card stats-card">
-            <i class="fa-solid fa-briefcase"></i>
-            <h3>15</h3>
-            <p>Vagas Ativas</p>
+          <div class="card stats-card h-100">
+            <div class="card-body text-center">
+              <i class="fa-solid fa-briefcase"></i>
+              <h3>15</h3>
+              <p>Vagas Ativas</p>
+            </div>
           </div>
         </div>
         <div class="col-md-4 mb-4">
-          <div class="card stats-card">
-            <i class="fa-solid fa-users"></i>
-            <h3>42</h3>
-            <p>Candidatos</p>
+          <div class="card stats-card h-100">
+            <div class="card-body text-center">
+              <i class="fa-solid fa-users"></i>
+              <h3>42</h3>
+              <p>Candidatos</p>
+            </div>
           </div>
         </div>
         <div class="col-md-4 mb-4">
-          <div class="card stats-card">
-            <i class="fa-solid fa-clock"></i>
-            <h3>8 </h3>
-            <p>Candidaturas Pendentes</p>
+          <div class="card stats-card h-100">
+            <div class="card-body text-center">
+              <i class="fa-solid fa-clock"></i>
+              <h3>8</h3>
+              <p>Candidaturas Pendentes</p>
+            </div>
           </div>
         </div>
       </div>
@@ -724,15 +837,18 @@
           </div>
         </div>
       </div>
-      <div class="col-12 col-md-6 col-lg-4">
-        <div class="card action-card h-100">
-          <div class="card-body">
-            <h4 class="card-title"><i class="fa-solid fa-info-circle text-danger me-2"></i>Programa de Estágio</h4>
-            <p class="card-text">Veja todas as informações necessárias sobre o programa de estágio.</p>
-            <a href="#" class="btn-modern">Informações sobre</a>
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <div class="card action-card h-100">
+            <div class="card-body">
+              <h4 class="card-title"><i class="fa-solid fa-info-circle text-danger me-2"></i>Programa de Estágio</h4>
+              <p class="card-text">Veja todas as informações necessárias sobre o programa de estágio.</p>
+              <a href="#" class="btn-modern w-100">Informações sobre</a>
+            </div>
           </div>
         </div>
       </div>
+
     </main>
   </div>
 
