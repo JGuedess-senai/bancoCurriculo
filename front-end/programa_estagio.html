@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Programa de Estágio - Empresa</title>
+    <script src="https://kit.fontawesome.com/e66b0e408d.js" crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+    <style>
+        /* --- Copiado do painel_aluno: estilos base e da sidebar --- */
+        /* ----- layout base ----- */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #f4f6f9;
+        }
+
+        h1,
+        h2 {
+            font-family: 'Russo One';
+        }
+
+        /* ----- sidebar fixa ----- */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 293px;
+            background: linear-gradient(180deg, #000 0%, #1a1a1a 100%);
+            color: #fff;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            height: 100vh;
+            z-index: 1000;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3);
+            transition: width 0.3s ease;
+        }
+
+        .sidebar-top {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar h2 {
+            margin: 0 0 35px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.6rem;
+            letter-spacing: 1.5px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .sidebar ul li {
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #ff0000;
+            transform: translateX(5px);
+            box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+        }
+
+        .sidebar ul li a.active {
+            background-color: #ff0000;
+            box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+        }
+
+        .sidebar ul li a i {
+            margin-right: 12px;
+            width: 20px;
+        }
+
+        /* ----- perfil / dropdown ----- */
+        .profile-section {
+            margin-top: auto;
+            position: relative;
+            padding: 0 15px 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: visible;
+        }
+
+        .profile-section .dropdown-toggle {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            padding: 14px 0;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .profile-section .dropdown-toggle:hover {
+            background-color: rgba(255, 0, 0, 0.2);
+        }
+
+        .profile-section .dropdown-toggle::after {
+            color: white;
+            margin-left: auto;
+            border-top-color: white;
+        }
+
+        .profile-section .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 5px;
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
+            z-index: 1050;
+            min-width: auto;
+            padding: 10px 0;
+            animation: slideDown 0.3s ease forwards;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-section .dropdown-item {
+            color: white;
+            padding: 12px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-section .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .profile-section .dropdown-item:hover {
+            background-color: #e00000;
+            transform: translateX(5px);
+        }
+
+        .profile-section .dropdown-item i {
+            margin-right: 10px;
+            width: 18px;
+        }
+
+        /* Custom Dropdown (copiado do painel_aluno) */
+        .custom-dropdown {
+            position: relative;
+        }
+
+        .custom-dropdown-toggle {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 30px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            margin: 0 -15px;
+        }
+
+        .custom-dropdown-toggle:hover {
+            background-color: rgba(255, 0, 0, 0.3);
+            transform: scale(1.02);
+        }
+
+        .custom-dropdown-toggle i {
+            transition: transform 0.2s ease;
+        }
+
+        .custom-dropdown.active .custom-dropdown-toggle i {
+            transform: rotate(180deg);
+        }
+
+        .custom-dropdown-menu {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            right: 0;
+            margin-bottom: 12px !important;
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
+            z-index: 1050;
+            min-width: auto;
+            padding: 10px 0;
+            list-style: none;
+            opacity: 0;
+            transform: translateY(30px);
+            visibility: hidden;
+            transition: all 0.4s ease-out;
+        }
+
+        .custom-dropdown.active .custom-dropdown-menu {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+        }
+
+        /* Custom Dropdown Mobile */
+        .custom-dropdown-mobile {
+            position: relative;
+        }
+
+        .custom-dropdown-toggle-mobile {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background-color: transparent;
+        }
+
+        .custom-dropdown-toggle-mobile:hover {
+            background-color: rgba(255, 0, 0, 0.3);
+            transform: scale(1.02);
+        }
+
+        .custom-dropdown-toggle-mobile i:last-child {
+            transition: transform 0.2s ease;
+        }
+
+        .custom-dropdown-mobile.active .custom-dropdown-toggle-mobile i:last-child {
+            transform: rotate(180deg);
+        }
+
+        .custom-dropdown-menu-mobile {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 12px;
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
+            z-index: 1050;
+            min-width: auto;
+            padding: 10px 0;
+            list-style: none;
+            opacity: 0;
+            transform: translateY(-30px);
+            visibility: hidden;
+            transition: all 0.4s ease-out;
+        }
+
+        .custom-dropdown-mobile.active .custom-dropdown-menu-mobile {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+        }
+
+        .custom-dropdown-item-mobile {
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .custom-dropdown-item-mobile:last-child {
+            border-bottom: none;
+        }
+
+        .custom-dropdown-item-mobile:hover {
+            background-color: #e00000;
+            color: white;
+        }
+
+        .custom-dropdown-item-mobile i {
+            margin-right: 10px;
+            width: 18px;
+        }
+
+        /* Garantir que o offcanvas permita overflow para o dropdown */
+        .offcanvas-body {
+            overflow: visible !important;
+        }
+
+        .offcanvas {
+            overflow: visible !important;
+        }
+
+        /* ----- área de conteúdo (rola independente) ----- */
+        .content {
+            margin-left: 290px;
+            min-height: 100vh;
+            padding: 40px;
+            background: #f4f6f9;
+            box-sizing: border-box;
+        }
+
+        .content h1 {
+            color: #000;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        .content p {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        /* Cards modernos no content */
+        .stats-card {
+            background: linear-gradient(135deg, #1c1c1c 0%, #2c2c2c 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .stats-card i {
+            font-size: 3rem;
+            color: #ff0000;
+            margin-bottom: 15px;
+        }
+
+        .stats-card h3 {
+            font-family: 'Russo One';
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .stats-card p {
+            color: #ccc;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.2);
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            border-left: 5px solid #ff0000;
+        }
+
+        .action-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .action-card h4 {
+            color: #000;
+            margin-bottom: 15px;
+            font-family: 'Russo One';
+        }
+
+        .action-card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .btn-modern {
+            background: linear-gradient(135deg, #ff0000 0%, #e00000 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+            color: white;
+        }
+
+        /* ----- modal ----- */
+        .modal {
+            z-index: 1055;
+        }
+
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background-color: #1c1c1c;
+            color: white;
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: scaleIn 0.3s ease;
+            margin-top: 50px;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.8);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            border-bottom: none;
+            padding: 30px 30px 0;
+        }
+
+        .modal-header h2 {
+            color: white;
+            font-family: 'Russo One';
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .modal-header i {
+            color: #ff0000;
+        }
+
+        .modal-body {
+            padding: 0 30px 30px;
+        }
+
+        .modal-body hr {
+            border-color: #333;
+            margin: 20px 0;
+        }
+
+        .modal-body h3 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-family: 'Russo One';
+        }
+
+        .btn-close {
+            filter: invert(1);
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-close:hover {
+            opacity: 1;
+        }
+
+
+        /* ----- responsivo ----- */
+        @media (max-width: 1199.98px) {
+            .sidebar {
+                width: 250px;
+            }
+
+            .content {
+                margin-left: 250px;
+                padding: 30px;
+            }
+
+            .custom-dropdown .custom-dropdown-menu {
+                left: auto !important;
+                right: -20px !important;
+                width: 200px;
+                min-width: 200px;
+            }
+
+            .action-card {
+                min-height: 260px;
+                display: flex;
+                flex-direction: column;
+                box-sizing: border-box;
+            }
+
+            .action-card .card-body {
+                flex: 1 1 auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                box-shadow: none;
+                display: none !important;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 20px;
+                margin-top: 0;
+            }
+
+            .stats-card,
+            .action-card {
+                margin-bottom: 20px;
+            }
+
+            .profile-section .dropdown-menu {
+                position: static;
+                top: auto;
+                margin-top: 10px;
+                box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+            }
+
+            /* Ajustes para mobile */
+            .content h1 {
+                font-size: 2rem;
+            }
+
+            .content p {
+                font-size: 16px;
+            }
+
+            .stats-card {
+                padding: 20px;
+            }
+
+            .stats-card i {
+                font-size: 2.5rem;
+            }
+
+            .stats-card h3 {
+                font-size: 1.5rem;
+            }
+
+            .action-card {
+                padding: 20px;
+            }
+
+            .img-boas-vindas-desktop {
+                max-width: 120px !important;
+            }
+
+            .navbar-logo-mobile {
+                height: 50px !important;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .content {
+                padding: 15px;
+            }
+
+            .content h1 {
+                font-size: 1.75rem;
+            }
+
+            .stats-card,
+            .action-card {
+                padding: 15px;
+            }
+
+            .btn-modern {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .modal-dialog {
+                margin: 10px;
+            }
+        }
+
+        /* Logo na navbar mobile (copiado do painel_aluno) */
+        .navbar-logo-mobile {
+            height: 80px;
+            width: auto;
+            transition: transform 0.3s ease;
+            filter: brightness(1.1);
+        }
+
+        .navbar-logo-mobile:hover {
+            transform: scale(1.1);
+        }
+
+        /* --- Estilos específicos do programa estagio --- */
+        .programa-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            max-width: 1600px;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+
+        .programa-container:hover {
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .programa-container h2 {
+            color: #ff0000;
+            font-family: 'Russo One';
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .programa-container h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, #ff0000 0%, #e00000 100%);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        .programa-intro {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .programa-intro p {
+            font-size: 18px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .beneficios-card,
+        .como-funciona-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .beneficios-card:hover,
+        .como-funciona-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .beneficios-card h4,
+        .como-funciona-card h4 {
+            color: #333;
+            margin-bottom: 15px;
+            font-family: 'Russo One';
+        }
+
+        .beneficios-list,
+        .funciona-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .beneficios-list li,
+        .funciona-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            align-items: center;
+        }
+
+        .beneficios-list li:last-child,
+        .funciona-list li:last-child {
+            border-bottom: none;
+        }
+
+        .beneficios-list li i,
+        .funciona-list li i {
+            color: #ff0000;
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        /* Responsivo para programa */
+        @media (max-width: 768px) {
+            .programa-container {
+                padding: 25px 20px;
+                margin: 10px;
+                border-radius: 12px;
+            }
+
+            .programa-intro p {
+                font-size: 16px;
+            }
+
+            .beneficios-card,
+            .como-funciona-card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid p-0 m-0">
+        <!-- Navbar Mobile -->
+        <nav class="navbar navbar-dark bg-dark d-lg-none">
+            <div class="container-fluid">
+                <span class="navbar-brand mb-0 h1">Área da Empresa</span>
+                <div class="d-flex align-items-center justify-content-center flex-grow-1">
+                    <img src="../img/logo3.png" alt="etec-conecta" class="navbar-logo-mobile">
+                </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Sidebar Desktop -->
+        <nav class="sidebar d-none d-lg-flex flex-column">
+            <div class="sidebar-top">
+                <h2>Área da Empresa</h2>
+                <ul>
+                    <li><a href="painel_empresa.html"><i class="fa-solid fa-house"></i>Inicio</a></li>
+                    <li><a href="verVagas.html"><i class="fa-solid fa-briefcase"></i>Vagas</a></li>
+                </ul>
+            </div>
+
+            <!-- Profile Dropdown -->
+            <div class="profile-section">
+                <div class="custom-dropdown">
+                    <a class="custom-dropdown-toggle" href="#" role="button">
+                        <span id="empresaNome">Nome da Empresa</span>
+                        <i class="fa-solid fa-chevron-up"></i>
+                    </a>
+                    <ul class="custom-dropdown-menu">
+                        <li><a class="custom-dropdown-item" href="#" data-bs-toggle="modal"
+                                data-bs-target="#configuracoesModal">
+                                <i class="fa-solid fa-gear"></i>Configurações
+                            </a></li>
+                        <li><a class="custom-dropdown-item" href="#" data-bs-toggle="modal"
+                                data-bs-target="#ajudaModal">
+                                <i class="fa-solid fa-circle-info"></i>Ajuda
+                            </a></li>
+                        <li><a class="custom-dropdown-item btn-sair" href="index.html">
+                                <i class="fa-solid fa-right-from-bracket"></i>Sair
+                            </a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Sidebar Mobile (Offcanvas) -->
+        <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="sidebarOffcanvas"
+            aria-labelledby="sidebarOffcanvasLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="sidebarOffcanvasLabel">Área da Empresa</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="list-unstyled">
+                    <li class="mb-3">
+                        <a href="painel_empresa.html"
+                            class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
+                            <i class="fa-solid fa-user me-3"></i>Seu Perfil
+                        </a>
+                    </li>
+                    <li class="mb-3">
+                        <a href="#"
+                            class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
+                            <i class="fa-solid fa-briefcase me-3"></i>Vagas
+                        </a>
+                    </li>
+                </ul>
+
+                <hr class="text-white">
+
+                <!-- Profile Section Mobile -->
+                <div class="custom-dropdown-mobile">
+                    <a class="custom-dropdown-toggle-mobile" href="#" role="button">
+                        <i class="fa-solid fa-building me-2"></i><span id="empresaNomeMobile">Nome da Empresa</span>
+                        <i class="fa-solid fa-chevron-up"></i>
+                    </a>
+                    <ul class="custom-dropdown-menu-mobile">
+                        <li><a class="custom-dropdown-item-mobile mobile-modal-trigger" href="#"
+                                data-modal-target="#configuracoesModal">
+                                <i class="fa-solid fa-gear me-2"></i>Configurações
+                            </a></li>
+                        <li><a class="custom-dropdown-item-mobile mobile-modal-trigger" href="#"
+                                data-modal-target="#ajudaModal">
+                                <i class="fa-solid fa-circle-info me-2"></i>Ajuda
+                            </a></li>
+                        <li><a class="custom-dropdown-item-mobile btn-sair" href="index.html">
+                                <i class="fa-solid fa-right-from-bracket me-2"></i>Sair
+                            </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="content">
+            <!-- Container do programa -->
+            <div class="programa-container">
+                <h2>Programa de Estágio</h2>
+
+                <div class="programa-intro">
+                    <p>O Programa de Estágio da ETEC-Conecta é uma iniciativa inovadora que serve como uma ponte entre
+                        empresas parceiras e alunos talentosos das Escolas Técnicas Estaduais (ETECs). Nosso objetivo é
+                        facilitar conexões significativas, permitindo que empresas encontrem candidatos qualificados
+                        para oportunidades de estágio, enquanto os alunos ganham experiência prática no mercado de
+                        trabalho.</p>
+                </div>
+
+                <!-- Seção de Benefícios -->
+                <div class="beneficios-card">
+                    <h4><i class="fa-solid fa-star text-danger me-2"></i>Benefícios para Empresas</h4>
+                    <ul class="beneficios-list">
+                        <li><i class="fa-solid fa-check"></i>Acesso a um banco de talentos qualificados e motivados.
+                        </li>
+                        <li><i class="fa-solid fa-check"></i>Processo simplificado de recrutamento e seleção.</li>
+                        <li><i class="fa-solid fa-check"></i>Oportunidade de contribuir para a formação profissional de
+                            jovens.</li>
+                        <li><i class="fa-solid fa-check"></i>Possibilidade de identificar futuros colaboradores
+                            permanentes.</li>
+                        <li><i class="fa-solid fa-check"></i>Suporte completo da plataforma para gerenciamento de vagas
+                            e candidaturas.</li>
+                    </ul>
+                </div>
+
+                <!-- Seção de Como Funciona -->
+                <div class="como-funciona-card">
+                    <h4><i class="fa-solid fa-cogs text-danger me-2"></i>Como Funciona</h4>
+                    <ul class="funciona-list">
+                        <li><i class="fa-solid fa-1"></i>Empresas criam vagas de estágio detalhando requisitos e
+                            benefícios.</li>
+                        <li><i class="fa-solid fa-2"></i>Alunos enviam seus currículos e se candidatam às oportunidades.
+                        </li>
+                        <li><i class="fa-solid fa-3"></i>Empresas revisam currículos e selecionam candidatos para
+                            entrevistas.</li>
+                        <li><i class="fa-solid fa-4"></i>Processo de contratação é realizado diretamente entre empresa e
+                            aluno.</li>
+                        <li><i class="fa-solid fa-5"></i>A plataforma oferece ferramentas para acompanhar o progresso
+                            das candidaturas.</li>
+                    </ul>
+                </div>
+
+                <!-- Call to Action -->
+                <div class="text-center">
+                    <p class="mb-4">Pronto para começar? Crie sua primeira vaga e conecte-se com os melhores talentos!
+                    </p>
+                    <a href="criar_vaga.html" class="btn-modern">Criar Vaga Agora</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Configurações -->
+    <div class="modal fade" id="configuracoesModal" tabindex="-1" aria-labelledby="configuracoesModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="configuracoesModalLabel">
+                        <i class="fa-solid fa-gear"></i> Configurações
+                    </h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="inputNomeEmpresa" class="form-label">Nome da Empresa</label>
+                                <input type="text" class="form-control" id="inputNomeEmpresa"
+                                    placeholder="Nome da sua empresa">
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="inputEmailEmpresa" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="inputEmailEmpresa"
+                                    placeholder="contato@empresa.com" disabled>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputSenhaEmpresa" class="form-label">Alterar Senha</label>
+                            <input type="password" class="form-control" id="inputSenhaEmpresa" placeholder="Nova senha">
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-3">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="notificacoesEmailEmpresa"
+                                        checked>
+                                    <label class="form-check-label" for="notificacoesEmailEmpresa">Receber notificações
+                                        por email</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-danger">Salvar Configurações</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ajuda -->
+    <div class="modal fade" id="ajudaModal" tabindex="-1" aria-labelledby="ajudaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="ajudaModalLabel">
+                        <i class="fa-solid fa-circle-info"></i> Ajuda
+                    </h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="accordion" id="accordionAjuda">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Perguntas Frequentes
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                                data-bs-parent="#accordionAjuda">
+                                <div class="accordion-body">
+                                    <ul class="list-unstyled">
+                                        <li class="mb-3">
+                                            <strong>Como participar do Programa de Estágio?</strong><br>
+                                            Empresas parceiras podem criar vagas diretamente na plataforma.
+                                        </li>
+                                        <li class="mb-3">
+                                            <strong>Quais são os requisitos para os alunos?</strong><br>
+                                            Alunos devem estar matriculados em uma ETEC e ter interesse em oportunidades
+                                            de estágio.
+                                        </li>
+                                        <li class="mb-3">
+                                            <strong>Como funciona o processo de seleção?</strong><br>
+                                            Empresas revisam currículos enviados e realizam entrevistas conforme
+                                            necessário.
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Contato do Suporte
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                                data-bs-parent="#accordionAjuda">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-12 col-md-4 mb-3">
+                                            <div class="text-center">
+                                                <i class="fa-solid fa-envelope fa-2x text-danger mb-2"></i>
+                                                <p><strong>Email</strong><br>suporte@exemplo.com</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4 mb-3">
+                                            <div class="text-center">
+                                                <i class="fa-solid fa-phone fa-2x text-danger mb-2"></i>
+                                                <p><strong>Telefone</strong><br>(11) 1234-5678</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4 mb-3">
+                                            <div class="text-center">
+                                                <i class="fa-solid fa-comments fa-2x text-danger mb-2"></i>
+                                                <p><strong>Chat</strong><br>Disponível no canto inferior direito</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <script>
+        // Função placeholder para carregar páginas (substitua por AJAX real se necessário)
+        function carregarPagina(pagina) {
+            console.log('Carregando página: ' + pagina);
+        }
+
+        // Adicione onclick nos links da sidebar/offcanvas para simular navegação (exceto dropdowns)
+        document.querySelectorAll('.sidebar a[href="#"], .offcanvas a[href="#"]').forEach(link => {
+            if (link.classList.contains('dropdown-toggle') ||
+                link.classList.contains('dropdown-item') ||
+                link.classList.contains('mobile-modal-trigger') ||
+                link.classList.contains('custom-dropdown-toggle-mobile')) {
+                return;
+            }
+
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const texto = this.textContent.trim();
+                carregarPagina(texto.toLowerCase() + '.html');
+
+                // Só fechar offcanvas em mobile
+                if (this.closest('.offcanvas')) {
+                    const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('sidebarOffcanvas'));
+                    if (offcanvas) {
+                        offcanvas.hide();
+                    }
+                }
+            });
+        });
+
+        // Evento para o botão sair - restrito aos botões com classe .btn-sair
+        document.querySelectorAll('.btn-sair').forEach(sairBtn => {
+            sairBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (confirm('Deseja sair da conta?')) {
+                    window.location.href = sairBtn.href; // redireciona para o href do link
+                }
+            });
+        });
+
+        // Fechar offcanvas quando clicar fora dele (exceto dropdown mobile)
+        document.addEventListener('click', function (e) {
+            const offcanvas = document.getElementById('sidebarOffcanvas');
+            const toggle = document.querySelector('[data-bs-target="#sidebarOffcanvas"]');
+            const customDropdownMobile = document.querySelector('.custom-dropdown-mobile');
+
+            if (customDropdownMobile && customDropdownMobile.contains(e.target)) return;
+            if (e.target.closest('.custom-dropdown-menu-mobile')) return;
+            if (e.target.closest('.custom-dropdown-toggle-mobile')) return;
+
+            if (offcanvas && !offcanvas.contains(e.target) && toggle && !toggle.contains(e.target)) {
+                const offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvas);
+                if (offcanvasInstance) {
+                    offcanvasInstance.hide();
+                }
+            }
+        });
+
+        // Indicar mobile view com classe no body
+        function checkMobile() {
+            if (window.innerWidth < 992) {
+                document.body.classList.add('mobile-view');
+            } else {
+                document.body.classList.remove('mobile-view');
+            }
+        }
+
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+
+        // Controle dos dropdowns customizados
+        document.addEventListener('DOMContentLoaded', function () {
+            const customDropdown = document.querySelector('.custom-dropdown');
+            const customToggle = document.querySelector('.custom-dropdown-toggle');
+
+            const customDropdownMobile = document.querySelector('.custom-dropdown-mobile');
+            const customToggleMobile = document.querySelector('.custom-dropdown-toggle-mobile');
+
+            function setupDropdown(dropdown, toggle) {
+                if (dropdown && toggle) {
+                    toggle.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        dropdown.classList.toggle('active');
+
+                        document.querySelectorAll('.custom-dropdown, .custom-dropdown-mobile').forEach(otherDropdown => {
+                            if (otherDropdown !== dropdown) otherDropdown.classList.remove('active');
+                        });
+                    });
+                }
+            }
+
+            setupDropdown(customDropdown, customToggle);
+            setupDropdown(customDropdownMobile, customToggleMobile);
+
+            // Fechar dropdowns ao clicar fora
+            document.addEventListener('click', function (e) {
+                if (customDropdown && !customDropdown.contains(e.target)) customDropdown.classList.remove('active');
+                if (customDropdownMobile && !customDropdownMobile.contains(e.target) && !e.target.closest('.custom-dropdown-menu-mobile')) customDropdownMobile.classList.remove('active');
+            });
+        });
+
+        // --- Buscar nome da empresa e preencher spans (usa get_empresa.php se existir) ---
+        (function carregarNomeEmpresa() {
+            const endpoint = '../back-end/get_empresa.php';
+            // Tenta buscar, mas falha silenciosamente se não existir
+            fetch(endpoint, { method: 'GET', credentials: 'include' })
+                .then(response => {
+                    if (!response.ok) {
+                        // Não faz nada se endpoint não existir ou retornar erro
+                        console.warn('get_empresa.php não disponível ou retornou erro:', response.status);
+                        return null;
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data) return;
+                    if (data.nome || data.email) {
+                        const nome = data.nome || data.email || 'Sua Conta';
+                        const span = document.getElementById('empresaNome');
+                        const spanMobile = document.getElementById('empresaNomeMobile');
+                        if (span) span.textContent = nome;
+                        if (spanMobile) spanMobile.textContent = nome;
+                    }
+                })
+                .catch(err => {
+                    console.debug('Ignorado: erro ao tentar obter nome da empresa (provavelmente endpoint ausente):', err);
+                });
+        })();
+
+        // Controle específico para modais no mobile
+        document.querySelectorAll('.mobile-modal-trigger').forEach(modalTrigger => {
+            modalTrigger.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const modalId = this.getAttribute('data-modal-target');
+                const modalElement = document.querySelector(modalId);
+
+                if (modalElement) {
+                    const dropdown = this.closest('.custom-dropdown-mobile');
+                    if (dropdown) dropdown.classList.remove('active');
+
+                    const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('sidebarOffcanvas'));
+                    if (offcanvas) {
+                        offcanvas.hide();
+                        setTimeout(() => {
+                            const modal = new bootstrap.Modal(modalElement);
+                            modal.show();
+                        }, 300);
+                    } else {
+                        const modal = new bootstrap.Modal(modalElement);
+                        modal.show();
+                    }
+                }
+            });
+        });
+
+        // Manter funcionalidade normal para desktop (placeholders caso precise)
+        document.querySelectorAll('[data-bs-toggle="modal"]').forEach(modalTrigger => {
+            modalTrigger.addEventListener('click', function (e) {
+                if (window.innerWidth < 992) {
+                    if (this.classList.contains('mobile-modal-trigger')) return;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
