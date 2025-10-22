@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Criar Vaga - Empresa</title>
+    <title>Seu Perfil - Empresa</title>
     <script src="https://kit.fontawesome.com/e66b0e408d.js" crossorigin="anonymous"></script>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -106,7 +106,82 @@
             overflow: visible;
         }
 
-        /* Custom Dropdown */
+        .profile-section .dropdown-toggle {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            padding: 14px 0;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .profile-section .dropdown-toggle:hover {
+            background-color: rgba(255, 0, 0, 0.2);
+        }
+
+        .profile-section .dropdown-toggle::after {
+            color: white;
+            margin-left: auto;
+            border-top-color: white;
+        }
+
+        .profile-section .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 5px;
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
+            z-index: 1050;
+            min-width: auto;
+            padding: 10px 0;
+            animation: slideDown 0.3s ease forwards;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-section .dropdown-item {
+            color: white;
+            padding: 12px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-section .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .profile-section .dropdown-item:hover {
+            background-color: #e00000;
+            transform: translateX(5px);
+        }
+
+        .profile-section .dropdown-item i {
+            margin-right: 10px;
+            width: 18px;
+        }
+
+        /* Custom Dropdown (copiado do painel_aluno) */
         .custom-dropdown {
             position: relative;
         }
@@ -164,308 +239,6 @@
             opacity: 1;
             transform: translateY(0);
             visibility: visible;
-        }
-
-        .custom-dropdown-item {
-            color: white;
-            text-decoration: none;
-            padding: 12px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-            transition: background-color 0.2s ease;
-            display: flex;
-            align-items: center;
-        }
-
-        .custom-dropdown-item:last-child {
-            border-bottom: none;
-        }
-
-        .custom-dropdown-item:hover {
-            background-color: #e00000;
-            color: white;
-        }
-
-        .custom-dropdown-item i {
-            margin-right: 10px;
-            width: 18px;
-        }
-
-        /* ----- área de conteúdo (rola independente) ----- */
-        .content {
-            margin-left: 290px;
-            min-height: 100vh;
-            padding: 40px;
-            background: #f4f6f9;
-            box-sizing: border-box;
-        }
-
-        .content h1 {
-            color: #000;
-            margin-bottom: 30px;
-            font-size: 2.5rem;
-        }
-
-        .content p {
-            font-size: 18px;
-            color: #333;
-            margin-bottom: 40px;
-        }
-
-        /* Cards modernos no content */
-        .stats-card {
-            background: linear-gradient(135deg, #1c1c1c 0%, #2c2c2c 100%);
-            color: white;
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: none;
-        }
-
-        .stats-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.2);
-        }
-
-        .stats-card i {
-            font-size: 3rem;
-            color: #ff0000;
-            margin-bottom: 15px;
-        }
-
-        .stats-card h3 {
-            font-family: 'Russo One';
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: white;
-        }
-
-        .stats-card p {
-            color: #ccc;
-            font-size: 1.1rem;
-        }
-
-        .action-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
-            border-left: 5px solid #ff0000;
-        }
-
-        .action-card:hover {
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .action-card h4 {
-            color: #000;
-            margin-bottom: 15px;
-            font-family: 'Russo One';
-        }
-
-        .action-card p {
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        .btn-modern {
-            background: linear-gradient(135deg, #ff0000 0%, #e00000 100%);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-modern:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
-            color: white;
-        }
-
-        /* ----- modal ----- */
-        .modal {
-            z-index: 1060;
-        }
-
-        .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.6);
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        .modal-content {
-            background-color: #1c1c1c;
-            color: white;
-            border-radius: 15px;
-            border: none;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            animation: scaleIn 0.3s ease;
-            margin-top: 50px;
-        }
-
-        @keyframes scaleIn {
-            from {
-                transform: scale(0.8);
-            }
-
-            to {
-                transform: scale(1);
-            }
-        }
-
-        .modal-header {
-            border-bottom: none;
-            padding: 30px 30px 0;
-        }
-
-        .modal-header h2 {
-            color: white;
-            font-family: 'Russo One';
-            margin: 0;
-            font-size: 1.8rem;
-        }
-
-        .modal-header i {
-            color: #ff0000;
-        }
-
-        .modal-body {
-            padding: 0 30px 30px;
-        }
-
-        .modal-body hr {
-            border-color: #333;
-            margin: 20px 0;
-        }
-
-        .modal-body h3,
-        .modal-body h4 {
-            color: #fff;
-            margin-bottom: 10px;
-            font-family: 'Russo One';
-        }
-
-        .btn-close {
-            filter: invert(1);
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-        }
-
-        .btn-close:hover {
-            opacity: 1;
-        }
-
-
-        /* ----- responsivo ----- */
-        @media (max-width: 1199.98px) {
-            .sidebar {
-                width: 250px;
-            }
-
-            .content {
-                margin-left: 250px;
-                padding: 30px;
-            }
-        }
-
-        @media (max-width: 991.98px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                box-shadow: none;
-                display: none !important;
-            }
-
-            .content {
-                margin-left: 0;
-                padding: 20px;
-                margin-top: 0;
-            }
-
-            .stats-card,
-            .action-card {
-                margin-bottom: 20px;
-            }
-
-            .profile-section .dropdown-menu {
-                position: static;
-                top: auto;
-                margin-top: 10px;
-                box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
-            }
-
-            /* Ajustes para mobile */
-            .content h1 {
-                font-size: 2rem;
-            }
-
-            .content p {
-                font-size: 16px;
-            }
-
-            .stats-card {
-                padding: 20px;
-            }
-
-            .stats-card i {
-                font-size: 2.5rem;
-            }
-
-            .stats-card h3 {
-                font-size: 1.5rem;
-            }
-
-            .action-card {
-                padding: 20px;
-            }
-
-            .img-boas-vindas-desktop {
-                max-width: 120px !important;
-            }
-
-            .navbar-logo-mobile {
-                height: 50px !important;
-            }
-        }
-
-        @media (max-width: 575.98px) {
-            .content {
-                padding: 15px;
-            }
-
-            .content h1 {
-                font-size: 1.75rem;
-            }
-
-            .stats-card,
-            .action-card {
-                padding: 15px;
-            }
-
-            .btn-modern {
-                padding: 10px 20px;
-                font-size: 14px;
-            }
-
-            .modal-dialog {
-                margin: 10px;
-            }
         }
 
         /* Custom Dropdown Mobile */
@@ -562,25 +335,311 @@
             overflow: visible !important;
         }
 
-        /* Animação de hover/touch para links de navegação mobile */
-        .nav-link-mobile {
+        /* ----- área de conteúdo (rola independente) ----- */
+        .content {
+            margin-left: 290px;
+            min-height: 100vh;
+            padding: 40px;
+            background: #f4f6f9;
+            box-sizing: border-box;
+        }
+
+        .content h1 {
+            color: #000;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        .content p {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        /* Cards modernos no content */
+        .stats-card {
+            background: linear-gradient(135deg, #1c1c1c 0%, #2c2c2c 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .stats-card i {
+            font-size: 3rem;
+            color: #ff0000;
+            margin-bottom: 15px;
+        }
+
+        .stats-card h3 {
+            font-family: 'Russo One';
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .stats-card p {
+            color: #ccc;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.2);
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            border-left: 5px solid #ff0000;
+        }
+
+        .action-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .action-card h4 {
+            color: #000;
+            margin-bottom: 15px;
+            font-family: 'Russo One';
+        }
+
+        .action-card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .btn-modern {
+            background: linear-gradient(135deg, #ff0000 0%, #e00000 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
             transition: all 0.3s ease;
-            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .nav-link-mobile:hover,
-        .nav-link-mobile:active,
-        .nav-link-mobile:focus {
-            transform: scale(1.05);
-            background-color: rgba(255, 0, 0, 0.2) !important;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+        .btn-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+            color: white;
         }
 
-        .nav-link-mobile:active {
-            transform: scale(1.02);
+        /* ----- modal ----- */
+        .modal {
+            z-index: 1055;
         }
 
-        /* Logo na navbar mobile */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background-color: #1c1c1c;
+            color: white;
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: scaleIn 0.3s ease;
+            margin-top: 50px;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.8);
+            }
+
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            border-bottom: none;
+            padding: 30px 30px 0;
+        }
+
+        .modal-header h2 {
+            color: white;
+            font-family: 'Russo One';
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .modal-header i {
+            color: #ff0000;
+        }
+
+        .modal-body {
+            padding: 0 30px 30px;
+        }
+
+        .modal-body hr {
+            border-color: #333;
+            margin: 20px 0;
+        }
+
+        .modal-body h3 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-family: 'Russo One';
+        }
+
+        .btn-close {
+            filter: invert(1);
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-close:hover {
+            opacity: 1;
+        }
+
+
+        /* ----- responsivo ----- */
+        @media (max-width: 1199.98px) {
+            .sidebar {
+                width: 250px;
+            }
+
+            .content {
+                margin-left: 250px;
+                padding: 30px;
+            }
+
+            .custom-dropdown .custom-dropdown-menu {
+                left: auto !important;
+                right: -20px !important;
+                width: 200px;
+                min-width: 200px;
+            }
+
+            .action-card {
+                min-height: 260px;
+                display: flex;
+                flex-direction: column;
+                box-sizing: border-box;
+            }
+
+            .action-card .card-body {
+                flex: 1 1 auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 991.98px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                box-shadow: none;
+                display: none !important;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 20px;
+                margin-top: 0;
+            }
+
+            .stats-card,
+            .action-card {
+                margin-bottom: 20px;
+            }
+
+            .profile-section .dropdown-menu {
+                position: static;
+                top: auto;
+                margin-top: 10px;
+                box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+            }
+
+            /* Ajustes para mobile */
+            .content h1 {
+                font-size: 2rem;
+            }
+
+            .content p {
+                font-size: 16px;
+            }
+
+            .stats-card {
+                padding: 20px;
+            }
+
+            .stats-card i {
+                font-size: 2.5rem;
+            }
+
+            .stats-card h3 {
+                font-size: 1.5rem;
+            }
+
+            .action-card {
+                padding: 20px;
+            }
+
+            .img-boas-vindas-desktop {
+                max-width: 120px !important;
+            }
+
+            .navbar-logo-mobile {
+                height: 50px !important;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .content {
+                padding: 15px;
+            }
+
+            .content h1 {
+                font-size: 1.75rem;
+            }
+
+            .stats-card,
+            .action-card {
+                padding: 15px;
+            }
+
+            .btn-modern {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .modal-dialog {
+                margin: 10px;
+            }
+        }
+
+        /* Logo na navbar mobile (copiado do painel_aluno) */
         .navbar-logo-mobile {
             height: 80px;
             width: auto;
@@ -592,64 +651,8 @@
             transform: scale(1.1);
         }
 
-        /* --- Estilos específicos do criarVaga (adaptado do criarCurriculo) --- */
-        /* Barra de progresso moderna e sticky (desce junto com a tela) */
-        .progress-section {
-            position: sticky;
-            top: 20px;
-            z-index: 10;
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            border: 2px solid #e9ecef;
-            border-bottom: 3px solid #ff0000;
-            transition: all 0.3s ease;
-            animation: slideDown 0.5s ease-out;
-        }
-
-        @keyframes slideDown {
-            from {
-                transform: translateY(-100%);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .progress-container {
-            background-color: #e9ecef;
-            border-radius: 25px;
-            overflow: hidden;
-            margin-bottom: 10px;
-            height: 20px;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .progress-bar-custom {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(135deg, #ff0000 0%, #e00000 100%);
-            transition: width 0.8s ease-in-out;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
-        }
-
-        .progress-text {
-            text-align: right;
-            font-size: 14px;
-            color: #ff0000;
-            font-weight: bold;
-            margin: 0;
-            font-family: 'Russo One';
-            letter-spacing: 0.5px;
-        }
-
-        /* Estilos para o formulário de vaga (modernizado sutilmente) */
-        .vaga-container {
+        /* --- Estilos específicos do perfil empresa --- */
+        .perfil-container {
             background: white;
             border-radius: 15px;
             padding: 40px;
@@ -660,11 +663,11 @@
             border: 1px solid #e9ecef;
         }
 
-        .vaga-container:hover {
+        .perfil-container:hover {
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
         }
 
-        .vaga-container h2 {
+        .perfil-container h2 {
             color: #ff0000;
             font-family: 'Russo One';
             text-align: center;
@@ -674,7 +677,7 @@
             position: relative;
         }
 
-        .vaga-container h2::after {
+        .perfil-container h2::after {
             content: '';
             display: block;
             width: 60px;
@@ -684,37 +687,49 @@
             border-radius: 2px;
         }
 
-        .form-label {
-            font-weight: bold;
-            margin-bottom: 8px;
-            font-size: 1rem;
-            transition: color 0.3s ease;
-        }
-
-        .form-control,
-        .form-select {
-            padding: 12px 15px;
-            border: 2px solid #e9ecef;
+        .perfil-card {
+            background: #f8f9fa;
             border-radius: 10px;
+            padding: 20px;
             margin-bottom: 20px;
-            font-size: 1rem;
-            background: #fafafa;
+            border: 1px solid #e9ecef;
             transition: all 0.3s ease;
         }
 
-        .form-control:focus,
-        .form-select:focus {
-            border-color: #ff0000;
-            box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.15);
-            background: white;
-            transform: translateY(-1px);
+        .perfil-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .btn-submit {
+        .perfil-card h4 {
+            color: #333;
+            margin-bottom: 15px;
+            font-family: 'Russo One';
+        }
+
+        .perfil-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .info-item {
+            flex: 1 1 200px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .info-item strong {
+            color: #ff0000;
+        }
+
+        .btn-editar-perfil {
             background: linear-gradient(135deg, #ff0000 0%, #e00000 100%);
             color: white;
             border: none;
-            padding: 15px 40px;
+            padding: 15px 30px;
             border-radius: 25px;
             font-weight: bold;
             font-size: 16px;
@@ -726,25 +741,26 @@
             box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
         }
 
-        .btn-submit:hover {
+        .btn-editar-perfil:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(255, 0, 0, 0.3);
             color: white;
         }
 
-        /* Responsivo para formulário */
+        /* Responsivo para perfil */
         @media (max-width: 768px) {
-            .vaga-container {
+            .perfil-container {
                 padding: 25px 20px;
                 margin: 10px;
                 border-radius: 12px;
             }
 
-            .progress-section {
-                top: 10px;
+            .perfil-card {
                 padding: 15px;
-                border-radius: 12px;
-                margin-bottom: 15px;
+            }
+
+            .info-item {
+                flex: 1 1 100%;
             }
         }
     </style>
@@ -756,6 +772,13 @@
         <nav class="navbar navbar-dark bg-dark d-lg-none">
             <div class="container-fluid">
                 <span class="navbar-brand mb-0 h1">Área da Empresa</span>
+                <div class="d-flex align-items-center justify-content-center flex-grow-1">
+                    <img src="../img/logo3.png" alt="etec-conecta" class="navbar-logo-mobile">
+                </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
             </div>
         </nav>
 
@@ -766,8 +789,8 @@
                 <ul>
                     <li><a href="painel_empresa.html"><i class="fa-solid fa-house"></i>Inicio</a></li>
                     <li><a href="verVagas.html"><i class="fa-solid fa-briefcase"></i>Vagas</a></li>
-                    <li><a href="#"><i class="fa-solid fa-user"></i>Seu Perfil</a></li>
-                    <li><a href="verCurriculos.html"><i class="fa-solid fa-file-alt"></i>Visualizar Currículos</a></li>
+                    <li><a href="criarVagas.html"><i class="fa-solid fa-plus"></i>Criar Vagas</a></li>
+                    <li><a href="verCurriculos.html"><i class="fa-solid fa-briefcase"></i>Visualizar Currículos</a></li>
                 </ul>
             </div>
 
@@ -807,32 +830,20 @@
                 <ul class="list-unstyled">
                     <li class="mb-3">
                         <a href="painel_empresa.html"
-                            class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
+                            class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile active">
                             <i class="fa-solid fa-house me-3"></i>Inicio
                         </a>
                     </li>
                     <li class="mb-3">
                         <a href="#"
                             class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
-                            <i class="fa-solid fa-briefcase me-3"></i>Vagas
+                            <i class="fa-solid fa-plus me-3"></i>Criar Vagas
                         </a>
                     </li>
                     <li class="mb-3">
                         <a href="#"
                             class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
-                            <i class="fa-solid fa-file-alt me-3"></i>Currículo
-                        </a>
-                    </li>
-                    <li class="mb-3">
-                        <a href="#"
-                            class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
-                            <i class="fa-solid fa-user me-3"></i>Minhas Candidaturas
-                        </a>
-                    </li>
-                    <li class="mb-3">
-                        <a href="#"
-                            class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
-                            <i class="fa-solid fa-edit me-3"></i>Atualizar Currículo
+                            <i class="fa-solid fa-file-alt me-3"></i>Ver Currículos
                         </a>
                     </li>
                 </ul>
@@ -864,75 +875,76 @@
 
         <!-- Main Content -->
         <main class="content">
-            <!-- Seção da barra de progresso (sticky e moderna) -->
-            <div class="progress-section">
-                <div class="progress-container">
-                    <div class="progress-bar-custom" id="progressBar"></div>
+            <!-- Container do perfil -->
+            <div class="perfil-container">
+                <h2>Seu Perfil - Empresa</h2>
+
+                <!-- Card de Informações Gerais -->
+                <div class="perfil-card">
+                    <h4><i class="fa-solid fa-building text-danger me-2"></i>Informações Gerais</h4>
+                    <div class="perfil-info">
+                        <div class="info-item">
+                            <strong>Nome da Empresa:</strong> Tech Solutions Ltda
+                        </div>
+                        <div class="info-item">
+                            <strong>CNPJ:</strong> 12.345.678/0001-90
+                        </div>
+                        <div class="info-item">
+                            <strong>Setor:</strong> Tecnologia da Informação
+                        </div>
+                        <div class="info-item">
+                            <strong>Porte:</strong> Pequena Empresa
+                        </div>
+                    </div>
                 </div>
-                <p class="progress-text" id="progressText">0% Completo</p>
-            </div>
 
-            <!-- Container do formulário (estrutura original, mas modernizada) -->
-            <div class="vaga-container">
-                <h2>Criar Vaga - Empresa</h2>
-
-                <form id="form" action="../back-end/criar_vaga.php" method="POST" enctype="multipart/form-data">
-                    <!-- Campos do formulário com Bootstrap (estrutura mantida) -->
-                    <div class="mb-3">
-                        <label class="form-label">Título da Vaga:</label>
-                        <input type="text" class="form-control" name="titulo" required>
+                <!-- Card de Contato -->
+                <div class="perfil-card">
+                    <h4><i class="fa-solid fa-envelope text-danger me-2"></i>Contato</h4>
+                    <div class="perfil-info">
+                        <div class="info-item">
+                            <strong>Email:</strong> contato@techsolutions.com
+                        </div>
+                        <div class="info-item">
+                            <strong>Telefone:</strong> (11) 99999-9999
+                        </div>
+                        <div class="info-item">
+                            <strong>Website:</strong> www.techsolutions.com
+                        </div>
+                        <div class="info-item">
+                            <strong>Endereço:</strong> Rua das Inovações, 123 - São Paulo, SP
+                        </div>
                     </div>
+                </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Descrição da Vaga:</label>
-                        <textarea class="form-control" name="descricao" rows="4" required></textarea>
+                <!-- Card de Estatísticas -->
+                <div class="perfil-card">
+                    <h4><i class="fa-solid fa-chart-line text-danger me-2"></i>Estatísticas</h4>
+                    <div class="perfil-info">
+                        <div class="info-item">
+                            <strong>Vagas Publicadas:</strong> 15
+                        </div>
+                        <div class="info-item">
+                            <strong>Candidatos Recebidos:</strong> 42
+                        </div>
+                        <div class="info-item">
+                            <strong>Candidaturas Pendentes:</strong> 8
+                        </div>
+                        <div class="info-item">
+                            <strong>Membro Desde:</strong> Janeiro 2023
+                        </div>
                     </div>
+                </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Requisitos:</label>
-                        <textarea class="form-control" name="requisitos" rows="3" required></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Carga Horária:</label>
-                        <textarea class="form-control" name="requisitos" rows="3" required></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Salário (R$):</label>
-                        <input type="text" class="form-control" id="salario" name="salario" oninput="validarSalario()">
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Localização:</label>
-                        <input type="text" class="form-control" name="localizacao" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Curso de Preferência:</label>
-                        <select class="form-select" name="tipo" required>
-                            <option value="">Selecione</option>
-                            <option>Administração</option>
-                            <option>Agropecuária</option>
-                            <option>Desenvolvimento de Sistemas</option>
-                            <option>Informática</option>
-                            <option>Recursos Humanos</option>
-                            <option>Zootecnia</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Data de Expiração:</label>
-                        <input type="date" class="form-control" name="data_expiracao" required>
-                    </div>
-
-                    <button type="submit" class="btn-submit">Criar Vaga</button>
-                </form>
+                <!-- Botão Editar Perfil -->
+                <button class="btn-editar-perfil" data-bs-toggle="modal" data-bs-target="#configuracoesModal">
+                    <i class="fa-solid fa-edit me-2"></i>Editar Perfil
+                </button>
             </div>
         </main>
     </div>
 
-    <!-- Modal Configurações (versão completa do painel_aluno) -->
+    <!-- Modal Configurações -->
     <div class="modal fade" id="configuracoesModal" tabindex="-1" aria-labelledby="configuracoesModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
@@ -947,25 +959,27 @@
                     <form>
                         <div class="row">
                             <div class="col-12 col-md-6 mb-3">
-                                <label for="inputNome" class="form-label">Nome da Empresa</label>
-                                <input type="text" class="form-control" id="inputNome" placeholder="Nome da empresa">
+                                <label for="inputNomeEmpresa" class="form-label">Nome da Empresa</label>
+                                <input type="text" class="form-control" id="inputNomeEmpresa"
+                                    placeholder="Nome da sua empresa">
                             </div>
                             <div class="col-12 col-md-6 mb-3">
-                                <label for="inputEmail" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="inputEmail" placeholder="empresa@email.com"
-                                    disabled>
+                                <label for="inputEmailEmpresa" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="inputEmailEmpresa"
+                                    placeholder="contato@empresa.com" disabled>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="inputSenha" class="form-label">Alterar Senha</label>
-                            <input type="password" class="form-control" id="inputSenha" placeholder="Nova senha">
+                            <label for="inputSenhaEmpresa" class="form-label">Alterar Senha</label>
+                            <input type="password" class="form-control" id="inputSenhaEmpresa" placeholder="Nova senha">
                         </div>
                         <div class="row">
                             <div class="col-12 col-md-6 mb-3">
                                 <div class="form-check">
-                                    <input type="checkbox" class="form-check-input" id="notificacoesEmail" checked>
-                                    <label class="form-check-label" for="notificacoesEmail">Receber notificações por
-                                        email</label>
+                                    <input type="checkbox" class="form-check-input" id="notificacoesEmailEmpresa"
+                                        checked>
+                                    <label class="form-check-label" for="notificacoesEmailEmpresa">Receber notificações
+                                        por email</label>
                                 </div>
                             </div>
                         </div>
@@ -979,7 +993,7 @@
         </div>
     </div>
 
-    <!-- Modal Ajuda (versão completa do painel_aluno com accordion) -->
+    <!-- Modal Ajuda -->
     <div class="modal fade" id="ajudaModal" tabindex="-1" aria-labelledby="ajudaModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
@@ -1003,16 +1017,16 @@
                                 <div class="accordion-body">
                                     <ul class="list-unstyled">
                                         <li class="mb-3">
-                                            <strong>Como criar uma vaga?</strong><br>
-                                            Preencha os campos do formulário e clique em "Criar Vaga". A barra de
-                                            progresso mostra o quanto você já completou.
-                                                                                    <li class="mb-3">
-                                            <strong>Como gerenciar minhas vagas?</strong><br>
-                                            Acesse a seção "Vagas" no menu lateral para visualizar e editar suas vagas publicadas.
+                                            <strong>Como atualizar meu perfil?</strong><br>
+                                            Clique em "Editar Perfil" e salve as alterações no modal de configurações.
                                         </li>
                                         <li class="mb-3">
-                                            <strong>Posso atualizar meus dados empresariais?</strong><br>
-                                            Sim, no modal de configurações você pode alterar o nome da empresa e senha.
+                                            <strong>Como publicar uma vaga?</strong><br>
+                                            Acesse a seção "Vagas" no menu lateral e clique em "Criar Vaga".
+                                        </li>
+                                        <li class="mb-3">
+                                            <strong>Posso alterar meus dados empresariais?</strong><br>
+                                            Sim, no modal de configurações você pode alterar nome e senha.
                                         </li>
                                     </ul>
                                 </div>
@@ -1063,74 +1077,12 @@
         crossorigin="anonymous"></script>
 
     <script>
-        // --- Validação simples de salário ---
-        function validarSalario() {
-            const input = document.getElementById('salario');
-            if (!input) return;
-            input.value = input.value.replace(/[^0-9.,]/g, ''); // Remove qualquer coisa que não seja número, ponto ou vírgula
-        }
-
-        // --- Barra de progresso do formulário ---
-        const form = document.getElementById('form');
-        const progressBar = document.getElementById('progressBar');
-        const progressText = document.getElementById('progressText');
-        const inputs = form ? form.querySelectorAll('input, select, textarea') : [];
-
-        function updateProgress() {
-            if (!form) return;
-            let filled = 0;
-            let total = 0;
-
-            inputs.forEach(input => {
-                if (input.type !== 'file') {
-                    total++;
-                    if ((input.type === 'checkbox' && input.checked) || (input.value && input.value.trim() !== '')) {
-                        filled++;
-                    }
-                }
-            });
-
-            const percent = total === 0 ? 0 : Math.round((filled / total) * 100);
-            if (progressBar) progressBar.style.width = percent + '%';
-            if (progressText) progressText.textContent = percent + '% Completo';
-        }
-
-        function checkEmptyFields() {
-            if (!form) return;
-            let allEmpty = true;
-            inputs.forEach(input => {
-                if (input.type !== 'file') {
-                    if ((input.type === 'checkbox' && input.checked) || (input.value && input.value.trim() !== '')) {
-                        allEmpty = false;
-                    }
-                }
-            });
-
-            if (allEmpty && progressBar && progressText) {
-                progressBar.style.width = '0%';
-                progressText.textContent = '0% Completo';
-            }
-        }
-
-        // Recalcula a porcentagem sempre que houver alteração nos inputs
-        if (inputs.length) {
-            inputs.forEach(input => {
-                input.addEventListener('input', updateProgress);
-                input.addEventListener('change', updateProgress);
-            });
-        }
-
-        // Inicializa
-        updateProgress();
-        setInterval(checkEmptyFields, 3000);
-
-        // --- Scripts herdados do painel_aluno: navegação simulada, dropdowns e offcanvas ---
         // Função placeholder para carregar páginas (substitua por AJAX real se necessário)
         function carregarPagina(pagina) {
             console.log('Carregando página: ' + pagina);
         }
 
-        // Adicione onclick nos links da sidebar para simular navegação (exceto dropdowns)
+        // Adicione onclick nos links da sidebar/offcanvas para simular navegação (exceto dropdowns)
         document.querySelectorAll('.sidebar a[href="#"], .offcanvas a[href="#"]').forEach(link => {
             if (link.classList.contains('dropdown-toggle') ||
                 link.classList.contains('dropdown-item') ||
@@ -1144,7 +1096,8 @@
                 const texto = this.textContent.trim();
                 carregarPagina(texto.toLowerCase() + '.html');
 
-                if (!this.closest('.offcanvas')) {
+                // Só fechar offcanvas em mobile
+                if (this.closest('.offcanvas')) {
                     const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('sidebarOffcanvas'));
                     if (offcanvas) {
                         offcanvas.hide();
@@ -1153,7 +1106,7 @@
             });
         });
 
-        // Evento para o botão sair - restrito ao dropdown correto
+        // Evento para o botão sair - restrito aos botões com classe .btn-sair
         document.querySelectorAll('.btn-sair').forEach(sairBtn => {
             sairBtn.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -1163,7 +1116,7 @@
             });
         });
 
-        // Fechar offcanvas quando clicar fora dele (exceto dropdown)
+        // Fechar offcanvas quando clicar fora dele (exceto dropdown mobile)
         document.addEventListener('click', function (e) {
             const offcanvas = document.getElementById('sidebarOffcanvas');
             const toggle = document.querySelector('[data-bs-target="#sidebarOffcanvas"]');
@@ -1181,7 +1134,7 @@
             }
         });
 
-        // Adicionar classe para indicar que é mobile
+        // Indicar mobile view com classe no body
         function checkMobile() {
             if (window.innerWidth < 992) {
                 document.body.classList.add('mobile-view');
@@ -1206,6 +1159,7 @@
                     toggle.addEventListener('click', function (e) {
                         e.preventDefault();
                         e.stopPropagation();
+
                         dropdown.classList.toggle('active');
 
                         document.querySelectorAll('.custom-dropdown, .custom-dropdown-mobile').forEach(otherDropdown => {
@@ -1218,33 +1172,39 @@
             setupDropdown(customDropdown, customToggle);
             setupDropdown(customDropdownMobile, customToggleMobile);
 
+            // Fechar dropdowns ao clicar fora
             document.addEventListener('click', function (e) {
                 if (customDropdown && !customDropdown.contains(e.target)) customDropdown.classList.remove('active');
                 if (customDropdownMobile && !customDropdownMobile.contains(e.target) && !e.target.closest('.custom-dropdown-menu-mobile')) customDropdownMobile.classList.remove('active');
             });
         });
 
-        // --- Buscar nome da empresa e preencher spans ---
+        // --- Buscar nome da empresa e preencher spans (usa get_empresa.php se existir) ---
         (function carregarNomeEmpresa() {
-            fetch('../back-end/get_empresa.php', { method: 'GET', credentials: 'include' })
+            const endpoint = '../back-end/get_empresa.php';
+            // Tenta buscar, mas falha silenciosamente se não existir
+            fetch(endpoint, { method: 'GET', credentials: 'include' })
                 .then(response => {
-                    if (response.status === 401) {
-                        window.location.href = 'login_empresa.html';
+                    if (!response.ok) {
+                        // Não faz nada se endpoint não existir ou retornar erro
+                        console.warn('get_empresa.php não disponível ou retornou erro:', response.status);
                         return null;
                     }
                     return response.json();
                 })
                 .then(data => {
                     if (!data) return;
-                    if (data.nome) {
-                        const nome = data.nome;
+                    if (data.nome || data.email) {
+                        const nome = data.nome || data.email || 'Sua Conta';
                         const span = document.getElementById('empresaNome');
                         const spanMobile = document.getElementById('empresaNomeMobile');
                         if (span) span.textContent = nome;
                         if (spanMobile) spanMobile.textContent = nome;
                     }
                 })
-                .catch(err => console.error('Erro ao obter nome da empresa:', err));
+                .catch(err => {
+                    console.debug('Ignorado: erro ao tentar obter nome da empresa (provavelmente endpoint ausente):', err);
+                });
         })();
 
         // Controle específico para modais no mobile
@@ -1275,7 +1235,7 @@
             });
         });
 
-        // Manter funcionalidade normal para triggers de modal desktop
+        // Manter funcionalidade normal para desktop (placeholders caso precise)
         document.querySelectorAll('[data-bs-toggle="modal"]').forEach(modalTrigger => {
             modalTrigger.addEventListener('click', function (e) {
                 if (window.innerWidth < 992) {
@@ -1283,24 +1243,7 @@
                 }
             });
         });
-
-        // Prevenção de submit do form (demo; substitua por fetch real para backend de criar vaga)
-        if (form) {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                if (confirm('Deseja criar a vaga?')) {
-                    alert('Vaga criada com sucesso! (Simulação - integre com backend real)');
-                    // Exemplo para envio real: 
-                    // const formData = new FormData(form);
-                    // fetch('../back-end/criar_vaga.php', { method: 'POST', body: formData })
-                    //     .then(response => response.json())
-                    //     .then(data => { alert('Vaga criada!'); })
-                    //     .catch(err => { alert('Erro ao criar vaga.'); console.error(err); });
-                }
-            });
-        }
     </script>
 </body>
 
 </html>
-</body>
