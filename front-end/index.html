@@ -529,16 +529,52 @@
 
         <!-- Footer - Reformulado com fundo claro e botões mais acessíveis -->
         <footer class="footer d-flex justify-content-center align-items-center pb-4 pt-3 mt-auto">
-            <a href="login_aluno.html" class="me-3" aria-label="Acessar como aluno">
+                        <a href="login_aluno.html" class="me-3" aria-label="Acessar como aluno">
                 <button class="btn btn-danger rounded-pill fw-semibold px-4 py-2">SOU ALUNO</button>
             </a>
             <a href="login_empresa.html" class="me-3" aria-label="Acessar como empresa">
                 <button class="btn btn-empresa rounded-pill fw-semibold px-4 py-2">SOU EMPRESA</button>
             </a>
+            <button class="btn btn-dark rounded-pill fw-semibold px-4 py-2" data-bs-toggle="modal" data-bs-target="#adminModal" aria-label="Acessar como admin">ADMIN</button>
         </footer>
+
+        <!-- Modal para Acesso Administrativo -->
+        <div class="modal fade" id="adminModal" tabindex="-1" aria-labelledby="adminModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="adminModalLabel">Acesso Administrativo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="adminForm">
+                            <div class="mb-3">
+                                <label for="adminPassword" class="form-label">Digite a senha:</label>
+                                <input type="password" class="form-control" id="adminPassword" required>
+                            </div>
+                            <button type="submit" class="btn btn-danger">Entrar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        // Script para verificar a senha do admin (exemplo simples)
+        document.getElementById('adminForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const password = document.getElementById('adminPassword').value;
+            // Senha hardcoded para exemplo (substitua por uma verificação segura)
+            if (password === 'admin123') {
+                // Redirecionar para a página de admin ou executar ação
+                window.location.href = 'admin_dashboard.html'; // Substitua pela URL real
+            } else {
+                alert('Senha incorreta!');
+            }
+        });
+    </script>
 </body>
 </html>
