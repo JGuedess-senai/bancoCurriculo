@@ -463,6 +463,101 @@
             }
         }
 
+        /* Estilos base para os cards em todas as telas */
+        .vaga-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            min-height: 300px; /* Altura mínima fixa */
+            margin-bottom: 20px; /* Espaçamento entre cards */
+            width: 100%; /* Garante que o card ocupe apenas o espaço da sua coluna */
+            box-sizing: border-box; /* Inclui padding e border no cálculo da largura */
+        }
+
+        .card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Distribui o conteúdo verticalmente */
+            padding: 20px; /* Padding consistente */
+            width: 100%; /* Garante que o conteúdo não ultrapasse o card */
+        }
+
+        .card-body .d-flex {
+            margin-top: auto; /* Empurra os botões para baixo */
+            display: flex;
+            gap: 10px; /* Espaço entre botões */
+        }
+
+        .card-body button {
+            flex: 1; /* Distribui espaço igualmente entre botões */
+            min-width: fit-content; /* Evita botões muito estreitos */
+            white-space: nowrap; /* Evita quebra de texto nos botões */
+        }
+
+        /* Garante que os cards tenham o mesmo tamanho em cada linha */
+        .col-12, .col-md-6, .col-lg-4 {
+            display: flex;
+        }
+
+        @media (min-width: 576px) {
+            .vaga-card {
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .vaga-card .card-body {
+                flex: 1 1 auto;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .vaga-card .card-body .d-flex {
+                margin-top: auto;
+                flex-direction: row;
+                flex-wrap: nowrap;
+            }
+
+            .card-body .d-flex button {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .vaga-card {
+                min-height: 350px; /* Aumenta altura mínima */
+            }
+
+            .card-body {
+                padding: 15px; /* Reduz padding para mais espaço interno */
+            }
+
+            .card-body .d-flex {
+                flex-direction: column; /* Empilha os botões */
+                gap: 10px; /* Espaço entre os botões */
+            }
+
+            .card-body .d-flex button {
+                width: 100%; /* Botões ocupam largura total */
+            }
+        }
+
+        /* Empilha botões para telas maiores próximas a 992px para evitar overflow
+           (usuário pediu comportamento em 991px pra cima) */
+        @media (min-width: 991.98px) {
+            .card-body .d-flex {
+                flex-direction: column !important;
+                gap: 10px;
+                align-items: stretch;
+            }
+
+            .card-body .d-flex button {
+                width: 100% !important;
+                white-space: normal; /* permite quebra se necessário */
+            }
+        }
+
         @media (max-width: 991.98px) {
             .sidebar {
                 width: 100%;
@@ -513,6 +608,27 @@
 
             .action-card {
                 padding: 20px;
+            }
+
+            /* Evitar overflow dos botões em larguras logo acima de 575px: empilhar verticalmente */
+            .card-body .d-flex {
+                flex-direction: column !important;
+                gap: 10px;
+                align-items: stretch;
+            }
+
+            .card-body .d-flex button {
+                width: 100% !important;
+                white-space: normal;
+            }
+
+            /* manter consistência com painel_aluno: logos menores em telas <=991.98px */
+            .img-boas-vindas-desktop {
+                max-width: 120px !important;
+            }
+
+            .navbar-logo-mobile {
+                height: 50px !important;
             }
         }
 
@@ -662,7 +778,7 @@
         }
 
 
-        /* Logo na navbar mobile */
+        /* Logo na navbar mobile e imagem de boas-vindas */
         .navbar-logo-mobile {
             height: 80px;
             width: auto;
@@ -674,6 +790,31 @@
             transform: scale(1.1);
         }
 
+        .img-boas-vindas-desktop {
+            max-width: 230px; /* tamanho padrão desktop */
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .img-boas-vindas-desktop:hover {
+            transform: scale(1.05);
+        }
+
+        /* Garantir tamanho/posicionamento igual ao painel_aluno em telas grandes */
+        @media (min-width: 992px) {
+            .img-boas-vindas-desktop {
+                max-width: 230px !important;
+                width: 100%;
+                height: auto;
+            }
+
+            .navbar-logo-mobile {
+                height: 80px !important;
+                width: auto;
+            }
+        }
+
         /* Estilos específicos para as vagas, usando Bootstrap */
         .vagas-container {
             display: flex;
@@ -682,15 +823,37 @@
             margin-top: 30px;
         }
 
+        /* Container para os cards */
+        #listaVagas {
+            margin: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #listaVagas > div {
+            padding: 15px; /* Aumenta o espaçamento entre cards */
+            box-sizing: border-box;
+            overflow: hidden; /* Previne que o conteúdo vaze */
+        }
+
+        /* Garante que as colunas respeitem seus limites */
+        #listaVagas .col {
+            flex: 0 0 auto;
+            max-width: 100%;
+        }
+
         .vaga-card {
             background-color: #ffffff;
             border: 1px solid #dfe6ec;
             border-left: 6px solid #ff0000;
-            /* Cor vermelha do painel */
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.03);
             transition: transform 0.2s ease;
             padding: 20px;
+            width: 100%;
+            height: 100%; /* Garante altura igual em cada linha */
+            display: flex;
+            flex-direction: column;
         }
 
         .vaga-card:hover {
@@ -894,9 +1057,28 @@
         <!-- Main Content -->
         <main class="content">
             <div class="container-fluid">
-                <h1 class="mb-4" style="color: #ff0000;">Vagas Disponíveis</h1>
+                <div class="row mb-5">
+                    <div class="col-12">
+                        <!-- Layout desktop: textos à esquerda, imagem à direita -->
+                        <div class="d-none d-lg-flex align-items-center justify-content-center mb-4" style="gap: 32px;">
+                            <div>
+                                <h1 class="display-4 mb-3" style="color: #ff0000;">Vagas Disponíveis</h1>
+                                <p class="lead">Aqui você pode visualizar e gerenciar suas vagas publicadas.</p>
+                            </div>
+                            <img src="../img/logo3.png" alt="etec-conecta"
+                                style="max-width: 230px; width: 100%; height: auto; flex-shrink: 0; margin-bottom: 15px;"
+                                class="img-boas-vindas-desktop">
+                        </div>
 
-                <div id="listaVagas" class="row g-4"></div>
+                        <!-- Layout mobile/tablet: textos normais -->
+                        <div class="d-block d-lg-none">
+                            <h1 class="display-4 mb-3" style="color: #ff0000;">Vagas Disponíveis</h1>
+                            <p class="lead">Aqui você pode visualizar e gerenciar suas vagas publicadas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="listaVagas" class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4"></div>
             </div>
         </main>
     </div>
@@ -1094,11 +1276,11 @@
 
             vagas.forEach(vaga => {
                 const card = document.createElement("div");
-                card.className = "col-12 col-md-6 col-lg-4";  // Responsivo com Bootstrap
+                card.className = "col";  // Usa o sistema de grid automático do Bootstrap
                 card.innerHTML = `
       <div class="card vaga-card">
         <div class="card-body">
-          <h3 class="card-title">${vaga.titulo}</h3>
+          <h3 class="card-title mb-3">${vaga.titulo}</h3>
           <p class="card-text"><strong>Empresa:</strong> ${vaga.empresa}</p>
           <p class="card-text"><strong>Descrição:</strong> ${vaga.descricao}</p>
           <div class="d-flex gap-2">
