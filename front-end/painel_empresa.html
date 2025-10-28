@@ -617,6 +617,7 @@
       .action-card .btn-modern {
         padding: 10px 20px;
       }
+      /* comportamento padrão para telas menores permanece (sem forçar layout em linha) */
     }
 
     /* Alinhamento específico para telas entre 992px e 1199.98px
@@ -635,13 +636,17 @@
         width: 100%;
       }
 
-      /* card-body organiza conteúdo em coluna, começa no topo e empurra o botão para baixo */
+      /* card-body organiza conteúdo em coluna e empurra o botão para o rodapé
+         Mantemos justify-content: space-between para manter os botões alinhados
+         em toda a faixa entre 992px e 1199.98px */
       .row.g-4 .card.action-card .card-body {
         display: flex;
         flex-direction: column;
-        justify-content: flex-start; /* top-alinha títulos e parágrafos */
+        justify-content: space-between; /* garante botão no rodapé do card */
+        height: 100%; /* força o card-body a ocupar toda a altura da coluna */
         flex: 1 1 auto;
         gap: 12px;
+        box-sizing: border-box;
       }
 
       /* garantir consistência do espaçamento de título/texto */
@@ -654,6 +659,55 @@
         margin-bottom: 12px;
         color: #666;
       }
+
+      /* Dispor action-cards em linha e permitir quebra automática (wrap).
+         Cada card é um quadrado fixo (300x300) dentro deste intervalo (992px - 1199.98px).
+         Isso não afetará telas <= 991.98px, que continuam com o comportamento anterior. */
+      .row.g-4 {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap; /* permite quebrar para a próxima linha */
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .row.g-4 > [class*="col-"] {
+        flex: 0 0 300px; /* largura fixa 300px */
+        max-width: 300px;
+        margin: 0;
+      }
+
+      .action-card {
+        width: 300px;
+        height: 300px;
+        padding: 12px 16px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* mantém o botão na base do card */
+        align-items: center;
+      }
+
+      .row.g-4 .card.action-card .card-body {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* título/texto em cima, botão embaixo */
+        align-items: center;
+        text-align: center;
+        gap: 8px;
+      }
+
+      .action-card .btn-modern {
+        align-self: center;
+        width: calc(100% - 32px);
+        padding: 10px 12px;
+      }
+
+      .action-card .card-icon i {
+        font-size: 1.6rem;
+      }
     }
 
     @media (max-width: 991.98px) {
@@ -665,11 +719,24 @@
         display: none !important;
       }
 
+      /* Reduzir largura dos action-cards em telas menores */
+      .action-card {
+        max-width: 100%; /* garante que não extrapola o contêiner */
+      }
+
       .content {
         margin-left: 0;
         padding: 20px;
         margin-top: 0;
       }
+    }
+
+    @media (max-width: 767.98px) {
+      .action-card {
+        max-width: 90%;
+        margin: 10px auto;
+      }
+    }
 
       .stats-card,
       .action-card {
@@ -723,11 +790,23 @@
       .navbar-logo-mobile {
         height: 50px !important;
       }
+
+    @media (max-width: 767.98px) {
+      .action-card {
+        max-width: 90%;
+        margin: 10px auto;
+      }
     }
 
     @media (max-width: 575.98px) {
       .content {
         padding: 15px;
+      }
+
+      /* Igualar largura dos stats-cards com os action-cards */
+      .stats-card {
+        max-width: 90%;
+        margin: 10px auto;
       }
 
       /* Diminuir largura do modal de configurações em phones muito estreitos */
@@ -761,6 +840,18 @@
       .modal-dialog {
         margin: 10px;
       }
+    }
+
+    /* Estilo dos links na sidebar mobile */
+    .nav-link-mobile {
+      transition: all 0.3s ease;
+      border-radius: 8px;
+    }
+
+    .nav-link-mobile:hover {
+      background-color: #ff0000;
+      transform: translateX(5px);
+      box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
     }
 
     /* Logo na navbar mobile (copiado do painel_aluno) */
@@ -836,12 +927,12 @@
       <div class="offcanvas-body">
         <ul class="list-unstyled">
           <li class="mb-3">
-            <a href="#" class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
-              <i class="fa-solid fa-file-alt me-3"></i>Currículo
+            <a href="perfilEmpresa.html" class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
+              <i class="fa-solid fa-user me-3"></i>Seu Perfil
             </a>
           </li>
           <li class="mb-3">
-            <a href="#" class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
+            <a href="verVagas.html" class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
               <i class="fa-solid fa-briefcase me-3"></i>Vagas
             </a>
           </li>
