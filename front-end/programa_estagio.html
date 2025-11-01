@@ -1225,6 +1225,96 @@
             });
         });
     </script>
+    <script>
+        // Ajusta a página de "Programa de Estágio" conforme o papel (role) passado por query string
+        (function () {
+            function getParam(name) {
+                const params = new URLSearchParams(window.location.search);
+                return params.get(name);
+            }
+
+            const roleParam = getParam('role');
+            // Inferir role pelo referrer como fallback
+            const ref = document.referrer || '';
+            let role = roleParam || (ref.indexOf('painel_aluno.html') !== -1 ? 'aluno' : (ref.indexOf('painel_empresa.html') !== -1 ? 'empresa' : 'empresa'));
+
+            // Atualizar título da página
+            if (role === 'aluno') {
+                document.title = 'Programa de Estágio - Aluno';
+            } else {
+                document.title = 'Programa de Estágio - Empresa';
+            }
+
+            // Atualizar textos da navbar mobile
+            document.querySelectorAll('.navbar-brand, .navbar .navbar-brand').forEach(el => {
+                if (role === 'aluno') el.textContent = 'Área do Aluno';
+                else el.textContent = 'Área da Empresa';
+            });
+
+            // Atualizar título do sidebar desktop
+            const sidebarH2 = document.querySelector('.sidebar .sidebar-top h2');
+            if (sidebarH2) sidebarH2.textContent = (role === 'aluno') ? 'Área do Aluno' : 'Área da Empresa';
+
+            // Atualizar offcanvas label
+            const offLabel = document.getElementById('sidebarOffcanvasLabel');
+            if (offLabel) offLabel.textContent = (role === 'aluno') ? 'Área do Aluno' : 'Área da Empresa';
+
+            // Ajustar links do sidebar para apontar para as páginas corretas de cada role
+            // Inicio
+            const inicioLink = document.querySelector('.sidebar .sidebar-top ul li a[href="painel_empresa.html"]');
+            if (inicioLink) {
+                inicioLink.setAttribute('href', (role === 'aluno') ? 'painel_aluno.html' : 'painel_empresa.html');
+            }
+            // Vagas
+            const vagasLink = document.querySelector('.sidebar .sidebar-top ul li a[href="verVagas.html"]') || document.querySelector('.sidebar .sidebar-top ul li a[href="vagasDisponiveis.html"]');
+            if (vagasLink) {
+                vagasLink.setAttribute('href', (role === 'aluno') ? 'vagasDisponiveis.html' : 'verVagas.html');
+            }
+
+            // Ajustar nomes dos spans do perfil (empresaNome / alunoNome)
+            const spanEmpresa = document.getElementById('empresaNome');
+            const spanEmpresaMobile = document.getElementById('empresaNomeMobile');
+            if (role === 'aluno') {
+                if (spanEmpresa) {
+                    spanEmpresa.id = 'alunoNome';
+                    spanEmpresa.textContent = 'Seu Nome';
+                }
+                if (spanEmpresaMobile) {
+                    spanEmpresaMobile.id = 'alunoNomeMobile';
+                    spanEmpresaMobile.textContent = 'Seu Nome';
+                }
+                // Ajustar CTA para aluno (ver vagas)
+                const cta = document.querySelector('.programa-container .btn-modern');
+                if (cta) {
+                    cta.setAttribute('href', 'vagasDisponiveis.html');
+                    cta.textContent = 'Ver Vagas';
+                }
+            } else {
+                // garantir ids padrão empresa
+                const spanAluno = document.getElementById('alunoNome');
+                const spanAlunoMobile = document.getElementById('alunoNomeMobile');
+                if (spanAluno) {
+                    spanAluno.id = 'empresaNome';
+                    spanAluno.textContent = 'Nome da Empresa';
+                }
+                if (spanAlunoMobile) {
+                    spanAlunoMobile.id = 'empresaNomeMobile';
+                    spanAlunoMobile.textContent = 'Nome da Empresa';
+                }
+                // CTA padrão empresa já aponta para criar vaga (mantido)
+            }
+
+            // Marcar link ativo no sidebar
+            document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+            if (role === 'aluno') {
+                const a = document.querySelector('.sidebar a[href="painel_aluno.html"]');
+                if (a) a.classList.add('active');
+            } else {
+                const a = document.querySelector('.sidebar a[href="painel_empresa.html"]');
+                if (a) a.classList.add('active');
+            }
+        })();
+    </script>
 </body>
 
 </html>

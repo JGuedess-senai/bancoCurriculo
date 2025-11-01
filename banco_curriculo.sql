@@ -2,6 +2,7 @@
 CREATE DATABASE IF NOT EXISTS banco_curriculo;
 USE banco_curriculo;
 
+-- Tabela de alunos
 CREATE TABLE IF NOT EXISTS alunos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
@@ -10,6 +11,7 @@ CREATE TABLE IF NOT EXISTS alunos (
     senha VARCHAR(255) NOT NULL
 );
 
+-- Tabela de empresas
 CREATE TABLE IF NOT EXISTS empresas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cnpj VARCHAR(20) NOT NULL UNIQUE,
@@ -18,6 +20,7 @@ CREATE TABLE IF NOT EXISTS empresas (
     senha VARCHAR(255) NOT NULL
 );
 
+-- Tabela de currículos dos alunos
 CREATE TABLE IF NOT EXISTS curriculos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
