@@ -4,20 +4,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Painel do Administrador</title>
+  <title>Painel Admin</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://kit.fontawesome.com/e66b0e408d.js" crossorigin="anonymous"></script>
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
-    /* ----- layout base ----- */
+    /* Estilos Gerais (Copied from Admin base) */
     body {
       margin: 0;
+      display: flex;
+      /* Mantém a estrutura de 3 colunas principal */
       font-family: 'Poppins', sans-serif;
       background: #f4f6f9;
     }
@@ -27,28 +28,24 @@
       font-family: 'Russo One';
     }
 
-    /* ----- sidebar fixa ----- */
+    /* ----------------------- */
+    /* Sidebar (Padrão Aluno/Moderno) */
+    /* ----------------------- */
     .sidebar {
       position: fixed;
       left: 0;
       top: 0;
       bottom: 0;
-      width: 290px;
+      width: 250px;
+      /* Reduzido para 250px para melhor visualização em 3 colunas */
       background: linear-gradient(180deg, #000 0%, #1a1a1a 100%);
       color: #fff;
       padding: 25px;
       display: flex;
       flex-direction: column;
-      overflow-y: auto;
       height: 100vh;
       z-index: 1000;
       box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3);
-      transition: width 0.3s ease;
-    }
-
-    .sidebar-top {
-      display: flex;
-      flex-direction: column;
     }
 
     .sidebar h2 {
@@ -59,19 +56,8 @@
       letter-spacing: 1.5px;
     }
 
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      flex-grow: 1;
-    }
-
-    .sidebar ul li {
-      margin: 20px 0;
-      font-size: 16px;
-    }
-
-    .sidebar ul li a {
+    /* Links da Sidebar */
+    .sidebar a {
       color: white;
       text-decoration: none;
       font-weight: bold;
@@ -80,123 +66,54 @@
       align-items: center;
       border-radius: 8px;
       transition: all 0.3s ease;
+      margin: 12px 0;
+      /* Espaçamento entre os links */
     }
 
-    .sidebar ul li a:hover {
+    .sidebar a:hover {
       background-color: #ff0000;
       transform: translateX(5px);
       box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
     }
 
-    .sidebar ul li a i {
+    .sidebar a i {
       margin-right: 12px;
       width: 20px;
     }
 
-    /* ----- perfil / dropdown ----- */
-    .profile-section {
+    /* Botão Sair da Sidebar */
+    .sidebar .btn-sair {
       margin-top: auto;
-      position: relative;
-      padding: 0 25px 25px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      overflow: visible;
+      /* Empurra para o final da sidebar */
+      text-align: center;
+      background: #ff0000;
+      box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+      /* Remove transform para o botão Sair */
+      transition: background-color 0.3s ease;
     }
 
-    .custom-dropdown {
-      position: relative;
+    .sidebar .btn-sair:hover {
+      background: #e00000;
+      transform: none;
+      box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4);
     }
 
-    .custom-dropdown-toggle {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 30px;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: all 0.2s ease;
-      margin: 0 -15px;
-    }
 
-    .custom-dropdown-toggle:hover {
-      background-color: rgba(255, 0, 0, 0.3);
-      transform: scale(1.02);
-    }
-
-    .custom-dropdown-toggle i {
-      transition: transform 0.2s ease;
-    }
-
-    .custom-dropdown.active .custom-dropdown-toggle i {
-      transform: rotate(180deg);
-    }
-
-    .custom-dropdown-menu {
-      position: absolute;
-      bottom: 100%;
-      left: 0;
-      right: 0;
-      margin-bottom: 12px !important;
-      background-color: #ff0000;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
-      z-index: 1050;
-      min-width: auto;
-      padding: 10px 0;
-      list-style: none;
-      opacity: 0;
-      transform: translateY(30px);
-      visibility: hidden;
-      transition: all 0.4s ease-out;
-    }
-
-    .custom-dropdown.active .custom-dropdown-menu {
-      opacity: 1;
-      transform: translateY(0);
-      visibility: visible;
-    }
-
-    .custom-dropdown-item {
-      color: white;
-      text-decoration: none;
-      padding: 12px 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-      transition: background-color 0.2s ease;
-      display: flex;
-      align-items: center;
-    }
-
-    .custom-dropdown-item:last-child {
-      border-bottom: none;
-    }
-
-    .custom-dropdown-item:hover {
-      background-color: #e00000;
-      color: white;
-    }
-
-    .custom-dropdown-item i {
-      margin-right: 10px;
-      width: 18px;
-    }
-
-    /* ----- área de conteúdo (rola independente) ----- */
+    /* ----------------------- */
+    /* Conteúdo principal */
+    /* ----------------------- */
     .content {
-      margin-left: 290px;
-      min-height: 100vh;
+      flex: 1;
       padding: 40px;
-      background: #f4f6f9;
-      box-sizing: border-box;
+      margin-left: 250px;
+      /* Compensa a largura da sidebar */
+      margin-right: 330px;
+      /* Compensa a largura da notificação */
     }
 
     .content h1 {
       color: #000;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
       font-size: 2.5rem;
     }
 
@@ -206,760 +123,244 @@
       margin-bottom: 40px;
     }
 
-    /* Cards modernos no content */
-    .stats-card {
-      background: linear-gradient(135deg, #1c1c1c 0%, #2c2c2c 100%);
-      color: white;
-      border-radius: 15px;
-      padding: 30px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    .charts-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .chart-box {
+      background: white;
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+      /* Padrão moderno */
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border: none;
     }
 
-    .stats-card:hover {
+    .chart-box:hover {
       transform: translateY(-5px);
-      box-shadow: 0 15px 40px rgba(255, 0, 0, 0.2);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
 
-    .stats-card i {
-      font-size: 3rem;
-      color: #ff0000;
-      margin-bottom: 15px;
-    }
-
-    .stats-card h3 {
+    .chart-box h3 {
       font-family: 'Russo One';
-      font-size: 2rem;
-      margin-bottom: 10px;
-      color: white;
-    }
-
-    .stats-card p {
-      color: #ccc;
-      font-size: 1.1rem;
-    }
-
-    .action-card {
-      background: white;
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-      transition: box-shadow 0.3s ease;
-      border-left: 5px solid #ff0000;
-    }
-
-    .action-card:hover {
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    }
-
-    .action-card h4 {
+      font-size: 1.5rem;
       color: #000;
-      margin-bottom: 15px;
-      font-family: 'Russo One';
-    }
-
-    .action-card p {
-      color: #666;
       margin-bottom: 20px;
     }
 
-    .btn-modern {
-      background: linear-gradient(135deg, #ff0000 0%, #e00000 100%);
-      color: white;
-      border: none;
-      padding: 12px 30px;
-      border-radius: 25px;
-      font-weight: bold;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    .btn-modern:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
-      color: white;
-    }
-
-    /* Gráficos */
-    .chart-container {
+    /* ----------------------- */
+    /* Notificações (Padrão Admin Original + Visual Moderno) */
+    /* ----------------------- */
+    .notifications {
+      width: 330px;
       background: white;
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
+      padding: 25px;
+      height: 100vh;
+      overflow-y: auto;
+      position: fixed;
+      /* Fixa no lado direito */
+      right: 0;
+      top: 0;
+      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+      border-left: 5px solid #ff0000;
+      /* Linha vermelha moderna */
+      z-index: 999;
     }
 
-    /* ----- modal ----- */
-    .modal {
-      z-index: 1060;
-    }
-
-    .modal-backdrop {
-      background-color: rgba(0, 0, 0, 0.6);
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    .modal-content {
-      background-color: #1c1c1c;
-      color: white;
-      border-radius: 15px;
-      border: none;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-      animation: scaleIn 0.3s ease;
-      margin-top: 50px;
-    }
-
-    @keyframes scaleIn {
-      from {
-        transform: scale(0.8);
-      }
-
-      to {
-        transform: scale(1);
-      }
-    }
-
-    .modal-header {
-      border-bottom: none;
-      padding: 30px 30px 0;
-    }
-
-    .modal-header h2 {
-      color: white;
-      font-family: 'Russo One';
-      margin: 0;
+    .notifications h2 {
+      margin-bottom: 30px;
+      color: #000;
       font-size: 1.8rem;
     }
 
-    .modal-header i {
-      color: #ff0000;
+    .notification {
+      background: #f1f1f1;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border-left: 5px solid #ff0000;
+      transition: all 0.3s ease;
     }
 
-    .modal-body {
-      padding: 0 30px 30px;
+    .notification:hover {
+      background: #ffebeb;
+      box-shadow: 0 2px 10px rgba(255, 0, 0, 0.1);
+      transform: translateX(3px);
     }
 
-    .modal-body hr {
-      border-color: #333;
-      margin: 20px 0;
-    }
-
-    .modal-body h3,
-    .modal-body h4 {
-      color: #fff;
-      margin-bottom: 10px;
+    .notification h4 {
+      margin: 0 0 5px 0;
       font-family: 'Russo One';
+      color: #000;
     }
 
-    .btn-close {
-      filter: invert(1);
-      opacity: 0.7;
-      transition: opacity 0.3s ease;
+    .notification p {
+      margin: 0;
+      font-size: 14px;
+      color: #555;
     }
 
-    .btn-close:hover {
-      opacity: 1;
-    }
+    /* ----------------------- */
+    /* Responsivo (Adaptação para 3 colunas) */
+    /* ----------------------- */
 
-    /* ----- responsivo ----- */
-    @media (max-width: 1199.98px) {
-      .sidebar {
-        width: 250px;
+    /* Remove 3a coluna (notificações) em telas menores */
+    @media (max-width: 1300px) {
+      .notifications {
+        width: 280px;
       }
 
       .content {
-        margin-left: 250px;
-        padding: 30px;
+        margin-right: 280px;
+      }
+
+      .charts-container {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
       }
     }
 
+    /* Remove a notificação e transforma sidebar em 100% no tablet/mobile */
     @media (max-width: 991.98px) {
+      body {
+        display: block;
+        /* Volta para fluxo normal (vertical) */
+      }
+
       .sidebar {
+        position: static;
+        /* Não fica mais fixa */
         width: 100%;
         height: auto;
-        position: relative;
-        box-shadow: none;
-        display: none !important;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
       }
 
       .content {
         margin-left: 0;
+        /* Remove margem */
+        margin-right: 0;
+        /* Remove margem */
         padding: 20px;
-        margin-top: 0;
       }
 
-      .stats-card,
-      .action-card {
-        margin-bottom: 20px;
-      }
-    }
-
-    @media (max-width: 575.98px) {
-      .content {
-        padding: 15px;
-      }
-
-      .content h1 {
-        font-size: 1.75rem;
+      .notifications {
+        position: static;
+        /* Não fica mais fixa */
+        width: 100%;
+        height: auto;
+        border-left: none;
+        border-top: 5px solid #ff0000;
+        box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.1);
       }
 
-      .stats-card,
-      .action-card {
-        padding: 15px;
+      .charts-container {
+        grid-template-columns: 1fr;
+        /* 1 coluna */
+        gap: 20px;
       }
 
-      .btn-modern {
-        padding: 10px 20px;
-        font-size: 14px;
-      }
-
-      .modal-dialog {
-        margin: 10px;
-      }
-    }
-
-    /* Custom Dropdown Mobile */
-    .custom-dropdown-mobile {
-      position: relative;
-    }
-
-    .custom-dropdown-toggle-mobile {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 20px;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: all 0.2s ease;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      background-color: transparent;
-    }
-
-    .custom-dropdown-toggle-mobile:hover {
-      background-color: rgba(255, 0, 0, 0.3);
-      transform: scale(1.02);
-    }
-
-    .custom-dropdown-toggle-mobile i:last-child {
-      transition: transform 0.2s ease;
-    }
-
-    .custom-dropdown-mobile.active .custom-dropdown-toggle-mobile i:last-child {
-      transform: rotate(180deg);
-    }
-
-    .custom-dropdown-menu-mobile {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      margin-top: 12px;
-      background-color: #ff0000;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
-      z-index: 1050;
-      min-width: auto;
-      padding: 10px 0;
-      list-style: none;
-      opacity: 0;
-      transform: translateY(-30px);
-      visibility: hidden;
-      transition: all 0.4s ease-out;
-    }
-
-    .custom-dropdown-mobile.active .custom-dropdown-menu-mobile {
-      opacity: 1;
-      transform: translateY(0);
-      visibility: visible;
-    }
-
-    .custom-dropdown-item-mobile {
-      color: white;
-      text-decoration: none;
-      padding: 12px 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-      transition: background-color 0.2s ease;
-      display: flex;
-      align-items: center;
-    }
-
-    .custom-dropdown-item-mobile:last-child {
-      border-bottom: none;
-    }
-
-    .custom-dropdown-item-mobile:hover {
-      background-color: #e00000;
-      color: white;
-    }
-
-    .custom-dropdown-item-mobile i {
-      margin-right: 10px;
-      width: 18px;
-    }
-
-    .offcanvas-body {
-      overflow: visible !important;
-    }
-
-    .offcanvas {
-      overflow: visible !important;
-    }
-
-    .navbar-logo-mobile {
-      height: 80px;
-      width: auto;
-      transition: transform 0.3s ease;
-      filter: brightness(1.1);
     }
   </style>
 </head>
 
 <body>
-  <!-- Navbar Mobile -->
-  <nav class="navbar navbar-dark bg-dark d-lg-none">
-    <div class="container-fluid">
-      <span class="navbar-brand mb-0 h1">Área do Administrador</span>
-      <div class="d-flex align-items-center justify-content-center flex-grow-1">
-        <img src="../img/logo3.png" alt="etec-conecta" class="navbar-logo-mobile">
-      </div>
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas"
-        aria-controls="sidebarOffcanvas">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    </div>
-  </nav>
 
-  <div class="container-fluid p-0 m-0">
-    <!-- Sidebar Desktop -->
-    <nav class="sidebar d-none d-lg-flex flex-column">
-      <div class="sidebar-top">
-        <h2>Área do Administrador</h2>
-        <ul>
-          <li class="mb-3">
-            <a href="#gerenciamento-alunos"
-              class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
-              <i class="fa-solid fa-users me-3"></i>Gerenciamento de Alunos
-            </a>
-          </li>
-          <li class="mb-3">
-            <a href="#gerenciamento-empresas"
-              class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
-              <i class="fa-solid fa-building me-3"></i>Gerenciamento de Empresas
-            </a>
-          </li>
-        </ul>
-      </div>
+  <div class="sidebar">
+    <h2>Admin</h2>
 
-      <!-- Profile Dropdown -->
-      <div class="profile-section">
-        <div class="custom-dropdown">
-          <a class="custom-dropdown-toggle" href="#" role="button">
-            <span id="adminNome">Administrador</span>
-            <i class="fa-solid fa-chevron-up"></i>
-          </a>
-          <ul class="custom-dropdown-menu">
-            <li><a class="custom-dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#configuracoesModal">
-                <i class="fa-solid fa-gear"></i>Configurações
-              </a></li>
-            <li><a class="custom-dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ajudaModal">
-                <i class="fa-solid fa-circle-info"></i>Ajuda
-              </a></li>
-            <li><a class="custom-dropdown-item btn-sair" href="index.html">
-                <i class="fa-solid fa-right-from-bracket"></i>Sair
-              </a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Sidebar Mobile (Offcanvas) -->
-    <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="sidebarOffcanvas"
-      aria-labelledby="sidebarOffcanvasLabel">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="sidebarOffcanvasLabel">Área do Administrador</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <ul class="list-unstyled">
-          <li class="mb-3">
-            <a href="#gerenciamento-alunos"
-              class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
-              <i class="fa-solid fa-users me-3"></i>Gerenciamento de Alunos
-            </a>
-          </li>
-          <li class="mb-3">
-            <a href="#gerenciamento-empresas"
-              class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
-              <i class="fa-solid fa-building me-3"></i>Gerenciamento de Empresas
-            </a>
-          </li>
-        </ul>
-
-        <hr class="text-white">
-
-        <!-- Profile Section Mobile -->
-        <div class="custom-dropdown-mobile">
-          <a class="custom-dropdown-toggle-mobile" href="#" role="button">
-            <i class="fa-solid fa-circle-user me-2"></i><span id="adminNomeMobile">Administrador</span>
-            <i class="fa-solid fa-chevron-up"></i>
-          </a>
-          <ul class="custom-dropdown-menu-mobile">
-            <li><a class="custom-dropdown-item-mobile mobile-modal-trigger" href="#"
-                data-modal-target="#configuracoesModal">
-                <i class="fa-solid fa-gear me-2"></i>Configurações
-              </a></li>
-            <li><a class="custom-dropdown-item-mobile mobile-modal-trigger" href="#" data-modal-target="#ajudaModal">
-                <i class="fa-solid fa-circle-info me-2"></i>Ajuda
-              </a></li>
-            <li><a class="custom-dropdown-item-mobile btn-sair" href="index.html">
-                <i class="fa-solid fa-right-from-bracket me-2"></i>Sair
-              </a></li>
-          </ul>
-        </div>
-      </div>
+    <div class="sidebar-top">
+      <a href="#"><i class="fa-solid fa-graduation-cap"></i>Gerenciar Alunos</a>
+      <a href="#"><i class="fa-solid fa-building"></i>Gerenciar Empresas</a>
+      <a href="#"><i class="fa-solid fa-briefcase"></i>Gerenciar Vagas</a>
+      <a href="#"><i class="fa-solid fa-chart-line"></i>Relatórios</a>
     </div>
 
-    <!-- Main Content -->
-    <main class="content">
-      <div class="container-fluid">
-        <div class="row mb-3">
-          <div class="col-12">
-            <div class="d-none d-lg-flex align-items-center justify-content-center mb-4" style="gap: 32px;">
-              <div>
-                <h1 class="display-4 mb-3">Bem-vindo ao painel administrativo!</h1>
-                <p class="lead">Aqui você pode visualizar estatísticas gerais, gerenciar alunos e empresas do sistema.
-                </p>
-              </div>
-              <img src="../img/logo3.png" alt="etec-conecta"
-                style="max-width: 230px; width: 100%; height: auto; flex-shrink: 0; margin-bottom: 15px;">
-            </div>
-            <div class="d-block d-lg-none">
-              <h1 class="display-4 mb-3">Bem-vindo ao painel administrativo!</h1>
-              <p class="lead">Aqui você pode visualizar estatísticas gerais, gerenciar alunos e empresas do sistema.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Gráficos -->
-        <div class="row mb-5">
-          <div class="col-12 col-md-6">
-            <div class="chart-container">
-              <h4 class="text-center mb-3">Distribuição por Categoria</h4>
-              <canvas id="pieChart" style="max-height: 300px;"></canvas>
-            </div>
-          </div>
-          <div class="col-12 col-md-6">
-            <div class="chart-container">
-              <h4 class="text-center mb-3">Estatísticas Mensais</h4>
-              <canvas id="barChart" style="max-height: 300px;"></canvas>
-            </div>
-          </div>
-        </div>
-        </div>
-
-        <!-- Seção Gerenciamento de Alunos -->
-        <div id="gerenciamento-alunos" class="mt-5">
-          <h2 class="mb-4">Gerenciamento de Alunos</h2>
-          <div class="card">
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Nome</th>
-                      <th>Email</th>
-                      <th>Status</th>
-                      <th>Ações</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>João Silva</td>
-                      <td>joao@email.com</td>
-                      <td><span class="badge bg-success">Ativo</span></td>
-                      <td>
-                        <button class="btn btn-sm btn-primary me-2">Editar</button>
-                        <button class="btn btn-sm btn-danger">Desativar</button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Maria Santos</td>
-                      <td>maria@email.com</td>
-                      <td><span class="badge bg-success">Ativo</span></td>
-                      <td>
-                        <button class="btn btn-sm btn-primary me-2">Editar</button>
-                        <button class="btn btn-sm btn-danger">Desativar</button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Pedro Oliveira</td>
-                      <td>pedro@email.com</td>
-                      <td><span class="badge bg-warning">Pendente</span></td>
-                      <td>
-                        <button class="btn btn-sm btn-primary me-2">Editar</button>
-                        <button class="btn btn-sm btn-success me-2">Aprovar</button>
-                        <button class="btn btn-sm btn-danger">Rejeitar</button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Seção Gerenciamento de Empresas -->
-        <div id="gerenciamento-empresas" class="mt-5">
-          <h2 class="mb-4">Gerenciamento de Empresas</h2>
-          <div class="card">
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-striped">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Nome da Empresa</th>
-                      <th>Email</th>
-                      <th>Status</th>
-                      <th>Ações</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Tech Solutions Ltda</td>
-                      <td>contato@techsolutions.com</td>
-                      <td><span class="badge bg-success">Aprovada</span></td>
-                      <td>
-                        <button class="btn btn-sm btn-primary me-2">Editar</button>
-                        <button class="btn btn-sm btn-danger">Suspender</button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Inovação Digital S.A.</td>
-                      <td>rh@inovacaodigital.com</td>
-                      <td><span class="badge bg-warning">Pendente</span></td>
-                      <td>
-                        <button class="btn btn-sm btn-primary me-2">Editar</button>
-                        <button class="btn btn-sm btn-success me-2">Aprovar</button>
-                        <button class="btn btn-sm btn-danger">Rejeitar</button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Construtora ABC</td>
-                      <td>recursos@construtoraabc.com</td>
-                      <td><span class="badge bg-success">Aprovada</span></td>
-                      <td>
-                        <button class="btn btn-sm btn-primary me-2">Editar</button>
-                        <button class="btn btn-sm btn-danger">Suspender</button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
+    <a href="index.html" class="btn-sair">
+      <i class="fa-solid fa-right-from-bracket"></i>Sair
+    </a>
   </div>
 
-  <!-- Modal Configurações -->
-  <div class="modal fade" id="configuracoesModal" tabindex="-1" aria-labelledby="configuracoesModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title" id="configuracoesModalLabel">
-            <i class="fa-solid fa-gear"></i> Configurações
-          </h2>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="row">
-              <div class="col-12 col-md-6 mb-3">
-                <label for="inputNome" class="form-label">Nome Completo</label>
-                <input type="text" class="form-control" id="inputNome" placeholder="Seu nome">
-              </div>
-              <div class="col-12 col-md-6 mb-3">
-                <label for="inputEmail" class="form-label">Email</label>
-                <input type="email" class="form-control" id="inputEmail" placeholder="seu@email.com" disabled>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label for="inputSenha" class="form-label">Alterar Senha</label>
-              <input type="password" class="form-control" id="inputSenha" placeholder="Nova senha">
-            </div>
-            <div class="row">
-              <div class="col-12 col-md-6 mb-3">
-                <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="notificacoesEmail" checked>
-                  <label class="form-check-label" for="notificacoesEmail">Receber notificações por email</label>
-                </div>
-              </div>
-            </div>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-              <button type="submit" class="btn btn-danger">Salvar Configurações</button>
-            </div>
-          </form>
-        </div>
+  <div class="content">
+    <h1>Painel do Administrador</h1>
+    <p>Visualização geral do sistema.</p>
+
+    <div class="charts-container">
+      <div class="chart-box">
+        <h3>Alunos cadastrados por mês</h3>
+        <canvas id="chartLine"></canvas>
+      </div>
+
+      <div class="chart-box">
+        <h3>Vagas por área</h3>
+        <canvas id="chartPie"></canvas>
+      </div>
+
+      <div class="chart-box">
+        <h3>Empresas parceiras por setor</h3>
+        <canvas id="chartBar"></canvas>
       </div>
     </div>
   </div>
 
-  <!-- Modal Ajuda -->
-  <div class="modal fade" id="ajudaModal" tabindex="-1" aria-labelledby="ajudaModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title" id="ajudaModalLabel">
-            <i class="fa-solid fa-circle-info"></i> Ajuda
-          </h2>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="accordion" id="accordionAjuda">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
-                  aria-expanded="true" aria-controls="collapseOne">
-                  Perguntas Frequentes
-                </button>
-              </h2>
-              <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
-                data-bs-parent="#accordionAjuda">
-                <div class="accordion-body">
-                  <ul class="list-unstyled">
-                    <li class="mb-3">
-                      <strong>Como gerenciar alunos?</strong><br>
-                      Acesse "Gerenciamento de Alunos" na sidebar para visualizar e editar.
-                    </li>
-                    <li class="mb-3">
-                      <strong>Como aprovar empresas?</strong><br>
-                      No "Gerenciamento de Empresas", você pode aprovar ou rejeitar cadastros pendentes.
-                    </li>
-                    <li class="mb-3">
-                      <strong>Onde vejo estatísticas?</strong><br>
-                      As estatísticas gerais estão na página principal do painel.
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingTwo">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                  Contato do Suporte
-                </button>
-              </h2>
-              <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                data-bs-parent="#accordionAjuda">
-                <div class="accordion-body">
-                  <div class="row">
-                    <div class="col-12 col-md-4 mb-3">
-                      <div class="text-center">
-                        <i class="fa-solid fa-envelope fa-2x text-danger mb-2"></i>
-                        <p><strong>Email</strong><br>suporte@exemplo.com</p>
-                      </div>
-                    </div>
-                    <div class="col-12 col-md-4 mb-3">
-                      <div class="text-center">
-                        <i class="fa-solid fa-phone fa-2x text-danger mb-2"></i>
-                        <p><strong>Telefone</strong><br>(11) 1234-5678</p>
-                      </div>
-                    </div>
-                    <div class="col-12 col-md-4 mb-3">
-                      <div class="text-center">
-                        <i class="fa-solid fa-comments fa-2x text-danger mb-2"></i>
-                        <p><strong>Chat</strong><br>Disponível no canto inferior direito</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="notifications">
+    <h2>Notificações Recentes</h2>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"></script>
+    <div class="notification">
+      <h4>Novo aluno cadastrado</h4>
+      <p>João Pereira acabou de criar uma conta.</p>
+    </div>
+
+    <div class="notification">
+      <h4>Nova vaga publicada</h4>
+      <p>Empresa TechCorp abriu vaga para Desenvolvedor Mobile.</p>
+    </div>
+
+    <div class="notification">
+      <h4>Empresa cadastrada</h4>
+      <p>Nova empresa: Global Solutions.</p>
+    </div>
+
+    <div class="notification">
+      <h4>Relatório Gerado</h4>
+      <p>Relatório mensal de vagas concluído.</p>
+    </div>
+
+    <div class="notification">
+      <h4>Revisão de Currículo</h4>
+      <p>O aluno Maria Silva atualizou o currículo.</p>
+    </div>
+
+  </div>
 
   <script>
-    // Dados mockados para gráficos
-    const pieData = {
-      labels: ['Alunos', 'Empresas', 'Vagas', 'Contratações'],
-      datasets: [{
-        data: [150, 25, 30, 10],
-        backgroundColor: ['#ff0000', '#00ff00', '#0000ff', '#ffff00'],
-        hoverOffset: 4
-      }]
-    };
-
-    const barData = {
-      labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
-      datasets: [{
-        label: 'Cadastros',
-        data: [20, 35, 45, 30, 50, 40],
-        backgroundColor: '#ff0000',
-        borderColor: '#e00000',
-        borderWidth: 1
-      }]
-    };
-
-    // Inicializar gráficos
-    const pieCtx = document.getElementById('pieChart').getContext('2d');
-    new Chart(pieCtx, {
-      type: 'pie',
-      data: pieData,
+    // Gráfico de linha
+    new Chart(document.getElementById("chartLine"), {
+      type: 'line',
+      data: {
+        labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"],
+        datasets: [{
+          label: "Alunos",
+          data: [10, 20, 15, 25, 30, 40],
+          borderColor: '#ff0000', // Cor do tema
+          backgroundColor: 'rgba(255, 0, 0, 0.1)',
+          borderWidth: 3,
+          tension: 0.4,
+          fill: true
+        }]
+      },
       options: {
         responsive: true,
         plugins: {
           legend: {
-            position: 'bottom',
+            display: false
+          },
+          title: {
+            display: false
           }
-        }
-      }
-    });
-
-    const barCtx = document.getElementById('barChart').getContext('2d');
-    new Chart(barCtx, {
-      type: 'bar',
-      data: barData,
-      options: {
-        responsive: true,
+        },
         scales: {
           y: {
             beginAtZero: true
@@ -968,106 +369,64 @@
       }
     });
 
-    // Controle dos dropdowns customizados
-    document.addEventListener('DOMContentLoaded', function () {
-      const customDropdown = document.querySelector('.custom-dropdown');
-      const customToggle = document.querySelector('.custom-dropdown-toggle');
-
-      const customDropdownMobile = document.querySelector('.custom-dropdown-mobile');
-      const customToggleMobile = document.querySelector('.custom-dropdown-toggle-mobile');
-
-      function setupDropdown(dropdown, toggle) {
-        if (dropdown && toggle) {
-          toggle.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            dropdown.classList.toggle('active');
-            document.querySelectorAll('.custom-dropdown, .custom-dropdown-mobile').forEach(otherDropdown => {
-              if (otherDropdown !== dropdown) {
-                otherDropdown.classList.remove('active');
-              }
-            });
-          });
-        }
-      }
-
-      setupDropdown(customDropdown, customToggle);
-      setupDropdown(customDropdownMobile, customToggleMobile);
-
-      document.addEventListener('click', function (e) {
-        if (customDropdown && !customDropdown.contains(e.target)) {
-          customDropdown.classList.remove('active');
-        }
-        if (customDropdownMobile && !customDropdownMobile.contains(e.target) && !e.target.closest('.custom-dropdown-menu-mobile')) {
-          customDropdownMobile.classList.remove('active');
-        }
-      });
-    });
-
-    // Evento para o botão sair
-    document.querySelectorAll('.btn-sair').forEach(sairBtn => {
-      sairBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-        if (confirm('Deseja sair da conta?')) {
-          window.location.href = sairBtn.href;
-        }
-      });
-    });
-
-    // Fechar offcanvas quando clicar fora
-    document.addEventListener('click', function (e) {
-      const offcanvas = document.getElementById('sidebarOffcanvas');
-      const toggle = document.querySelector('[data-bs-target="#sidebarOffcanvas"]');
-      const customDropdownMobile = document.querySelector('.custom-dropdown-mobile');
-
-      if (customDropdownMobile && customDropdownMobile.contains(e.target)) {
-        return;
-      }
-
-      if (e.target.closest('.custom-dropdown-menu-mobile')) {
-        return;
-      }
-
-      if (e.target.closest('.custom-dropdown-toggle-mobile')) {
-        return;
-      }
-
-      if (offcanvas && !offcanvas.contains(e.target) && !toggle.contains(e.target)) {
-        const offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvas);
-        if (offcanvasInstance) {
-          offcanvasInstance.hide();
-        }
-      }
-    });
-
-    // Controle específico para modais no mobile
-    document.querySelectorAll('.mobile-modal-trigger').forEach(modalTrigger => {
-      modalTrigger.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        const modalId = this.getAttribute('data-modal-target');
-        const modalElement = document.querySelector(modalId);
-
-        if (modalElement) {
-          const dropdown = this.closest('.custom-dropdown-mobile');
-          if (dropdown) dropdown.classList.remove('active');
-
-          const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('sidebarOffcanvas'));
-          if (offcanvas) {
-            offcanvas.hide();
-            setTimeout(() => {
-              const modal = new bootstrap.Modal(modalElement);
-              modal.show();
-            }, 300);
-          } else {
-            const modal = new bootstrap.Modal(modalElement);
-            modal.show();
+    // Gráfico de pizza
+    new Chart(document.getElementById("chartPie"), {
+      type: 'doughnut', // Alterado para Doughnut para visual moderno
+      data: {
+        labels: ["TI", "Administração", "Saúde", "Marketing"],
+        datasets: [{
+          data: [20, 15, 10, 8],
+          backgroundColor: ['#ff0000', '#000000', '#333333', '#666666'] // Cores do tema
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+          },
+          title: {
+            display: false
           }
         }
-      });
+      }
+    });
+
+    // Gráfico de barras
+    new Chart(document.getElementById("chartBar"), {
+      type: 'bar',
+      data: {
+        labels: ["Tecnologia", "Comércio", "Indústria", "Educação"],
+        datasets: [{
+          label: "Empresas",
+          data: [12, 9, 7, 5],
+          backgroundColor: '#ff0000', // Cor do tema
+          borderColor: '#cc0000',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false
+          },
+          title: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
     });
   </script>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>
