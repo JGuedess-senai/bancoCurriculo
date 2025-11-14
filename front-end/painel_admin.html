@@ -12,7 +12,8 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
-
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     /* ----- layout base ----- */
     body {
@@ -32,7 +33,7 @@
       left: 0;
       top: 0;
       bottom: 0;
-      width: 293px;
+      width: 290px;
       background: linear-gradient(180deg, #000 0%, #1a1a1a 100%);
       color: #fff;
       padding: 25px;
@@ -101,7 +102,6 @@
       overflow: visible;
     }
 
-    /* Custom Dropdown */
     .custom-dropdown {
       position: relative;
     }
@@ -185,9 +185,9 @@
       width: 18px;
     }
 
-    /* ----- área de conteúdo ----- */
+    /* ----- área de conteúdo (rola independente) ----- */
     .content {
-      margin-left: 293px;
+      margin-left: 290px;
       min-height: 100vh;
       padding: 40px;
       background: #f4f6f9;
@@ -206,7 +206,7 @@
       margin-bottom: 40px;
     }
 
-    /* Cards modernos */
+    /* Cards modernos no content */
     .stats-card {
       background: linear-gradient(135deg, #1c1c1c 0%, #2c2c2c 100%);
       color: white;
@@ -283,8 +283,99 @@
       color: white;
     }
 
+    /* Gráficos */
+    .chart-container {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    /* ----- modal ----- */
+    .modal {
+      z-index: 1060;
+    }
+
+    .modal-backdrop {
+      background-color: rgba(0, 0, 0, 0.6);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modal-content {
+      background-color: #1c1c1c;
+      color: white;
+      border-radius: 15px;
+      border: none;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      animation: scaleIn 0.3s ease;
+      margin-top: 50px;
+    }
+
+    @keyframes scaleIn {
+      from {
+        transform: scale(0.8);
+      }
+
+      to {
+        transform: scale(1);
+      }
+    }
+
+    .modal-header {
+      border-bottom: none;
+      padding: 30px 30px 0;
+    }
+
+    .modal-header h2 {
+      color: white;
+      font-family: 'Russo One';
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .modal-header i {
+      color: #ff0000;
+    }
+
+    .modal-body {
+      padding: 0 30px 30px;
+    }
+
+    .modal-body hr {
+      border-color: #333;
+      margin: 20px 0;
+    }
+
+    .modal-body h3,
+    .modal-body h4 {
+      color: #fff;
+      margin-bottom: 10px;
+      font-family: 'Russo One';
+    }
+
+    .btn-close {
+      filter: invert(1);
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+
+    .btn-close:hover {
+      opacity: 1;
+    }
+
     /* ----- responsivo ----- */
-    @media (max-width: 991.98px) {
+    @media (max-width: 1199.98px) {
       .sidebar {
         width: 250px;
       }
@@ -295,17 +386,19 @@
       }
     }
 
-    @media (max-width: 767.98px) {
+    @media (max-width: 991.98px) {
       .sidebar {
         width: 100%;
         height: auto;
         position: relative;
         box-shadow: none;
+        display: none !important;
       }
 
       .content {
         margin-left: 0;
         padding: 20px;
+        margin-top: 0;
       }
 
       .stats-card,
@@ -319,6 +412,10 @@
         padding: 15px;
       }
 
+      .content h1 {
+        font-size: 1.75rem;
+      }
+
       .stats-card,
       .action-card {
         padding: 15px;
@@ -328,22 +425,147 @@
         padding: 10px 20px;
         font-size: 14px;
       }
+
+      .modal-dialog {
+        margin: 10px;
+      }
+    }
+
+    /* Custom Dropdown Mobile */
+    .custom-dropdown-mobile {
+      position: relative;
+    }
+
+    .custom-dropdown-toggle-mobile {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background-color: transparent;
+    }
+
+    .custom-dropdown-toggle-mobile:hover {
+      background-color: rgba(255, 0, 0, 0.3);
+      transform: scale(1.02);
+    }
+
+    .custom-dropdown-toggle-mobile i:last-child {
+      transition: transform 0.2s ease;
+    }
+
+    .custom-dropdown-mobile.active .custom-dropdown-toggle-mobile i:last-child {
+      transform: rotate(180deg);
+    }
+
+    .custom-dropdown-menu-mobile {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      margin-top: 12px;
+      background-color: #ff0000;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
+      z-index: 1050;
+      min-width: auto;
+      padding: 10px 0;
+      list-style: none;
+      opacity: 0;
+      transform: translateY(-30px);
+      visibility: hidden;
+      transition: all 0.4s ease-out;
+    }
+
+    .custom-dropdown-mobile.active .custom-dropdown-menu-mobile {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+
+    .custom-dropdown-item-mobile {
+      color: white;
+      text-decoration: none;
+      padding: 12px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      transition: background-color 0.2s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .custom-dropdown-item-mobile:last-child {
+      border-bottom: none;
+    }
+
+    .custom-dropdown-item-mobile:hover {
+      background-color: #e00000;
+      color: white;
+    }
+
+    .custom-dropdown-item-mobile i {
+      margin-right: 10px;
+      width: 18px;
+    }
+
+    .offcanvas-body {
+      overflow: visible !important;
+    }
+
+    .offcanvas {
+      overflow: visible !important;
+    }
+
+    .navbar-logo-mobile {
+      height: 80px;
+      width: auto;
+      transition: transform 0.3s ease;
+      filter: brightness(1.1);
     }
   </style>
 </head>
 
 <body>
+  <!-- Navbar Mobile -->
+  <nav class="navbar navbar-dark bg-dark d-lg-none">
+    <div class="container-fluid">
+      <span class="navbar-brand mb-0 h1">Área do Administrador</span>
+      <div class="d-flex align-items-center justify-content-center flex-grow-1">
+        <img src="../img/logo3.png" alt="etec-conecta" class="navbar-logo-mobile">
+      </div>
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas"
+        aria-controls="sidebarOffcanvas">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+
   <div class="container-fluid p-0 m-0">
     <!-- Sidebar Desktop -->
     <nav class="sidebar d-none d-lg-flex flex-column">
       <div class="sidebar-top">
         <h2>Área do Administrador</h2>
         <ul>
-          <li><a href="#"><i class="fa-solid fa-building"></i>Gerenciar Empresas</a></li>
-          <li><a href="#"><i class="fa-solid fa-users"></i>Gerenciar Alunos</a></li>
-          <li><a href="#"><i class="fa-solid fa-briefcase"></i>Vagas Cadastradas</a></li>
-          <li><a href="#"><i class="fa-solid fa-file-alt"></i>Currículos</a></li>
-          <li><a href="#"><i class="fa-solid fa-chart-line"></i>Estatísticas</a></li>
+          <li class="mb-3">
+            <a href="#gerenciamento-alunos"
+              class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
+              <i class="fa-solid fa-users me-3"></i>Gerenciamento de Alunos
+            </a>
+          </li>
+          <li class="mb-3">
+            <a href="#gerenciamento-empresas"
+              class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
+              <i class="fa-solid fa-building me-3"></i>Gerenciamento de Empresas
+            </a>
+          </li>
         </ul>
       </div>
 
@@ -351,7 +573,7 @@
       <div class="profile-section">
         <div class="custom-dropdown">
           <a class="custom-dropdown-toggle" href="#" role="button">
-            <span>Administrador</span>
+            <span id="adminNome">Administrador</span>
             <i class="fa-solid fa-chevron-up"></i>
           </a>
           <ul class="custom-dropdown-menu">
@@ -369,63 +591,197 @@
       </div>
     </nav>
 
+    <!-- Sidebar Mobile (Offcanvas) -->
+    <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="sidebarOffcanvas"
+      aria-labelledby="sidebarOffcanvasLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="sidebarOffcanvasLabel">Área do Administrador</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="list-unstyled">
+          <li class="mb-3">
+            <a href="#gerenciamento-alunos"
+              class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
+              <i class="fa-solid fa-users me-3"></i>Gerenciamento de Alunos
+            </a>
+          </li>
+          <li class="mb-3">
+            <a href="#gerenciamento-empresas"
+              class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
+              <i class="fa-solid fa-building me-3"></i>Gerenciamento de Empresas
+            </a>
+          </li>
+        </ul>
+
+        <hr class="text-white">
+
+        <!-- Profile Section Mobile -->
+        <div class="custom-dropdown-mobile">
+          <a class="custom-dropdown-toggle-mobile" href="#" role="button">
+            <i class="fa-solid fa-circle-user me-2"></i><span id="adminNomeMobile">Administrador</span>
+            <i class="fa-solid fa-chevron-up"></i>
+          </a>
+          <ul class="custom-dropdown-menu-mobile">
+            <li><a class="custom-dropdown-item-mobile mobile-modal-trigger" href="#"
+                data-modal-target="#configuracoesModal">
+                <i class="fa-solid fa-gear me-2"></i>Configurações
+              </a></li>
+            <li><a class="custom-dropdown-item-mobile mobile-modal-trigger" href="#" data-modal-target="#ajudaModal">
+                <i class="fa-solid fa-circle-info me-2"></i>Ajuda
+              </a></li>
+            <li><a class="custom-dropdown-item-mobile btn-sair" href="index.html">
+                <i class="fa-solid fa-right-from-bracket me-2"></i>Sair
+              </a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
     <!-- Main Content -->
     <main class="content">
       <div class="container-fluid">
-        <!-- Título e Boas-vindas -->
-        <div class="row mb-4">
+        <div class="row mb-3">
           <div class="col-12">
-            <h1>Painel Administrativo</h1>
-            <p>Gerencie empresas, alunos, vagas e acompanhe as estatísticas do sistema.</p>
-          </div>
-        </div>
-
-        <!-- Cards de Estatísticas -->
-        <div class="row mb-4">
-          <div class="col-md-3 mb-4">
-            <div class="stats-card">
-              <i class="fa-solid fa-building"></i>
-              <h3>25</h3>
-              <p>Empresas Cadastradas</p>
+            <div class="d-none d-lg-flex align-items-center justify-content-center mb-4" style="gap: 32px;">
+              <div>
+                <h1 class="display-4 mb-3">Bem-vindo ao painel administrativo!</h1>
+                <p class="lead">Aqui você pode visualizar estatísticas gerais, gerenciar alunos e empresas do sistema.
+                </p>
+              </div>
+              <img src="../img/logo3.png" alt="etec-conecta"
+                style="max-width: 230px; width: 100%; height: auto; flex-shrink: 0; margin-bottom: 15px;">
             </div>
-          </div>
-          <div class="col-md-3 mb-4">
-            <div class="stats-card">
-              <i class="fa-solid fa-users"></i>
-              <h3>150</h3>
-              <p>Alunos Ativos</p>
-            </div>
-          </div>
-          <div class="col-md-3 mb-4">
-            <div class="stats-card">
-              <i class="fa-solid fa-briefcase"></i>
-              <h3>45</h3>
-              <p>Vagas Abertas</p>
-            </div>
-          </div>
-          <div class="col-md-3 mb-4">
-            <div class="stats-card">
-              <i class="fa-solid fa-handshake"></i>
-              <h3>30</h3>
-              <p>Contratações</p>
+            <div class="d-block d-lg-none">
+              <h1 class="display-4 mb-3">Bem-vindo ao painel administrativo!</h1>
+              <p class="lead">Aqui você pode visualizar estatísticas gerais, gerenciar alunos e empresas do sistema.</p>
             </div>
           </div>
         </div>
 
-        <!-- Cards de Ação Rápida -->
-        <div class="row">
-          <div class="col-md-6 mb-4">
-            <div class="action-card">
-              <h4><i class="fa-solid fa-exclamation-circle text-danger me-2"></i>Aprovações Pendentes</h4>
-              <p>5 empresas aguardando aprovação de cadastro</p>
-              <a href="#" class="btn-modern">Revisar Cadastros</a>
+        <!-- Gráficos -->
+        <div class="row mb-5">
+          <div class="col-12 col-md-6">
+            <div class="chart-container">
+              <h4 class="text-center mb-3">Distribuição por Categoria</h4>
+              <canvas id="pieChart" style="max-height: 300px;"></canvas>
             </div>
           </div>
-          <div class="col-md-6 mb-4">
-            <div class="action-card">
-              <h4><i class="fa-solid fa-chart-bar text-danger me-2"></i>Relatório Mensal</h4>
-              <p>Visualize o resumo das atividades do último mês</p>
-              <a href="#" class="btn-modern">Ver Relatório</a>
+          <div class="col-12 col-md-6">
+            <div class="chart-container">
+              <h4 class="text-center mb-3">Estatísticas Mensais</h4>
+              <canvas id="barChart" style="max-height: 300px;"></canvas>
+            </div>
+          </div>
+        </div>
+        </div>
+
+        <!-- Seção Gerenciamento de Alunos -->
+        <div id="gerenciamento-alunos" class="mt-5">
+          <h2 class="mb-4">Gerenciamento de Alunos</h2>
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Nome</th>
+                      <th>Email</th>
+                      <th>Status</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>João Silva</td>
+                      <td>joao@email.com</td>
+                      <td><span class="badge bg-success">Ativo</span></td>
+                      <td>
+                        <button class="btn btn-sm btn-primary me-2">Editar</button>
+                        <button class="btn btn-sm btn-danger">Desativar</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Maria Santos</td>
+                      <td>maria@email.com</td>
+                      <td><span class="badge bg-success">Ativo</span></td>
+                      <td>
+                        <button class="btn btn-sm btn-primary me-2">Editar</button>
+                        <button class="btn btn-sm btn-danger">Desativar</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Pedro Oliveira</td>
+                      <td>pedro@email.com</td>
+                      <td><span class="badge bg-warning">Pendente</span></td>
+                      <td>
+                        <button class="btn btn-sm btn-primary me-2">Editar</button>
+                        <button class="btn btn-sm btn-success me-2">Aprovar</button>
+                        <button class="btn btn-sm btn-danger">Rejeitar</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seção Gerenciamento de Empresas -->
+        <div id="gerenciamento-empresas" class="mt-5">
+          <h2 class="mb-4">Gerenciamento de Empresas</h2>
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Nome da Empresa</th>
+                      <th>Email</th>
+                      <th>Status</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Tech Solutions Ltda</td>
+                      <td>contato@techsolutions.com</td>
+                      <td><span class="badge bg-success">Aprovada</span></td>
+                      <td>
+                        <button class="btn btn-sm btn-primary me-2">Editar</button>
+                        <button class="btn btn-sm btn-danger">Suspender</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Inovação Digital S.A.</td>
+                      <td>rh@inovacaodigital.com</td>
+                      <td><span class="badge bg-warning">Pendente</span></td>
+                      <td>
+                        <button class="btn btn-sm btn-primary me-2">Editar</button>
+                        <button class="btn btn-sm btn-success me-2">Aprovar</button>
+                        <button class="btn btn-sm btn-danger">Rejeitar</button>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Construtora ABC</td>
+                      <td>recursos@construtoraabc.com</td>
+                      <td><span class="badge bg-success">Aprovada</span></td>
+                      <td>
+                        <button class="btn btn-sm btn-primary me-2">Editar</button>
+                        <button class="btn btn-sm btn-danger">Suspender</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -433,7 +789,6 @@
     </main>
   </div>
 
-  <!-- Modais -->
   <!-- Modal Configurações -->
   <div class="modal fade" id="configuracoesModal" tabindex="-1" aria-labelledby="configuracoesModalLabel"
     aria-hidden="true">
@@ -495,7 +850,7 @@
               <h2 class="accordion-header" id="headingOne">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
                   aria-expanded="true" aria-controls="collapseOne">
-                  Funções do Administrador
+                  Perguntas Frequentes
                 </button>
               </h2>
               <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
@@ -503,16 +858,16 @@
                 <div class="accordion-body">
                   <ul class="list-unstyled">
                     <li class="mb-3">
-                      <strong>Como gerenciar empresas?</strong><br>
-                      Acesse a seção "Gerenciar Empresas" para aprovar cadastros e gerenciar informações.
+                      <strong>Como gerenciar alunos?</strong><br>
+                      Acesse "Gerenciamento de Alunos" na sidebar para visualizar e editar.
                     </li>
                     <li class="mb-3">
-                      <strong>Como moderar vagas?</strong><br>
-                      Use a seção "Vagas Cadastradas" para revisar e moderar vagas publicadas.
+                      <strong>Como aprovar empresas?</strong><br>
+                      No "Gerenciamento de Empresas", você pode aprovar ou rejeitar cadastros pendentes.
                     </li>
                     <li class="mb-3">
-                      <strong>Como ver estatísticas?</strong><br>
-                      Acesse "Estatísticas" para ver dados sobre empresas, alunos e vagas.
+                      <strong>Onde vejo estatísticas?</strong><br>
+                      As estatísticas gerais estão na página principal do painel.
                     </li>
                   </ul>
                 </div>
@@ -532,7 +887,7 @@
                     <div class="col-12 col-md-4 mb-3">
                       <div class="text-center">
                         <i class="fa-solid fa-envelope fa-2x text-danger mb-2"></i>
-                        <p><strong>Email</strong><br>suporte.ti@etec.sp.gov.br</p>
+                        <p><strong>Email</strong><br>suporte@exemplo.com</p>
                       </div>
                     </div>
                     <div class="col-12 col-md-4 mb-3">
@@ -562,39 +917,157 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
 
-  <!-- Custom JS -->
   <script>
+    // Dados mockados para gráficos
+    const pieData = {
+      labels: ['Alunos', 'Empresas', 'Vagas', 'Contratações'],
+      datasets: [{
+        data: [150, 25, 30, 10],
+        backgroundColor: ['#ff0000', '#00ff00', '#0000ff', '#ffff00'],
+        hoverOffset: 4
+      }]
+    };
+
+    const barData = {
+      labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+      datasets: [{
+        label: 'Cadastros',
+        data: [20, 35, 45, 30, 50, 40],
+        backgroundColor: '#ff0000',
+        borderColor: '#e00000',
+        borderWidth: 1
+      }]
+    };
+
+    // Inicializar gráficos
+    const pieCtx = document.getElementById('pieChart').getContext('2d');
+    new Chart(pieCtx, {
+      type: 'pie',
+      data: pieData,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+          }
+        }
+      }
+    });
+
+    const barCtx = document.getElementById('barChart').getContext('2d');
+    new Chart(barCtx, {
+      type: 'bar',
+      data: barData,
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
     // Controle dos dropdowns customizados
     document.addEventListener('DOMContentLoaded', function () {
       const customDropdown = document.querySelector('.custom-dropdown');
       const customToggle = document.querySelector('.custom-dropdown-toggle');
 
-      if (customDropdown && customToggle) {
-        customToggle.addEventListener('click', function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          customDropdown.classList.toggle('active');
-        });
+      const customDropdownMobile = document.querySelector('.custom-dropdown-mobile');
+      const customToggleMobile = document.querySelector('.custom-dropdown-toggle-mobile');
 
-        // Fechar dropdown ao clicar fora
-        document.addEventListener('click', function (e) {
-          if (customDropdown && !customDropdown.contains(e.target)) {
-            customDropdown.classList.remove('active');
-          }
-        });
+      function setupDropdown(dropdown, toggle) {
+        if (dropdown && toggle) {
+          toggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropdown.classList.toggle('active');
+            document.querySelectorAll('.custom-dropdown, .custom-dropdown-mobile').forEach(otherDropdown => {
+              if (otherDropdown !== dropdown) {
+                otherDropdown.classList.remove('active');
+              }
+            });
+          });
+        }
       }
 
-      // Evento para o botão sair
-      document.querySelectorAll('.btn-sair').forEach(sairBtn => {
-        sairBtn.addEventListener('click', function (e) {
-          e.preventDefault();
-          if (confirm('Deseja sair da conta?')) {
-            window.location.href = this.getAttribute('href');
+      setupDropdown(customDropdown, customToggle);
+      setupDropdown(customDropdownMobile, customToggleMobile);
+
+      document.addEventListener('click', function (e) {
+        if (customDropdown && !customDropdown.contains(e.target)) {
+          customDropdown.classList.remove('active');
+        }
+        if (customDropdownMobile && !customDropdownMobile.contains(e.target) && !e.target.closest('.custom-dropdown-menu-mobile')) {
+          customDropdownMobile.classList.remove('active');
+        }
+      });
+    });
+
+    // Evento para o botão sair
+    document.querySelectorAll('.btn-sair').forEach(sairBtn => {
+      sairBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (confirm('Deseja sair da conta?')) {
+          window.location.href = sairBtn.href;
+        }
+      });
+    });
+
+    // Fechar offcanvas quando clicar fora
+    document.addEventListener('click', function (e) {
+      const offcanvas = document.getElementById('sidebarOffcanvas');
+      const toggle = document.querySelector('[data-bs-target="#sidebarOffcanvas"]');
+      const customDropdownMobile = document.querySelector('.custom-dropdown-mobile');
+
+      if (customDropdownMobile && customDropdownMobile.contains(e.target)) {
+        return;
+      }
+
+      if (e.target.closest('.custom-dropdown-menu-mobile')) {
+        return;
+      }
+
+      if (e.target.closest('.custom-dropdown-toggle-mobile')) {
+        return;
+      }
+
+      if (offcanvas && !offcanvas.contains(e.target) && !toggle.contains(e.target)) {
+        const offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvas);
+        if (offcanvasInstance) {
+          offcanvasInstance.hide();
+        }
+      }
+    });
+
+    // Controle específico para modais no mobile
+    document.querySelectorAll('.mobile-modal-trigger').forEach(modalTrigger => {
+      modalTrigger.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const modalId = this.getAttribute('data-modal-target');
+        const modalElement = document.querySelector(modalId);
+
+        if (modalElement) {
+          const dropdown = this.closest('.custom-dropdown-mobile');
+          if (dropdown) dropdown.classList.remove('active');
+
+          const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('sidebarOffcanvas'));
+          if (offcanvas) {
+            offcanvas.hide();
+            setTimeout(() => {
+              const modal = new bootstrap.Modal(modalElement);
+              modal.show();
+            }, 300);
+          } else {
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
           }
-        });
+        }
       });
     });
   </script>
+
 </body>
 
 </html>
