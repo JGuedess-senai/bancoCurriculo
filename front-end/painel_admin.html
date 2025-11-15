@@ -1,432 +1,457 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!doctype html>
+<html lang="pt-br">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<title>Painel Admin - ETEC Estágios</title>
+		<link rel="icon" href="../img/favicon.png">
+		<!-- Bootstrap, FontAwesome e Google Fonts (Poppins) para seguir o padrão do projeto -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+		<script src="https://kit.fontawesome.com/e66b0e408d.js" crossorigin="anonymous"></script>
+		<link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<style>
+			/* base and fonts */
+			:root{--primary:#ff0000;--muted:#6c757d}
+			body{margin:0;font-family:'Poppins',sans-serif;background:#f4f6f9}
+			h1,h2{font-family:'Russo One',sans-serif}
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Painel Admin</title>
+			/* sidebar (copiado do padrão aluno/empresa) */
+			.sidebar{position:fixed;left:0;top:0;bottom:0;width:290px;background:linear-gradient(180deg,#000 0%,#1a1a1a 100%);color:#fff;padding:25px;display:flex;flex-direction:column;overflow-y:auto;height:100vh;z-index:1000;box-shadow:2px 0 15px rgba(0,0,0,.3);transition:width .3s}
+			.sidebar-top{display:flex;flex-direction:column}
+			.sidebar h2{margin:0 0 35px;text-align:center;font-weight:bold;font-size:1.6rem;letter-spacing:1.5px}
+			.sidebar ul{list-style:none;padding:0;margin:0;flex-grow:1}
+			.sidebar ul li{margin:20px 0;font-size:16px}
+			.sidebar ul li a{color:white;text-decoration:none;font-weight:bold;padding:14px 18px;display:flex;align-items:center;border-radius:8px;transition:all .3s}
+			.sidebar ul li a:hover{background-color:var(--primary);transform:translateX(5px);box-shadow:0 4px 10px rgba(255,0,0,.3)}
+			.sidebar ul li a i{margin-right:12px;width:20px}
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://kit.fontawesome.com/e66b0e408d.js" crossorigin="anonymous"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+			/* profile dropdown (bottom of sidebar) */
+			.profile-section{margin-top:auto;position:relative;padding:0 15px 25px;border-top:1px solid rgba(255,255,255,.1);overflow:visible}
+			.custom-dropdown{position:relative}
+			.custom-dropdown-toggle{color:white;text-decoration:none;font-weight:bold;font-size:16px;display:flex;align-items:center;justify-content:space-between;padding:12px 30px;cursor:pointer;border-radius:8px;transition:all .2s;margin:0 -15px}
+			.custom-dropdown-toggle:hover{background-color:rgba(255,0,0,.3);transform:scale(1.02)}
+			.custom-dropdown-toggle i{transition:transform .2s}
+			.custom-dropdown.active .custom-dropdown-toggle i{transform:rotate(180deg)}
+			.custom-dropdown-menu{position:absolute;bottom:100%;left:0;right:0;margin-bottom:12px!important;background-color:var(--primary);color:white;border:none;border-radius:8px;box-shadow:0 8px 25px rgba(255,0,0,.4);z-index:1050;min-width:auto;padding:10px 0;list-style:none;opacity:0;transform:translateY(30px);visibility:hidden;transition:all .4s}
+			.custom-dropdown.active .custom-dropdown-menu{opacity:1;transform:translateY(0);visibility:visible}
+			.custom-dropdown-item{color:white;text-decoration:none;padding:12px 20px;border-bottom:1px solid rgba(255,255,255,.3);display:flex;align-items:center}
+			.custom-dropdown-item:last-child{border-bottom:none}
+			.custom-dropdown-item:hover{background-color:#e00000;color:white}
 
-  <style>
-    /* Estilos Gerais (Copied from Admin base) */
-    body {
-      margin: 0;
-      display: flex;
-      /* Mantém a estrutura de 3 colunas principal */
-      font-family: 'Poppins', sans-serif;
-      background: #f4f6f9;
-    }
+			/* content area */
+			.content{margin-left:290px;min-height:100vh;padding:40px;background:#f4f6f9;box-sizing:border-box}
+			.card{background:linear-gradient(180deg,#fff,#fbfbfb);border:1px solid #eee;border-radius:10px;padding:18px;margin-bottom:16px}
+			.small{color:var(--muted);font-size:.95rem}
+			.placeholder-list{list-style:none;padding:0;margin:8px 0 0 0}
+			.placeholder-list li{padding:10px 12px;background:#fff;border:1px solid #eee;border-radius:6px;margin-bottom:8px}
+			.btn-modern{background:linear-gradient(135deg,#ff0000 0%,#e00000 100%);color:#fff;border:none;padding:12px 30px;border-radius:25px;font-weight:700}
 
-    h1,
-    h2 {
-      font-family: 'Russo One';
-    }
+			/* cards pattern */
+			.stats-card{background:linear-gradient(135deg,#1c1c1c 0%,#2c2c2c 100%);color:white;border-radius:15px;padding:30px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.2);transition:transform .3s,box-shadow .3s;border:none}
+			.stats-card i{font-size:3rem;color:var(--primary);margin-bottom:15px}
+			.action-card{background:white;border-radius:15px;padding:30px;box-shadow:0 5px 20px rgba(0,0,0,.1);border-left:5px solid var(--primary)}
 
-    /* ----------------------- */
-    /* Sidebar (Padrão Aluno/Moderno) */
-    /* ----------------------- */
-    .sidebar {
-      position: fixed;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 250px;
-      /* Reduzido para 250px para melhor visualização em 3 colunas */
-      background: linear-gradient(180deg, #000 0%, #1a1a1a 100%);
-      color: #fff;
-      padding: 25px;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      z-index: 1000;
-      box-shadow: 2px 0 15px rgba(0, 0, 0, 0.3);
-    }
+			@media(max-width:1199.98px){.sidebar{width:250px}.content{margin-left:250px;padding:30px}}
+			@media(max-width:991.98px){.sidebar{width:100%;height:auto;position:relative;box-shadow:none;display:none!important}.content{margin-left:0;padding:20px}}
 
-    .sidebar h2 {
-      margin: 0 0 35px;
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.6rem;
-      letter-spacing: 1.5px;
-    }
+			/* modal styles (copiado do padrão painel_aluno/painel_empresa) */
+			.modal{z-index:1060}
+			.modal-backdrop{background-color:rgba(0,0,0,.6);animation:fadeIn .3s ease}
+			@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+			.modal-content{background-color:#1c1c1c;color:white;border-radius:15px;border:none;box-shadow:0 10px 40px rgba(0,0,0,.5);animation:scaleIn .3s ease;margin-top:50px}
+			@keyframes scaleIn{from{transform:scale(.8)}to{transform:scale(1)}}
+			.modal-header{border-bottom:none;padding:30px 30px 0}
+			.modal-header h2{color:white;font-family:'Russo One';margin:0;font-size:1.8rem}
+			.modal-header i{color:var(--primary)}
+			.modal-body{padding:0 30px 30px}
+			.modal-body hr{border-color:#333;margin:20px 0}
+			.modal-body h3,.modal-body h4{color:#fff;margin-bottom:10px;font-family:'Russo One'}
+			.btn-close{filter:invert(1);opacity:.7;transition:opacity .3s}
+			.btn-close:hover{opacity:1}
+		</style>
+	</head>
+	<body>
+		<!-- Navbar Mobile -->
+		<nav class="navbar navbar-dark bg-dark d-lg-none">
+			<div class="container-fluid">
+				<span class="navbar-brand mb-0 h1">Painel ADM</span>
+				<div class="d-flex align-items-center justify-content-center flex-grow-1">
+					<img src="../img/logo3.png" alt="etec-conecta" class="navbar-logo-mobile">
+				</div>
+				<button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+			</div>
+		</nav>
 
-    /* Links da Sidebar */
-    .sidebar a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      padding: 14px 18px;
-      display: flex;
-      align-items: center;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-      margin: 12px 0;
-      /* Espaçamento entre os links */
-    }
+		<div class="container-fluid p-0 m-0">
+			<!-- Sidebar Desktop -->
+			<nav class="sidebar d-none d-lg-flex flex-column">
+				<div class="sidebar-top">
+					<h2>Painel ADM</h2>
+					<ul>
+						<li><a href="gestao_empresas.html"><i class="fa-solid fa-building"></i> Gestão de Empresas</a></li>
+						<li><a href="gestao_alunos.html"><i class="fa-solid fa-user-graduate"></i> Gestão de Alunos</a></li>
+					</ul>
+				</div>
 
-    .sidebar a:hover {
-      background-color: #ff0000;
-      transform: translateX(5px);
-      box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
-    }
+				<!-- Profile Dropdown -->
+				<div class="profile-section">
+					<div class="custom-dropdown">
+						<a class="custom-dropdown-toggle" href="#" role="button">
+							<span id="adminName">Administrador</span>
+							<i class="fa-solid fa-chevron-up"></i>
+						</a>
+						<ul class="custom-dropdown-menu">
+							<li><a class="custom-dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#configuracoesModal"><i class="fa-solid fa-gear"></i>Configurações</a></li>
+							<li><a class="custom-dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ajudaModal"><i class="fa-solid fa-circle-info"></i>Ajuda</a></li>
+							<li><a class="custom-dropdown-item btn-sair" href="index.html"><i class="fa-solid fa-right-from-bracket"></i>Sair</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
 
-    .sidebar a i {
-      margin-right: 12px;
-      width: 20px;
-    }
+			<!-- Sidebar Mobile (Offcanvas) -->
+			<div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel">
+				<div class="offcanvas-header">
+					<h5 class="offcanvas-title" id="sidebarOffcanvasLabel">Painel ADM</h5>
+					<button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+				</div>
+				<div class="offcanvas-body">
+					<ul class="list-unstyled">
+						<li class="mb-3">
+							<a href="gestao_empresas.html" class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
+								<i class="fa-solid fa-building me-3"></i>Gestão de Empresas
+							</a>
+						</li>
+						<li class="mb-3">
+							<a href="gestao_alunos.html" class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
+								<i class="fa-solid fa-user-graduate me-3"></i>Gestão de Alunos
+							</a>
+						</li>
+					</ul>
+					<hr class="text-white">
+					<div class="custom-dropdown-mobile">
+						<a class="custom-dropdown-toggle-mobile" href="#" role="button">
+							<i class="fa-solid fa-circle-user me-2"></i><span id="adminNameMobile">Administrador</span>
+							<i class="fa-solid fa-chevron-up"></i>
+						</a>
+						<ul class="custom-dropdown-menu-mobile">
+							<li><a class="custom-dropdown-item-mobile" href="#" data-modal-target="#configuracoesModal"><i class="fa-solid fa-gear me-2"></i>Configurações</a></li>
+							<li><a class="custom-dropdown-item-mobile" href="#" data-modal-target="#ajudaModal"><i class="fa-solid fa-circle-info me-2"></i>Ajuda</a></li>
+							<li><a class="custom-dropdown-item-mobile btn-sair" href="index.html"><i class="fa-solid fa-right-from-bracket me-2"></i>Sair</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
 
-    /* Botão Sair da Sidebar */
-    .sidebar .btn-sair {
-      margin-top: auto;
-      /* Empurra para o final da sidebar */
-      text-align: center;
-      background: #ff0000;
-      box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
-      /* Remove transform para o botão Sair */
-      transition: background-color 0.3s ease;
-    }
+			<main class="content">
+				<div class="d-flex align-items-start justify-content-between mb-3">
+					<div>
+						<h2 class="mb-1">Administração do Programa</h2>
+						<div class="small">Visual — publique avisos e edite informações do programa (sem backend por enquanto).</div>
+					</div>
+						<div>
+							<button id="btn-refresh" class="btn-modern">Atualizar dados</button>
+						</div>
+				</div>
 
-    .sidebar .btn-sair:hover {
-      background: #e00000;
-      transform: none;
-      box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4);
-    }
+				<section id="section-admin">
+					<div class="card">
+						<div class="row g-3">
+							<div class="col-lg-6">
+								<h5>Publicar / Gerenciar Avisos</h5>
+								<p class="small">Criar avisos rápidos que apareceriam no painel principal. Esta é a interface visual — sem salvar no servidor ainda.</p>
 
+								<div class="mb-2">
+									<input id="notice-title" class="form-control" placeholder="Título do aviso">
+								</div>
+								<div class="mb-2">
+									<textarea id="notice-body" class="form-control" rows="4" placeholder="Texto do aviso"></textarea>
+								</div>
+								<div class="d-flex gap-2">
+									<button id="btn-add-notice" class="btn btn-primary-custom">Publicar (visual)</button>
+									<button id="btn-clear-notice" class="btn btn-outline-secondary">Limpar</button>
+								</div>
 
-    /* ----------------------- */
-    /* Conteúdo principal */
-    /* ----------------------- */
-    .content {
-      flex: 1;
-      padding: 40px;
-      margin-left: 250px;
-      /* Compensa a largura da sidebar */
-      margin-right: 330px;
-      /* Compensa a largura da notificação */
-    }
+								<hr>
+								<h6 class="mb-2">Avisos publicados (visual)</h6>
+								<ul id="notices-list" class="placeholder-list"></ul>
+							</div>
 
-    .content h1 {
-      color: #000;
-      margin-bottom: 10px;
-      font-size: 2.5rem;
-    }
+							<div class="col-lg-6">
+								<h5>Editar Informações do Programa</h5>
+								<p class="small">Campos visuais para atualizar o conteúdo do programa. Ainda não grava no banco.</p>
 
-    .content p {
-      font-size: 18px;
-      color: #333;
-      margin-bottom: 40px;
-    }
+								<div class="mb-2">
+									<label class="form-label small">Nome do Programa</label>
+									<input id="program-name" class="form-control" placeholder="Programa de Estágios ETEC" value="Programa de Estágios ETEC">
+								</div>
+								<div class="mb-2">
+									<label class="form-label small">Descrição</label>
+									<textarea id="program-desc" class="form-control" rows="5">Descrição breve do programa...</textarea>
+								</div>
+								<div class="d-flex gap-2">
+									<button id="btn-save-program" class="btn btn-primary-custom">Salvar (visual)</button>
+									<button id="btn-reset-program" class="btn btn-outline-secondary">Reverter</button>
+								</div>
+								<hr>
+								<h6 class="mb-2">Pré-visualização</h6>
+								<div id="program-preview" class="card p-3">
+									<strong id="preview-title">Programa de Estágios ETEC</strong>
+									<p id="preview-desc" class="small mb-0">Descrição breve do programa...</p>
+								</div>
+							</div>
+						</div>
+					</div>
 
-    .charts-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 30px;
-      margin-top: 40px;
-    }
+					<div class="card">
+						<div class="d-flex align-items-center justify-content-between mb-3">
+							<h5 class="mb-0">Estatísticas</h5>
+							<button id="btn-refresh" class="btn-modern">Atualizar</button>
+						</div>
+						<div class="row g-3">
+							<div class="col-12">
+								<div class="card p-3 chart-wrap" style="min-height:140px; height:300px;">
+									<h6>Empresas</h6>
+									<canvas id="chartCompanies"></canvas>
+								</div>
+								</div>
+							<div class="col-12">
+								<div class="card p-3 chart-wrap" style="min-height:140px; height:400px;">
+									<h6>Alunos</h6>
+									<canvas id="chartStudents"></canvas>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
 
-    .chart-box {
-      background: white;
-      padding: 25px;
-      border-radius: 18px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-      /* Padrão moderno */
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+				<section id="section-empresas" style="display:none">
+					<div class="card">
+						<h5>Gestão de Empresas</h5>
+						<p class="small">Lista reduzida com ações básicas (visual). Use os botões para editar/validar.</p>
+						<ul id="lista-empresas" class="placeholder-list">
+							<li class="d-flex justify-content-between align-items-center"><span>Empresa Alpha — pendente</span><div><button class="btn btn-sm btn-outline-success me-1">Aprovar</button><button class="btn btn-sm btn-outline-danger">Remover</button></div></li>
+							<li class="d-flex justify-content-between align-items-center"><span>Empresa Beta — aprovada</span><div><button class="btn btn-sm btn-outline-secondary">Ver</button></div></li>
+						</ul>
+					</div>
+				</section>
 
-    .chart-box:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    }
+				<section id="section-alunos" style="display:none">
+					<div class="card">
+						<h5>Gestão de Alunos</h5>
+						<p class="small">Lista reduzida com ações básicas (visual).</p>
+						<ul id="lista-alunos" class="placeholder-list">
+							<li class="d-flex justify-content-between align-items-center"><span>João Silva — perfil</span><div><button class="btn btn-sm btn-outline-secondary">Ver</button></div></li>
+							<li class="d-flex justify-content-between align-items-center"><span>Maria Souza — perfil</span><div><button class="btn btn-sm btn-outline-secondary">Ver</button></div></li>
+						</ul>
+					</div>
+				</section>
+			</main>
+		</div>
 
-    .chart-box h3 {
-      font-family: 'Russo One';
-      font-size: 1.5rem;
-      color: #000;
-      margin-bottom: 20px;
-    }
+		<script>
+			// Navegação pelos links: os itens da sidebar apontam para páginas separadas
 
-    /* ----------------------- */
-    /* Notificações (Padrão Admin Original + Visual Moderno) */
-    /* ----------------------- */
-    .notifications {
-      width: 330px;
-      background: white;
-      padding: 25px;
-      height: 100vh;
-      overflow-y: auto;
-      position: fixed;
-      /* Fixa no lado direito */
-      right: 0;
-      top: 0;
-      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
-      border-left: 5px solid #ff0000;
-      /* Linha vermelha moderna */
-      z-index: 999;
-    }
+			// Avisos (visual)
+			const noticesList = document.getElementById('notices-list');
+			document.getElementById('btn-add-notice').addEventListener('click', ()=>{
+				const t = document.getElementById('notice-title').value.trim();
+				const b = document.getElementById('notice-body').value.trim();
+				if(!t && !b) return alert('Preencha título ou texto do aviso.');
+				const li = document.createElement('li');
+				li.innerHTML = `<div class="d-flex justify-content-between"><div><strong>${escapeHtml(t||'(sem título)')}</strong><div class="small">${escapeHtml(b)}</div></div><div><button class="btn btn-sm btn-outline-danger">Remover</button></div></div>`;
+				noticesList.prepend(li);
+				document.getElementById('notice-title').value='';
+				document.getElementById('notice-body').value='';
+			});
+			document.getElementById('btn-clear-notice').addEventListener('click', ()=>{document.getElementById('notice-title').value='';document.getElementById('notice-body').value=''});
 
-    .notifications h2 {
-      margin-bottom: 30px;
-      color: #000;
-      font-size: 1.8rem;
-    }
+			// Programa (visual)
+			const previewTitle = document.getElementById('preview-title');
+			const previewDesc = document.getElementById('preview-desc');
+			document.getElementById('btn-save-program').addEventListener('click', ()=>{
+				const name = document.getElementById('program-name').value;
+				const desc = document.getElementById('program-desc').value;
+				previewTitle.textContent = name;
+				previewDesc.textContent = desc;
+				alert('Alterações aplicadas visualmente. Integração com backend pendente.');
+			});
+			document.getElementById('btn-reset-program').addEventListener('click', ()=>{
+				document.getElementById('program-name').value = 'Programa de Estágios ETEC';
+				document.getElementById('program-desc').value = 'Descrição breve do programa...';
+				previewTitle.textContent = 'Programa de Estágios ETEC';
+				previewDesc.textContent = 'Descrição breve do programa...';
+			});
 
-    .notification {
-      background: #f1f1f1;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      border-left: 5px solid #ff0000;
-      transition: all 0.3s ease;
-    }
+			// Charts
+			const ctxCompanies = document.getElementById('chartCompanies').getContext('2d');
+			const ctxStudents = document.getElementById('chartStudents').getContext('2d');
+			let companiesChart = null, studentsChart = null;
+			function renderCharts(data){
+				const comp = data?.companies ?? {approved:12,pending:4};
+				const studs = data?.students ?? {labels:['Informática','Administração','Desenvolvimento de Sistemas','Agropecuária','Zootecnia','Recursos Humanos'],values:[24,12,18,8,6,10]};
+				if(companiesChart) companiesChart.destroy();
+				companiesChart = new Chart(ctxCompanies,{
+					type:'doughnut',
+					data:{labels:['Aprovadas','Pendentes'],datasets:[{data:[comp.approved,comp.pending],backgroundColor:['#198754','#ffc107']} ]},
+					options:{
+						responsive:true,
+						maintainAspectRatio:false,
+						plugins:{legend:{position:'bottom'}}
+					}
+				});
+				if(studentsChart) studentsChart.destroy();
+				studentsChart = new Chart(ctxStudents,{
+					type:'bar',
+					data:{labels:studs.labels,datasets:[{label:'Alunos',data:studs.values,backgroundColor:'#b00000'}]},
+					options:{
+						responsive:true,
+						maintainAspectRatio:false,
+						scales:{
+							x:{ticks:{maxRotation:45,minRotation:45}},
+							y:{beginAtZero:true}
+						},
+						plugins:{legend:{display:false}}
+					}
+				});
+			}
+			async function loadStats(){
+				try{
+					const res = await fetch('../back-end/get_estatisticas.php');
+					if(!res.ok) throw new Error('sem dados');
+					const json = await res.json();
+					renderCharts(json);
+				}catch(err){
+					renderCharts(null);
+				}
+			}
+			document.getElementById('btn-refresh').addEventListener('click',(e)=>{e.preventDefault(); loadStats()});
 
-    .notification:hover {
-      background: #ffebeb;
-      box-shadow: 0 2px 10px rgba(255, 0, 0, 0.1);
-      transform: translateX(3px);
-    }
+			// util
+			function escapeHtml(s){return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')}
 
-    .notification h4 {
-      margin: 0 0 5px 0;
-      font-family: 'Russo One';
-      color: #000;
-    }
+			// init
+			loadStats();
 
-    .notification p {
-      margin: 0;
-      font-size: 14px;
-      color: #555;
-    }
+			// Setup custom dropdowns (desktop + mobile)
+			document.addEventListener('DOMContentLoaded', function(){
+				const customDropdown = document.querySelector('.custom-dropdown');
+				const customToggle = document.querySelector('.custom-dropdown-toggle');
+				const customDropdownMobile = document.querySelector('.custom-dropdown-mobile');
+				const customToggleMobile = document.querySelector('.custom-dropdown-toggle-mobile');
 
-    /* ----------------------- */
-    /* Responsivo (Adaptação para 3 colunas) */
-    /* ----------------------- */
+				function setupDropdown(dropdown,toggle){
+					if(!dropdown||!toggle) return;
+					toggle.addEventListener('click', function(e){
+						e.preventDefault(); e.stopPropagation();
+						dropdown.classList.toggle('active');
+						// close others
+						document.querySelectorAll('.custom-dropdown, .custom-dropdown-mobile').forEach(other=>{ if(other!==dropdown) other.classList.remove('active'); });
+					});
+				}
 
-    /* Remove 3a coluna (notificações) em telas menores */
-    @media (max-width: 1300px) {
-      .notifications {
-        width: 280px;
-      }
+				setupDropdown(customDropdown, customToggle);
+				setupDropdown(customDropdownMobile, customToggleMobile);
 
-      .content {
-        margin-right: 280px;
-      }
+				// close on outside click
+				document.addEventListener('click', function(e){
+					if(customDropdown && !customDropdown.contains(e.target)) customDropdown.classList.remove('active');
+					if(customDropdownMobile && !customDropdownMobile.contains(e.target) && !e.target.closest('.custom-dropdown-menu-mobile')) customDropdownMobile.classList.remove('active');
+				});
+			});
+		</script>
 
-      .charts-container {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 20px;
-      }
-    }
+		<!-- Modal Configurações -->
+		<div class="modal fade" id="configuracoesModal" tabindex="-1" aria-labelledby="configuracoesModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h2 class="modal-title" id="configuracoesModalLabel"><i class="fa-solid fa-gear"></i> Configurações</h2>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="row">
+								<div class="col-12 col-md-6 mb-3">
+									<label for="inputNomeAdmin" class="form-label">Nome</label>
+									<input type="text" class="form-control" id="inputNomeAdmin" placeholder="Seu nome">
+								</div>
+								<div class="col-12 col-md-6 mb-3">
+									<label for="inputEmailAdmin" class="form-label">Email</label>
+									<input type="email" class="form-control" id="inputEmailAdmin" placeholder="admin@email.com" disabled>
+								</div>
+							</div>
+							<div class="mb-3">
+								<label for="inputSenhaAdmin" class="form-label">Alterar Senha</label>
+								<input type="password" class="form-control" id="inputSenhaAdmin" placeholder="Nova senha">
+							</div>
+							<div class="row">
+								<div class="col-12 col-md-6 mb-3">
+									<div class="form-check">
+										<input type="checkbox" class="form-check-input" id="notificacoesEmail" checked>
+										<label class="form-check-label" for="notificacoesEmail">Receber notificações por email</label>
+									</div>
+								</div>
+							</div>
+							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+								<button type="submit" class="btn btn-danger">Salvar Configurações</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 
-    /* Remove a notificação e transforma sidebar em 100% no tablet/mobile */
-    @media (max-width: 991.98px) {
-      body {
-        display: block;
-        /* Volta para fluxo normal (vertical) */
-      }
+		<!-- Modal Ajuda -->
+		<div class="modal fade" id="ajudaModal" tabindex="-1" aria-labelledby="ajudaModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h2 class="modal-title" id="ajudaModalLabel"><i class="fa-solid fa-circle-info"></i> Ajuda</h2>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="accordion" id="accordionAjuda">
+							<div class="accordion-item">
+								<h2 class="accordion-header" id="headingOne">
+									<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Perguntas Frequentes</button>
+								</h2>
+								<div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionAjuda">
+									<div class="accordion-body">
+										<ul class="list-unstyled">
+											<li class="mb-3"><strong>Como publicar avisos?</strong><br>Use o formulário na esquerda para criar avisos visuais; integração com backend pode ser adicionada depois.</li>
+											<li class="mb-3"><strong>Como aprovar uma empresa?</strong><br>Acesse a lista de empresas e clique em "Aprovar" para alterar o status (visual por enquanto).</li>
+											<li class="mb-3"><strong>Como editar informações do programa?</strong><br>Na tela Administração, edite os campos e clique em "Salvar (visual)".</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+							<div class="accordion-item">
+								<h2 class="accordion-header" id="headingTwo">
+									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Contato do Suporte</button>
+								</h2>
+								<div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionAjuda">
+									<div class="accordion-body">
+										<div class="row">
+											<div class="col-12 col-md-4 mb-3 text-center"><i class="fa-solid fa-envelope fa-2x text-danger mb-2"></i><p><strong>Email</strong><br>suporte@exemplo.com</p></div>
+											<div class="col-12 col-md-4 mb-3 text-center"><i class="fa-solid fa-phone fa-2x text-danger mb-2"></i><p><strong>Telefone</strong><br>(11) 1234-5678</p></div>
+											<div class="col-12 col-md-4 mb-3 text-center"><i class="fa-solid fa-comments fa-2x text-danger mb-2"></i><p><strong>Chat</strong><br>Disponível no canto inferior direito</p></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-      .sidebar {
-        position: static;
-        /* Não fica mais fixa */
-        width: 100%;
-        height: auto;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      }
-
-      .content {
-        margin-left: 0;
-        /* Remove margem */
-        margin-right: 0;
-        /* Remove margem */
-        padding: 20px;
-      }
-
-      .notifications {
-        position: static;
-        /* Não fica mais fixa */
-        width: 100%;
-        height: auto;
-        border-left: none;
-        border-top: 5px solid #ff0000;
-        box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.1);
-      }
-
-      .charts-container {
-        grid-template-columns: 1fr;
-        /* 1 coluna */
-        gap: 20px;
-      }
-
-    }
-  </style>
-</head>
-
-<body>
-
-  <div class="sidebar">
-    <h2>Admin</h2>
-
-    <div class="sidebar-top">
-      <a href="#"><i class="fa-solid fa-graduation-cap"></i>Gerenciar Alunos</a>
-      <a href="#"><i class="fa-solid fa-building"></i>Gerenciar Empresas</a>
-      <a href="#"><i class="fa-solid fa-briefcase"></i>Gerenciar Vagas</a>
-      <a href="#"><i class="fa-solid fa-chart-line"></i>Relatórios</a>
-    </div>
-
-    <a href="index.html" class="btn-sair">
-      <i class="fa-solid fa-right-from-bracket"></i>Sair
-    </a>
-  </div>
-
-  <div class="content">
-    <h1>Painel do Administrador</h1>
-    <p>Visualização geral do sistema.</p>
-
-    <div class="charts-container">
-      <div class="chart-box">
-        <h3>Alunos cadastrados por mês</h3>
-        <canvas id="chartLine"></canvas>
-      </div>
-
-      <div class="chart-box">
-        <h3>Vagas por área</h3>
-        <canvas id="chartPie"></canvas>
-      </div>
-
-      <div class="chart-box">
-        <h3>Empresas parceiras por setor</h3>
-        <canvas id="chartBar"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <div class="notifications">
-    <h2>Notificações Recentes</h2>
-
-    <div class="notification">
-      <h4>Novo aluno cadastrado</h4>
-      <p>João Pereira acabou de criar uma conta.</p>
-    </div>
-
-    <div class="notification">
-      <h4>Nova vaga publicada</h4>
-      <p>Empresa TechCorp abriu vaga para Desenvolvedor Mobile.</p>
-    </div>
-
-    <div class="notification">
-      <h4>Empresa cadastrada</h4>
-      <p>Nova empresa: Global Solutions.</p>
-    </div>
-
-    <div class="notification">
-      <h4>Relatório Gerado</h4>
-      <p>Relatório mensal de vagas concluído.</p>
-    </div>
-
-    <div class="notification">
-      <h4>Revisão de Currículo</h4>
-      <p>O aluno Maria Silva atualizou o currículo.</p>
-    </div>
-
-  </div>
-
-  <script>
-    // Gráfico de linha
-    new Chart(document.getElementById("chartLine"), {
-      type: 'line',
-      data: {
-        labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"],
-        datasets: [{
-          label: "Alunos",
-          data: [10, 20, 15, 25, 30, 40],
-          borderColor: '#ff0000', // Cor do tema
-          backgroundColor: 'rgba(255, 0, 0, 0.1)',
-          borderWidth: 3,
-          tension: 0.4,
-          fill: true
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            display: false
-          },
-          title: {
-            display: false
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-
-    // Gráfico de pizza
-    new Chart(document.getElementById("chartPie"), {
-      type: 'doughnut', // Alterado para Doughnut para visual moderno
-      data: {
-        labels: ["TI", "Administração", "Saúde", "Marketing"],
-        datasets: [{
-          data: [20, 15, 10, 8],
-          backgroundColor: ['#ff0000', '#000000', '#333333', '#666666'] // Cores do tema
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
-          },
-          title: {
-            display: false
-          }
-        }
-      }
-    });
-
-    // Gráfico de barras
-    new Chart(document.getElementById("chartBar"), {
-      type: 'bar',
-      data: {
-        labels: ["Tecnologia", "Comércio", "Indústria", "Educação"],
-        datasets: [{
-          label: "Empresas",
-          data: [12, 9, 7, 5],
-          backgroundColor: '#ff0000', // Cor do tema
-          borderColor: '#cc0000',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            display: false
-          },
-          title: {
-            display: false
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"></script>
-</body>
-
+		<!-- Bootstrap JS -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+	</body>
 </html>
+
