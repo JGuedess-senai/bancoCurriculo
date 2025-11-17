@@ -12,12 +12,21 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($empresa = $result->fetch_assoc()) {
+
+    // 1️⃣ Verifica se está aprovado
+    if ($empresa['estado'] != 'aprovado') {
+        echo "Seu cadastro ainda está pendente de aprovação.";
+        exit;
+    }
+
+    // 2️⃣ Verifica senha
     if (password_verify($senha, $empresa['senha'])) {
         $_SESSION['empresa'] = $empresa['id'];
         echo "OK";
     } else {
         echo "Senha incorreta.";
     }
+
 } else {
     echo "CNPJ não encontrado.";
 }

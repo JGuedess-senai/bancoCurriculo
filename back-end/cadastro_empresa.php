@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $senha = password_hash($senha_plain, PASSWORD_DEFAULT);
 
-    $stmt = $conexao->prepare("INSERT INTO empresas (nome, cnpj, email, senha) VALUES (?, ?, ?, ?)");
+    $stmt = $conexao->prepare("INSERT INTO empresas (nome, cnpj, email, senha, estado) VALUES (?, ?, ?, ?, 'pendente')");
     $stmt->bind_param("ssss", $nome, $cnpj, $email, $senha);
 
     if ($stmt->execute()) {
