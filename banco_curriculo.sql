@@ -53,3 +53,5 @@ CREATE TABLE IF NOT EXISTS vagas (
     ativo TINYINT(1) DEFAULT 1,
     FOREIGN KEY (empresa_id) REFERENCES empresas(id) ON DELETE CASCADE
 );
+
+ALTER TABLE empresas ADD status ENUM('pendente','aprovado','rejeitado') DEFAULT 'pendente';
