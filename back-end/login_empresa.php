@@ -17,21 +17,22 @@ $result = $stmt->get_result();
 
 if ($empresa = $result->fetch_assoc()) {
 
-    // 1️⃣ Verifica se está aprovado
-    // Usa operador null-coalescing para evitar Notice quando coluna não existe
+    // 1️⃣ Verifica senha primeiro — evita vazar que o CNPJ existe mostrando 'pendente' sem senha válida
+    if (!password_verify($senha, $empresa['senha'])) {
+        echo "Senha incorreta.";
+        exit;
+    }
+
+    // 2️⃣ Agora que a senha é válida, verifica se está aprovado
     $estado = $empresa['estado'] ?? ($empresa['status'] ?? null);
     if ($estado !== 'aprovado') {
         echo "Seu cadastro ainda está pendente de aprovação.";
         exit;
     }
 
-    // 2️⃣ Verifica senha
-    if (password_verify($senha, $empresa['senha'])) {
-        $_SESSION['empresa'] = $empresa['id'];
-        echo "OK";
-    } else {
-        echo "Senha incorreta.";
-    }
+    // 3️⃣ Login OK
+    $_SESSION['empresa'] = $empresa['id'];
+    echo "OK";
 
 } else {
     echo "CNPJ não encontrado.";
