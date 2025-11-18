@@ -895,7 +895,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Carga Horária:</label>
-                        <textarea class="form-control" name="requisitos" rows="3" required></textarea>
+                        <textarea class="form-control" name="carga_horaria" rows="3" required></textarea>
                     </div>
 
                     <div class="mb-3">
@@ -905,7 +905,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">Localização:</label>
-                        <input type="text" class="form-control" name="localizacao" required>
+                        <input type="text" class="form-control" name="local" required>
                     </div>
 
                     <div class="mb-3">
@@ -1284,19 +1284,33 @@
             });
         });
 
-        // Prevenção de submit do form (demo; substitua por fetch real para backend de criar vaga)
+        // Prevenção de submit do form com envio real via fetch
         if (form) {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                if (confirm('Deseja criar a vaga?')) {
-                    alert('Vaga criada com sucesso! (Simulação - integre com backend real)');
-                    // Exemplo para envio real: 
-                    // const formData = new FormData(form);
-                    // fetch('../back-end/criar_vaga.php', { method: 'POST', body: formData })
-                    //     .then(response => response.json())
-                    //     .then(data => { alert('Vaga criada!'); })
-                    //     .catch(err => { alert('Erro ao criar vaga.'); console.error(err); });
-                }
+
+                const formData = new FormData(form);
+
+                fetch('../back-end/criar_vaga.php', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.status === 'sucesso') {
+                        alert(data.mensagem || 'Vaga criada com sucesso!');
+                        form.reset();
+                        updateProgress();
+                        window.location.href = 'verVagas.html';
+                    } else {
+                        alert('Erro: ' + (data && data.mensagem ? data.mensagem : 'Erro ao criar vaga'));
+                    }
+                })
+                .catch(err => {
+                    console.error('Erro:', err);
+                    alert('Erro na requisição.');
+                });
             });
         }
     </script>
