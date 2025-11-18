@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS vagas (
     descricao TEXT NOT NULL,
     requisitos TEXT,
     salario VARCHAR(50),
-    local VARCHAR(120),
+    localizacao VARCHAR(120),
     tipo VARCHAR(50),
     data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     ativo TINYINT(1) DEFAULT 1,
