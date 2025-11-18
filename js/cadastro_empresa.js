@@ -109,23 +109,37 @@
           document.body.appendChild(overlay);
         }
 
+        // Envia os dados ao backend e trata respostas não-JSON para diagnóstico
         fetch('../back-end/cadastro_empresa.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: formData.toString()
         })
-          .then(response => response.json())
+          .then(async (response) => {
+            const text = await response.text();
+            // tenta parsear JSON, caso contrário mostra o texto para diagnóstico
+            try {
+              const data = JSON.parse(text);
+              return data;
+            } catch (e) {
+              console.error('Resposta do servidor (não-JSON):', text);
+              // mostra mensagem mais útil ao usuário
+              alert('Resposta inesperada do servidor:\n' + text);
+              throw new Error('invalid-json');
+            }
+          })
           .then(data => {
             if (data.status === 'sucesso') {
               // Mostra aviso de aprovação pendente em vez de redirecionar de imediato
               showApprovalNotice(data.mensagem);
             } else {
-              alert(data.mensagem);
+              alert(data.mensagem || 'Erro no servidor');
             }
           })
           .catch(err => {
-            console.error('Erro:', err);
-            alert('Erro ao enviar os dados.');
+            if (err.message === 'invalid-json') return; // já tratamos e mostramos ao usuário
+            console.error('Erro de rede ou runtime:', err);
+            alert('Erro ao enviar os dados. Verifique o console e o servidor.');
           });
       });
     }

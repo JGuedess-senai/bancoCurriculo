@@ -228,13 +228,26 @@
       tbody.innerHTML = '';
       list.forEach(emp => {
         const tr = document.createElement('tr');
+        if (emp.id) tr.dataset.id = emp.id;
         const tdNome = document.createElement('td'); tdNome.textContent = emp.nome || '';
         const tdEmail = document.createElement('td'); tdEmail.textContent = emp.email || '';
         const tdStatus = document.createElement('td');
-        tdStatus.innerHTML = emp.aprovada ? '<span class="badge bg-success">Aprovada</span>' : '<span class="badge bg-warning text-dark">Pendente</span>';
+        // detectar campo de estado (estado/status) ou fallback
+        const estado = (emp.estado || emp.status || '').toString().toLowerCase();
+        const isPendente = estado === 'pendente' || estado === 'pending' || estado === '';
+        tdStatus.innerHTML = isPendente ? '<span class="badge bg-warning text-dark">Pendente</span>' : '<span class="badge bg-success">Aprovada</span>';
         const tdActions = document.createElement('td');
-        if(!emp.aprovada){ const btn = document.createElement('button'); btn.className='btn btn-sm btn-success me-1 aprovar'; btn.textContent='Aprovar'; tdActions.appendChild(btn); }
-        const ver = document.createElement('button'); ver.className='btn btn-sm btn-outline-secondary ver'; ver.textContent='Ver'; tdActions.appendChild(ver);
+        if (isPendente) {
+          const btn = document.createElement('button');
+          btn.className = 'btn btn-sm btn-success me-1 aprovar';
+          btn.textContent = 'Aprovar';
+          tdActions.appendChild(btn);
+          const btnRem = document.createElement('button');
+          btnRem.className = 'btn btn-sm btn-danger remover ms-1';
+          btnRem.textContent = 'Remover';
+          tdActions.appendChild(btnRem);
+        }
+        const ver = document.createElement('button'); ver.className='btn btn-sm btn-outline-secondary ver ms-1'; ver.textContent='Ver'; tdActions.appendChild(ver);
         tr.appendChild(tdNome); tr.appendChild(tdEmail); tr.appendChild(tdStatus); tr.appendChild(tdActions);
         tbody.appendChild(tr);
       });
