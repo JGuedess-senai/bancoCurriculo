@@ -735,6 +735,63 @@
             border: 1px solid #ccc;
             font-size: 14px;
         }
+        
+        /* ----- modal (copiado de verVagas.html para aparência idêntica) ----- */
+        .modal {
+            z-index: 1060;
+        }
+
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: #1c1c1c;
+            color: white;
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: scaleIn 0.3s ease;
+            margin-top: 50px;
+        }
+
+        @keyframes scaleIn { from { transform: scale(0.8); } to { transform: scale(1); } }
+
+        .modal-header { border-bottom: none; padding: 30px 30px 0; }
+        .modal-header h2 { color: white; font-family: 'Russo One'; margin: 0; font-size: 1.8rem; }
+        .modal-header i { color: #ff0000; }
+        .modal-body { padding: 0 30px 30px; }
+        .modal-body hr { border-color: #333; margin: 20px 0; }
+        .modal-body h3, .modal-body h4 { color: #fff; margin-bottom: 10px; font-family: 'Russo One'; }
+        .btn-close { filter: invert(1); opacity: 0.7; transition: opacity 0.3s ease; }
+        .btn-close:hover { opacity: 1; }
+
+        /* Estilos da vaga no modal (fundo branco interno, bordas arredondadas) */
+        .vaga-view {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+
+        .vaga-view:hover { box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15); }
+
+        .vaga-section { margin-bottom: 25px; border-bottom: 1px solid #e9ecef; padding-bottom: 15px; }
+        .vaga-section h3 { color: #ff0000; font-family: 'Russo One'; margin-bottom: 10px; }
+        .vaga-section p, .vaga-section ul { color: #333; font-size: 1rem; line-height: 1.6; }
+
+        .vaga-header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #ff0000; padding-bottom: 20px; }
+        .vaga-header h1 { font-family: 'Russo One'; color: #000; font-size: 2.5rem; }
+        .vaga-header p { font-size: 1.1rem; color: #666; }
     </style>
 </head>
 
@@ -1000,38 +1057,58 @@
         crossorigin="anonymous"></script>
 
     <script>
-        // --- Vagas: renderização e filtros ---
-        const vagas = [
-            { titulo: "Estagiário Administrativo", empresa: "Empresa ABC", curso: "Administração", local: "Votuporanga", descricao: "Auxiliar nas rotinas administrativas, atendimento ao público e organização de documentos." },
-            { titulo: "Estágio em Suporte Técnico", empresa: "Tech Solutions", curso: "Informática", local: "Home Office", descricao: "Atendimento remoto a usuários, manutenção de sistemas e redes." },
-            { titulo: "Desenvolvedor Júnior", empresa: "SoftCode", curso: "Desenvolvimento de Sistemas", local: "Votuporanga", descricao: "Apoio em projetos web, codificação, testes e documentação técnica." },
-            { titulo: "Auxiliar Agropecuário", empresa: "Fazenda Verde", curso: "Agropecuária", local: "Zona Rural", descricao: "Suporte nas atividades diárias da fazenda, manejo animal e controle de produção." }
-        ];
+        // --- Vagas: carregamento dinâmico do backend e renderização ---
+        // Endpoint que fornece as vagas em JSON
+        const API_LIST = '../back-end/get_vagas.php';
 
-        function renderizarVagas(filtrarPor = "todas") {
-            const container = document.getElementById("listaVagas");
+        // Carrega vagas do backend e renderiza
+        async function carregarVagas() {
+            const container = document.getElementById('listaVagas');
             if (!container) return;
-            container.innerHTML = "";
+            container.innerHTML = '<div class="text-center py-5">Carregando vagas...</div>';
 
-            const vagasFiltradas = vagas.filter(vaga => filtrarPor === "todas" || vaga.curso === filtrarPor);
+            try {
+                const res = await fetch(API_LIST, { credentials: 'include' });
+                if (!res.ok) throw new Error('Status ' + res.status);
+                const vagas = await res.json();
+                // armazenar em cache para visualização detalhada
+                window.vagasCache = Array.isArray(vagas) ? vagas : [];
+                renderizarVagas(vagas);
+            } catch (err) {
+                console.error('Erro ao carregar vagas:', err);
+                container.innerHTML = `<div class='alert alert-danger'>Erro ao carregar vagas: ${err.message}</div>`;
+            }
+        }
+
+        function renderizarVagas(vagas = [], filtrarPor = 'todas') {
+            const container = document.getElementById('listaVagas');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const vagasFiltradas = (Array.isArray(vagas) ? vagas : []).filter(v => filtrarPor === 'todas' || (v.curso && v.curso === filtrarPor));
 
             if (vagasFiltradas.length === 0) {
-                container.innerHTML = "<div class='alert alert-warning'>Nenhuma vaga encontrada para esse curso.</div>";
+                container.innerHTML = "<div class='alert alert-warning'>Nenhuma vaga encontrada.</div>";
                 return;
             }
 
-            vagasFiltradas.forEach(vaga => {
-                const card = document.createElement("div");
-                card.className = "col-12 col-md-6 col-lg-4";  // Responsivo com Bootstrap
+                        vagasFiltradas.forEach(vaga => {
+                const card = document.createElement('div');
+                card.className = 'col-12 col-md-6 col-lg-4';
+                const empresa = vaga.empresa_nome || vaga.empresa || '';
+                const local = vaga.local || vaga.localizacao || '';
                 card.innerHTML = `
           <div class="card vaga-card">
             <div class="card-body">
-              <h3 class="card-title">${vaga.titulo}</h3>
-              <p class="card-text"><strong>Empresa:</strong> ${vaga.empresa}</p>
-              <p class="card-text"><strong>Curso:</strong> ${vaga.curso}</p>
-              <p class="card-text"><strong>Local:</strong> ${vaga.local}</p>
-              <p class="card-text">${vaga.descricao}</p>
-              <button class="btn btn-modern" onclick="mostrarInteresse('${vaga.titulo}', '${vaga.empresa}')">Tenho Interesse</button>
+              <h3 class="card-title">${escapeHtml(vaga.titulo || '')}</h3>
+              <p class="card-text"><strong>Empresa:</strong> ${escapeHtml(empresa)}</p>
+              ${vaga.curso ? `<p class="card-text"><strong>Curso:</strong> ${escapeHtml(vaga.curso)}</p>` : ''}
+              ${local ? `<p class="card-text"><strong>Local:</strong> ${escapeHtml(local)}</p>` : ''}
+              <p class="card-text">${escapeHtml(vaga.descricao || '')}</p>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-modern" onclick="mostrarInteresse('${escapeJs(vaga.titulo||'')}', '${escapeJs(empresa)}')">Tenho Interesse</button>
+                                <button class="btn btn-outline-secondary" onclick="visualizarVaga(${Number(vaga.id)})">Visualizar</button>
+                            </div>
             </div>
           </div>
         `;
@@ -1040,16 +1117,88 @@
         }
 
         function filtrarVagas() {
-            const curso = document.getElementById("filtroCurso").value;
-            renderizarVagas(curso);
+            const curso = document.getElementById('filtroCurso') ? document.getElementById('filtroCurso').value : 'todas';
+            // Recarrega a lista (poderíamos filtrar localmente se preferir)
+            carregarVagas().then(() => {
+                // após carregar, aplicar filtro localmente
+            });
         }
 
         function mostrarInteresse(titulo, empresa) {
             alert(`Seu interesse na vaga "${titulo}" da empresa "${empresa}" foi registrado!`);
         }
 
-        // Iniciar renderização de vagas após carregar a página
-        window.addEventListener('load', () => renderizarVagas());
+        // Helpers de escape
+        function escapeHtml(str) {
+            return String(str || '').replace(/[&<>"]+/g, function (s) {
+                return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[s] || s;
+            });
+        }
+
+        function escapeJs(str) {
+            return String(str || '').replace(/['"\\]/g, '\\$&');
+        }
+
+        // Iniciar carregamento de vagas após carregar a página
+        window.addEventListener('load', carregarVagas);
+
+        // Função para abrir modal com detalhes da vaga (modelo igual ao de verVagas.html)
+        function visualizarVaga(id) {
+            const vagas = window.vagasCache || [];
+            const vaga = vagas.find(v => Number(v.id) === Number(id));
+            if (!vaga) {
+                alert('Detalhes da vaga não encontrados.');
+                return;
+            }
+
+            const empresa = vaga.empresa_nome || vaga.empresa || '';
+            const local = vaga.local || vaga.localizacao || '';
+
+            document.getElementById('modalVagaTitulo').textContent = vaga.titulo || '';
+            document.getElementById('modalVagaEmpresa').textContent = `Empresa: ${empresa}`;
+            document.getElementById('modalVagaDescricao').textContent = vaga.descricao || '';
+
+            // Requisitos como lista
+            const reqEl = document.getElementById('modalVagaRequisitos');
+            if (reqEl) {
+                const requisitos = vaga.requisitos || '';
+                reqEl.innerHTML = requisitos ? requisitos.split(',').map(item => `<li>${item.trim()}</li>`).join('') : '';
+            }
+
+            // Benefícios e localização
+            const benEl = document.getElementById('modalVagaBeneficios');
+            if (benEl) benEl.textContent = vaga.beneficios || '';
+            const locEl = document.getElementById('modalVagaLocalizacao');
+            if (locEl) locEl.textContent = local || '';
+
+            // Campos adicionais (exibidos em seções menores)
+            const cargaEl = document.getElementById('modalVagaCarga'); if (cargaEl) cargaEl.textContent = vaga.carga_horaria || '';
+            const salarioEl = document.getElementById('modalVagaSalario'); if (salarioEl) salarioEl.textContent = vaga.salario || '';
+            const tipoEl = document.getElementById('modalVagaTipo'); if (tipoEl) tipoEl.textContent = vaga.tipo || '';
+            const dataExpEl = document.getElementById('modalVagaDataExpiracao'); if (dataExpEl) dataExpEl.textContent = vaga.data_expiracao || '';
+
+            // Preencher seção de detalhes com quaisquer outros campos cadastrados
+            const detalhesEl = document.getElementById('modalVagaDetalhes');
+            if (detalhesEl) {
+                detalhesEl.innerHTML = '';
+                const skip = new Set(['id','empresa_id','titulo','descricao','requisitos','carga_horaria','salario','local','localizacao','tipo','data_criacao','data_expiracao','ativo','empresa_nome','beneficios','curso']);
+                Object.keys(vaga).forEach(k => {
+                    if (skip.has(k)) return;
+                    let val = vaga[k];
+                    if (val === null || val === undefined || val === '') return;
+                    // formatar chave mais legível
+                    const label = k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                    const row = document.createElement('div');
+                    row.className = 'mb-2';
+                    row.innerHTML = `<strong>${label}:</strong> ${escapeHtml(String(val))}`;
+                    detalhesEl.appendChild(row);
+                });
+                if (detalhesEl.children.length === 0) detalhesEl.innerHTML = '<small class="text-muted">Nenhum detalhe adicional.</small>';
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('visualizarVagaModal'));
+            modal.show();
+        }
 
         /* ----------------- Scripts de UI do painel (copiados de painel_aluno.html) ----------------- */
 
@@ -1240,6 +1389,51 @@
             });
         });
     </script>
+    <!-- Modal Visualizar Vaga (modelo igual ao usado em verVagas.html) -->
+    <div class="modal fade" id="visualizarVagaModal" tabindex="-1" aria-labelledby="visualizarVagaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="visualizarVagaModalLabel">
+                        <i class="fa-solid fa-briefcase"></i> Visualizar Vaga
+                    </h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="vaga-view" id="vagaModalContainer">
+                        <div class="vaga-header">
+                            <h1 id="modalVagaTitulo">Carregando...</h1>
+                            <p id="modalVagaEmpresa">Carregando empresa...</p>
+                        </div>
+                        <div class="vaga-section">
+                            <h3>Descrição</h3>
+                            <p id="modalVagaDescricao">Carregando descrição...</p>
+                        </div>
+                        <div class="vaga-section">
+                            <h3>Requisitos</h3>
+                            <ul id="modalVagaRequisitos" class="list-unstyled"></ul>
+                        </div>
+                        <div class="vaga-section">
+                            <h3>Benefícios</h3>
+                            <p id="modalVagaBeneficios">Carregando benefícios...</p>
+                        </div>
+                        <div class="vaga-section">
+                            <h3>Localização</h3>
+                            <p id="modalVagaLocalizacao">Carregando localização...</p>
+                        </div>
+                        <div class="vaga-section">
+                            <h3>Detalhes</h3>
+                            <div id="modalVagaDetalhes"><small class="text-muted">Carregando...</small></div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-modern" onclick="editarVaga('')">Editar</button>
+                            <button class="btn btn-outline-danger" onclick="excluirVaga('')">Excluir</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
