@@ -956,6 +956,17 @@
             </div>
           </div>
         </div>
+        <!-- Avisos publicados: desktop e mobile -->
+        <div class="row justify-content-center mt-4">
+          <div class="col-lg-8 col-md-10">
+            <div class="card shadow-sm mb-4">
+              <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-bullhorn me-2"></i>Avisos publicados</h5>
+              </div>
+              <ul id="notices-list" class="list-group list-group-flush"></ul>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   </div>
@@ -1088,6 +1099,25 @@
     crossorigin="anonymous"></script>
 
   <script>
+        // Estatísticas reais nos cards
+        async function carregarEstatisticasAluno() {
+          try {
+            const res = await fetch('../back-end/get_estatisticas.php');
+            const stats = await res.json();
+            // Vagas disponíveis
+            const vagasCard = document.querySelector('.stats-card .card-text:contains("Vagas Disponíveis")');
+            if (vagasCard) vagasCard.previousElementSibling.textContent = stats.vagas || '0';
+            // Candidaturas enviadas
+            const enviadasCard = document.querySelector('.stats-card .card-text:contains("Candidaturas Enviadas")');
+            if (enviadasCard) enviadasCard.previousElementSibling.textContent = stats.candidaturas_enviadas || '0';
+            // Candidaturas pendentes
+            const pendentesCard = document.querySelector('.stats-card .card-text:contains("Candidaturas Pendentes")');
+            if (pendentesCard) pendentesCard.previousElementSibling.textContent = stats.candidaturas_pendentes || '0';
+          } catch (err) {
+            // Se erro, mantém valores default
+          }
+        }
+        window.addEventListener('DOMContentLoaded', carregarEstatisticasAluno);
     // Função placeholder para carregar páginas (substitua por AJAX real se necessário)
     function carregarPagina(pagina) {
       console.log('Carregando página: ' + pagina);
@@ -1257,6 +1287,35 @@
         });
     })();
 
+    // Avisos publicados para alunos
+    function escapeHtml(text) {
+      if (!text) return '';
+      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+    async function carregarAvisos() {
+      const noticesList = document.getElementById('notices-list');
+      if (!noticesList) return;
+      noticesList.innerHTML = '<li class="list-group-item">Carregando avisos...</li>';
+      try {
+        const res = await fetch('../back-end/get_avisos.php');
+        const avisos = await res.json();
+        noticesList.innerHTML = '';
+        if (!avisos || avisos.length === 0) {
+          noticesList.innerHTML = '<li class="list-group-item">Nenhum aviso publicado.</li>';
+        } else {
+          avisos.forEach(aviso => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item';
+            li.innerHTML = `<strong>${escapeHtml(aviso.titulo||'(sem título)')}</strong><br><span class="small">${escapeHtml(aviso.mensagem||'')}</span>`;
+            noticesList.appendChild(li);
+          });
+        }
+      } catch (err) {
+        noticesList.innerHTML = '<li class="list-group-item">Erro ao carregar avisos.</li>';
+      }
+    }
+    window.addEventListener('DOMContentLoaded', carregarAvisos);
     // Controle específico para modais no mobile
     document.querySelectorAll('.mobile-modal-trigger').forEach(modalTrigger => {
       modalTrigger.addEventListener('click', function (e) {

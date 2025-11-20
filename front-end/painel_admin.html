@@ -149,62 +149,27 @@
 
 			<main class="content">
 				<div class="d-flex align-items-start justify-content-between mb-3">
-					<div>
-						<h2 class="mb-1">Administração do Programa</h2>
-						<div class="small">Visual — publique avisos e edite informações do programa (sem backend por enquanto).</div>
-					</div>
-						<div>
-							<button id="btn-refresh" class="btn-modern">Atualizar dados</button>
-						</div>
+					<h2 class="mb-1">Publicar / Gerenciar Avisos</h2>
+					<button id="btn-refresh" class="btn-modern">Atualizar dados</button>
 				</div>
 
 				<section id="section-admin">
 					<div class="card">
-						<div class="row g-3">
-							<div class="col-lg-6">
-								<h5>Publicar / Gerenciar Avisos</h5>
-								<p class="small">Criar avisos rápidos que apareceriam no painel principal. Esta é a interface visual — sem salvar no servidor ainda.</p>
-
-								<div class="mb-2">
-									<input id="notice-title" class="form-control" placeholder="Título do aviso">
-								</div>
-								<div class="mb-2">
-									<textarea id="notice-body" class="form-control" rows="4" placeholder="Texto do aviso"></textarea>
-								</div>
-								<div class="d-flex gap-2">
-									<button id="btn-add-notice" class="btn btn-primary-custom">Publicar (visual)</button>
-									<button id="btn-clear-notice" class="btn btn-outline-secondary">Limpar</button>
-								</div>
-
-								<hr>
-								<h6 class="mb-2">Avisos publicados (visual)</h6>
-								<ul id="notices-list" class="placeholder-list"></ul>
-							</div>
-
-							<div class="col-lg-6">
-								<h5>Editar Informações do Programa</h5>
-								<p class="small">Campos visuais para atualizar o conteúdo do programa. Ainda não grava no banco.</p>
-
-								<div class="mb-2">
-									<label class="form-label small">Nome do Programa</label>
-									<input id="program-name" class="form-control" placeholder="Programa de Estágios ETEC" value="Programa de Estágios ETEC">
-								</div>
-								<div class="mb-2">
-									<label class="form-label small">Descrição</label>
-									<textarea id="program-desc" class="form-control" rows="5">Descrição breve do programa...</textarea>
-								</div>
-								<div class="d-flex gap-2">
-									<button id="btn-save-program" class="btn btn-primary-custom">Salvar (visual)</button>
-									<button id="btn-reset-program" class="btn btn-outline-secondary">Reverter</button>
-								</div>
-								<hr>
-								<h6 class="mb-2">Pré-visualização</h6>
-								<div id="program-preview" class="card p-3">
-									<strong id="preview-title">Programa de Estágios ETEC</strong>
-									<p id="preview-desc" class="small mb-0">Descrição breve do programa...</p>
-								</div>
-							</div>
+						<h5>Publicar / Gerenciar Avisos</h5>
+						<p class="small">Criar avisos rápidos que apareceriam no painel principal. Agora ocupa todo o quadro.</p>
+						<div class="mb-2">
+							<input id="notice-title" class="form-control" placeholder="Título do aviso">
 						</div>
+						<div class="mb-2">
+							<textarea id="notice-body" class="form-control" rows="4" placeholder="Texto do aviso"></textarea>
+						</div>
+						<div class="d-flex gap-2">
+							<button id="btn-add-notice" class="btn btn-primary-custom">Publicar</button>
+							<button id="btn-clear-notice" class="btn btn-outline-secondary">Limpar</button>
+						</div>
+						<hr>
+						<h6 class="mb-2">Avisos publicados</h6>
+						<ul id="notices-list" class="placeholder-list"></ul>
 					</div>
 
 					<div class="card">
@@ -258,34 +223,40 @@
 
 			// Avisos (visual)
 			const noticesList = document.getElementById('notices-list');
-			document.getElementById('btn-add-notice').addEventListener('click', ()=>{
+			async function carregarAvisos() {
+				noticesList.innerHTML = '<li>Carregando avisos...</li>';
+				try {
+					const res = await fetch('../back-end/get_avisos.php');
+					const avisos = await res.json();
+					noticesList.innerHTML = '';
+					avisos.forEach(aviso => {
+						const li = document.createElement('li');
+						li.innerHTML = `<div class="d-flex justify-content-between"><div><strong>${escapeHtml(aviso.titulo||'(sem título)')}</strong><div class="small">${escapeHtml(aviso.mensagem)}</div></div></div>`;
+						noticesList.appendChild(li);
+					});
+				} catch (err) {
+					noticesList.innerHTML = '<li>Erro ao carregar avisos.</li>';
+				}
+			}
+
+			document.getElementById('btn-add-notice').addEventListener('click', async ()=>{
 				const t = document.getElementById('notice-title').value.trim();
 				const b = document.getElementById('notice-body').value.trim();
 				if(!t && !b) return alert('Preencha título ou texto do aviso.');
-				const li = document.createElement('li');
-				li.innerHTML = `<div class="d-flex justify-content-between"><div><strong>${escapeHtml(t||'(sem título)')}</strong><div class="small">${escapeHtml(b)}</div></div><div><button class="btn btn-sm btn-outline-danger">Remover</button></div></div>`;
-				noticesList.prepend(li);
+				const res = await fetch('../back-end/publicar_aviso.php', {
+					method: 'POST',
+					body: new URLSearchParams({titulo: t, mensagem: b})
+				});
+				const data = await res.json();
+				alert(data.message);
 				document.getElementById('notice-title').value='';
 				document.getElementById('notice-body').value='';
+				carregarAvisos();
 			});
 			document.getElementById('btn-clear-notice').addEventListener('click', ()=>{document.getElementById('notice-title').value='';document.getElementById('notice-body').value=''});
 
-			// Programa (visual)
-			const previewTitle = document.getElementById('preview-title');
-			const previewDesc = document.getElementById('preview-desc');
-			document.getElementById('btn-save-program').addEventListener('click', ()=>{
-				const name = document.getElementById('program-name').value;
-				const desc = document.getElementById('program-desc').value;
-				previewTitle.textContent = name;
-				previewDesc.textContent = desc;
-				alert('Alterações aplicadas visualmente. Integração com backend pendente.');
-			});
-			document.getElementById('btn-reset-program').addEventListener('click', ()=>{
-				document.getElementById('program-name').value = 'Programa de Estágios ETEC';
-				document.getElementById('program-desc').value = 'Descrição breve do programa...';
-				previewTitle.textContent = 'Programa de Estágios ETEC';
-				previewDesc.textContent = 'Descrição breve do programa...';
-			});
+			window.addEventListener('load', carregarAvisos);
+
 
 			// Charts
 			const ctxCompanies = document.getElementById('chartCompanies').getContext('2d');

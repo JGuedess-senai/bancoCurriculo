@@ -1145,45 +1145,60 @@ Copy code
         document.getElementById('modalCurriculoCursos').textContent = curriculo.cursos;
 
         const modal = new bootstrap.Modal(document.getElementById('visualizarCurriculoModal'));
-        modal.show();
-    }
 
-    // Iniciar renderização de currículos após carregar a página
-    window.addEventListener('load', () => renderizarCurriculos());
+        // Busca currículos do backend e renderiza
+        async function carregarCurriculos() {
+                const container = document.getElementById("listaCurriculos");
+                if (!container) return;
+                container.innerHTML = '<div class="text-center py-5">Carregando currículos...</div>';
 
-    /* ----------------- Scripts de UI do painel (copiados de painel_aluno.html) ----------------- */
-
-    // Função placeholder para carregar páginas (substitua por AJAX real se necessário)
-    function carregarPagina(pagina) {
-        // console.log('Carregando página: ' + pagina);
-        // Aqui você pode adicionar lógica para carregar conteúdo dinamicamente no #conteudo
-    }
-
-    // Adicione onclick nos links da sidebar para simular navegação (exceto dropdowns)
-    document.querySelectorAll('.sidebar a[href="#"], .offcanvas a[href="#"]').forEach(link => {
-        if (link.classList.contains('dropdown-toggle') ||
-            link.classList.contains('dropdown-item') ||
-            link.classList.contains('mobile-modal-trigger') ||
-            link.classList.contains('custom-dropdown-toggle-mobile')) {
-            return;
+                try {
+                        const res = await fetch('../back-end/listar_curriculos.php');
+                        if (!res.ok) throw new Error('Status ' + res.status);
+                        const curriculos = await res.json();
+                        renderizarCurriculos(curriculos);
+                } catch (err) {
+                        container.innerHTML = `<div class='alert alert-danger'>Erro ao carregar currículos: ${err.message}</div>`;
+                }
         }
 
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const texto = this.textContent.trim();
-            carregarPagina(texto.toLowerCase() + '.html');
-
-            // Fechar offcanvas se apropriado
-            if (!this.closest('.offcanvas')) {
-                const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('sidebarOffcanvas'));
-                if (offcanvas) {
-                    offcanvas.hide();
+        function renderizarCurriculos(curriculos = [], filtrarPor = "todos") {
+                const container = document.getElementById("listaCurriculos");
+                if (!container) return;
+                container.innerHTML = "";
+                const curriculosFiltrados = (Array.isArray(curriculos) ? curriculos : []).filter(curriculo => filtrarPor === "todos" || curriculo.curso === filtrarPor);
+                if (curriculosFiltrados.length === 0) {
+                        container.innerHTML = "<div class='alert alert-warning'>Nenhum currículo encontrado para esse curso.</div>";
+                        return;
                 }
-            }
-        });
-    });
+                curriculosFiltrados.forEach(curriculo => {
+                        const card = document.createElement("div");
+                        card.className = "col-12 col-md-6 col-lg-4";
+                        card.innerHTML = `
+            <div class=\"card curriculo-card\">
+                <div class=\"card-body\">
+                    <h3 class=\"card-title\">${curriculo.nome}</h3>
+                    <p class=\"card-text\"><strong>Curso:</strong> ${curriculo.curso}</p>
+                    <p class=\"card-text\"><strong>Habilidades:</strong> ${curriculo.habilidades || ''}</p>
+                    <p class=\"card-text\"><strong>Email:</strong> ${curriculo.email}</p>
+                    <div class=\"d-flex gap-2\">
+                        <button class=\"btn btn-modern\" onclick=\"contatar('${curriculo.nome}', '${curriculo.email}')\">Contatar</button>
+                        <button class=\"btn btn-outline-danger\" onclick=\"visualizarCurriculo('${curriculo.nome}')\">Visualizar</button>
+                    </div>
+                </div>
+            </div>
+        `;
+                        container.appendChild(card);
+                });
+        }
 
-    // Evento para o botão sair - confirma e redireciona
+        function filtrarCurriculos() {
+                const curso = document.getElementById("filtroCurso").value;
+                carregarCurriculos(curso);
+        }
+
+        window.addEventListener('load', carregarCurriculos);
+    // ...existing code...
     document.querySelectorAll('.btn-sair').forEach(sairBtn => {
         sairBtn.addEventListener('click', function (e) {
             e.preventDefault();

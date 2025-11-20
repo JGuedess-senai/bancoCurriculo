@@ -175,20 +175,55 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
   <script>
-    // Actions: visual only
-    document.addEventListener('click', function(e){
-      if(e.target.matches('.aprovar')){
-        const tr = e.target.closest('tr');
-        tr.querySelector('td:nth-child(3)').innerHTML = '<span class="badge bg-success">Aprovada</span>';
-        e.target.remove();
+    // Carregar empresas pendentes do backend
+    async function carregarEmpresas() {
+      const tbody = document.getElementById('empresas-tbody');
+      tbody.innerHTML = '<tr><td colspan="4">Carregando...</td></tr>';
+      try {
+        const res = await fetch('../back-end/list_empresas.php');
+        const empresas = await res.json();
+        tbody.innerHTML = '';
+        empresas.forEach(emp => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${emp.nome}</td>
+            <td>${emp.email}</td>
+            <td><span class="badge ${emp.estado === 'aprovada' ? 'bg-success' : 'bg-warning text-dark'}">${emp.estado.charAt(0).toUpperCase() + emp.estado.slice(1)}</span></td>
+            <td>
+              ${emp.estado === 'pendente' ? `<button class="btn btn-sm btn-success me-1 aprovar" data-id="${emp.id}">Aprovar</button><button class="btn btn-sm btn-danger rejeitar" data-id="${emp.id}">Rejeitar</button>` : `<button class="btn btn-sm btn-outline-secondary ver" data-id="${emp.id}">Ver</button>`}
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan='4'>Erro ao carregar empresas</td></tr>`;
       }
-      if(e.target.matches('.remover')){
-        if(confirm('Remover esta empresa?')) e.target.closest('tr').remove();
+    }
+
+    document.addEventListener('click', async function(e){
+      if(e.target.matches('.aprovar')){
+        const id = e.target.getAttribute('data-id');
+        const res = await fetch('../back-end/aprovar_empresa.php', { method: 'POST', body: new URLSearchParams({ id }) });
+        const data = await res.json();
+        alert(data.message);
+        carregarEmpresas();
+      }
+      if(e.target.matches('.rejeitar')){
+        const id = e.target.getAttribute('data-id');
+        if(confirm('Rejeitar esta empresa?')){
+          const res = await fetch('../back-end/rejeitar_empresa.php', { method: 'POST', body: new URLSearchParams({ id }) });
+          const data = await res.json();
+          alert(data.message);
+          carregarEmpresas();
+        }
       }
       if(e.target.matches('.ver')){
         alert('Visualizar perfil (visual)');
       }
     });
+
+    window.addEventListener('load', carregarEmpresas);
+    document.getElementById('btn-refresh').addEventListener('click', carregarEmpresas);
 
     // custom dropdowns
     document.addEventListener('DOMContentLoaded', function(){
@@ -228,26 +263,13 @@
       tbody.innerHTML = '';
       list.forEach(emp => {
         const tr = document.createElement('tr');
-        if (emp.id) tr.dataset.id = emp.id;
         const tdNome = document.createElement('td'); tdNome.textContent = emp.nome || '';
         const tdEmail = document.createElement('td'); tdEmail.textContent = emp.email || '';
         const tdStatus = document.createElement('td');
-        // detectar campo de estado (estado/status) ou fallback
-        const estado = (emp.estado || emp.status || '').toString().toLowerCase();
-        const isPendente = estado === 'pendente' || estado === 'pending' || estado === '';
-        tdStatus.innerHTML = isPendente ? '<span class="badge bg-warning text-dark">Pendente</span>' : '<span class="badge bg-success">Aprovada</span>';
+        tdStatus.innerHTML = emp.aprovada ? '<span class="badge bg-success">Aprovada</span>' : '<span class="badge bg-warning text-dark">Pendente</span>';
         const tdActions = document.createElement('td');
-        if (isPendente) {
-          const btn = document.createElement('button');
-          btn.className = 'btn btn-sm btn-success me-1 aprovar';
-          btn.textContent = 'Aprovar';
-          tdActions.appendChild(btn);
-          const btnRem = document.createElement('button');
-          btnRem.className = 'btn btn-sm btn-danger remover ms-1';
-          btnRem.textContent = 'Remover';
-          tdActions.appendChild(btnRem);
-        }
-        const ver = document.createElement('button'); ver.className='btn btn-sm btn-outline-secondary ver ms-1'; ver.textContent='Ver'; tdActions.appendChild(ver);
+        if(!emp.aprovada){ const btn = document.createElement('button'); btn.className='btn btn-sm btn-success me-1 aprovar'; btn.textContent='Aprovar'; tdActions.appendChild(btn); }
+        const ver = document.createElement('button'); ver.className='btn btn-sm btn-outline-secondary ver'; ver.textContent='Ver'; tdActions.appendChild(ver);
         tr.appendChild(tdNome); tr.appendChild(tdEmail); tr.appendChild(tdStatus); tr.appendChild(tdActions);
         tbody.appendChild(tr);
       });

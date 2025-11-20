@@ -92,7 +92,7 @@ if ($stmt === false) {
 $stmt->bind_param('issssssss', $empresaId, $titulo, $descricao, $requisitos, $carga_horaria, $salario, $local, $tipo, $data_expiracao);
 
 if ($stmt->execute()) {
-    echo json_encode(['status' => 'sucesso', 'mensagem' => 'Vaga criada com sucesso!', 'vaga_id' => $stmt->insert_id]);
+    echo json_encode(['status' => 'sucesso', 'mensagem' => 'Vaga criada com sucesso!']);
 } else {
     echo json_encode(['status' => 'erro', 'mensagem' => 'Erro: ' . $stmt->error]);
 }

@@ -3,8 +3,8 @@ header('Content-Type: application/json');
 include 'conexao.php';
 
 try {
-    // Seleciona explicitamente as colunas relevantes e filtra por estado = 'pendente'
-    $sql = "SELECT id, nome AS nome, email, estado FROM empresas WHERE estado = 'pendente' ORDER BY id ASC";
+    // Seleciona todas as empresas
+    $sql = "SELECT id, nome AS nome, email, status FROM empresas ORDER BY id ASC";
     $result = $conexao->query($sql);
     if (!$result) {
         throw new Exception('Erro na consulta: ' . $conexao->error);
@@ -16,7 +16,7 @@ try {
             'id' => $row['id'] ?? null,
             'nome' => $row['nome'] ?? '',
             'email' => $row['email'] ?? '',
-            'estado' => strtolower(trim($row['estado'] ?? ''))
+            'estado' => strtolower(trim($row['status'] ?? ''))
         ];
     }
 

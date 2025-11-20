@@ -171,7 +171,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if ($stmt->execute()) {
-        echo "<script>alert('Currículo salvo com sucesso!'); window.location.href='../front-end/painel_aluno.html';</script>";
+        echo "<script>alert('Currículo salvo com sucesso!'); window.location.href='../front-end/verCurriculos.html';</script>";
     } else {
         echo "Erro ao salvar: " . $stmt->error;
     }

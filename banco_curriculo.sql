@@ -56,3 +56,11 @@ CREATE TABLE IF NOT EXISTS vagas (
     ativo TINYINT(1) DEFAULT 1,
     FOREIGN KEY (empresa_id) REFERENCES empresas(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Tabela de avisos
+CREATE TABLE avisos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    mensagem TEXT NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

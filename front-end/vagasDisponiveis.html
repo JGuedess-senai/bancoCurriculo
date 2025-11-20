@@ -1058,69 +1058,47 @@
 
     <script>
         // --- Vagas: carregamento dinâmico do backend e renderização ---
-        // Endpoint que fornece as vagas em JSON
-        const API_LIST = '../back-end/get_vagas.php';
-
-        // Carrega vagas do backend e renderiza
+        // Busca vagas do backend e renderiza
         async function carregarVagas() {
             const container = document.getElementById('listaVagas');
             if (!container) return;
             container.innerHTML = '<div class="text-center py-5">Carregando vagas...</div>';
 
             try {
-                const res = await fetch(API_LIST, { credentials: 'include' });
+                const res = await fetch('../back-end/get_vagas.php');
                 if (!res.ok) throw new Error('Status ' + res.status);
                 const vagas = await res.json();
-                // armazenar em cache para visualização detalhada
-                window.vagasCache = Array.isArray(vagas) ? vagas : [];
                 renderizarVagas(vagas);
             } catch (err) {
-                console.error('Erro ao carregar vagas:', err);
                 container.innerHTML = `<div class='alert alert-danger'>Erro ao carregar vagas: ${err.message}</div>`;
             }
         }
 
-        function renderizarVagas(vagas = [], filtrarPor = 'todas') {
+        function renderizarVagas(vagas = []) {
             const container = document.getElementById('listaVagas');
             if (!container) return;
             container.innerHTML = '';
-
-            const vagasFiltradas = (Array.isArray(vagas) ? vagas : []).filter(v => filtrarPor === 'todas' || (v.curso && v.curso === filtrarPor));
-
-            if (vagasFiltradas.length === 0) {
+            if (!Array.isArray(vagas) || vagas.length === 0) {
                 container.innerHTML = "<div class='alert alert-warning'>Nenhuma vaga encontrada.</div>";
                 return;
             }
-
-                        vagasFiltradas.forEach(vaga => {
+            vagas.forEach(vaga => {
                 const card = document.createElement('div');
                 card.className = 'col-12 col-md-6 col-lg-4';
-                const empresa = vaga.empresa_nome || vaga.empresa || '';
-                const local = vaga.local || vaga.localizacao || '';
                 card.innerHTML = `
-          <div class="card vaga-card">
-            <div class="card-body">
-              <h3 class="card-title">${escapeHtml(vaga.titulo || '')}</h3>
-              <p class="card-text"><strong>Empresa:</strong> ${escapeHtml(empresa)}</p>
-              ${vaga.curso ? `<p class="card-text"><strong>Curso:</strong> ${escapeHtml(vaga.curso)}</p>` : ''}
-              ${local ? `<p class="card-text"><strong>Local:</strong> ${escapeHtml(local)}</p>` : ''}
-              <p class="card-text">${escapeHtml(vaga.descricao || '')}</p>
-                            <div class="d-flex gap-2">
-                                <button class="btn btn-modern" onclick="mostrarInteresse('${escapeJs(vaga.titulo||'')}', '${escapeJs(empresa)}')">Tenho Interesse</button>
-                                <button class="btn btn-outline-secondary" onclick="visualizarVaga(${Number(vaga.id)})">Visualizar</button>
-                            </div>
+          <div class=\"card vaga-card\">
+            <div class=\"card-body\">
+              <h3 class=\"card-title\">${vaga.titulo}</h3>
+              <p class=\"card-text\"><strong>Empresa:</strong> ${vaga.empresa_nome}</p>
+              <p class=\"card-text\"><strong>Local:</strong> ${vaga.local}</p>
+              <p class=\"card-text\">${vaga.descricao}</p>
+              <div class=\"d-flex gap-2\">
+                <button class=\"btn btn-modern\" onclick=\"visualizarVaga(${vaga.id})\">Visualizar</button>
+              </div>
             </div>
           </div>
         `;
                 container.appendChild(card);
-            });
-        }
-
-        function filtrarVagas() {
-            const curso = document.getElementById('filtroCurso') ? document.getElementById('filtroCurso').value : 'todas';
-            // Recarrega a lista (poderíamos filtrar localmente se preferir)
-            carregarVagas().then(() => {
-                // após carregar, aplicar filtro localmente
             });
         }
 

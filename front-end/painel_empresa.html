@@ -1050,7 +1050,17 @@
           </div>
         </div>
       </div>
-
+      <!-- Avisos publicados: desktop e mobile -->
+      <div class="row justify-content-center mt-4">
+        <div class="col-lg-8 col-md-10">
+          <div class="card shadow-sm mb-4">
+            <div class="card-header bg-danger text-white">
+              <h5 class="mb-0"><i class="fas fa-bullhorn me-2"></i>Avisos publicados</h5>
+            </div>
+            <ul id="notices-list" class="list-group list-group-flush"></ul>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
 
@@ -1084,35 +1094,46 @@
             </div>
             <div class="row">
               <div class="col-12 col-md-6 mb-3">
-                <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="notificacoesEmailEmpresa" checked>
-                  <label class="form-check-label" for="notificacoesEmailEmpresa">Receber notificações por email</label>
+                <div class="row g-4">
+                  <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card action-card h-100">
+                      <div class="card-body">
+                        <h4 class="card-title"><i class="fa-solid fa-plus text-danger me-2"></i>Criar Vaga</h4>
+                        <p class="card-text">Publique uma nova vaga de estágio para alunos se candidatarem.</p>
+                        <a href="criarVagas.html" class="btn-modern">Criar Vaga</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card action-card h-100">
+                      <div class="card-body">
+                        <h4 class="card-title"><i class="fa-solid fa-edit text-danger me-2"></i>Editar Perfil</h4>
+                        <p class="card-text">Mantenha os dados da sua empresa sempre atualizados.</p>
+                        <a href="perfilEmpresa.html" class="btn-modern">Editar Perfil</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card action-card h-100">
+                      <div class="card-body">
+                        <h4 class="card-title"><i class="fa-solid fa-info-circle text-danger me-2"></i>Programa de Estágio</h4>
+                          <p class="card-text">Veja todas as informações necessárias sobre o programa de estágio.</p>
+                          <a href="programa_estagio.html?role=empresa" class="btn-modern">Informações sobre</a>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-              <button type="submit" class="btn btn-danger">Salvar Configurações</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Ajuda -->
-  <div class="modal fade" id="ajudaModal" tabindex="-1" aria-labelledby="ajudaModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title" id="ajudaModalLabel">
-            <i class="fa-solid fa-circle-info"></i> Ajuda
-          </h2>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="accordion" id="accordionAjuda">
-            <div class="accordion-item">
+                <!-- Avisos publicados: desktop e mobile -->
+                <div class="row justify-content-center mt-4">
+                  <div class="col-lg-8 col-md-10">
+                    <div class="card shadow-sm mb-4">
+                      <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0"><i class="fas fa-bullhorn me-2"></i>Avisos publicados</h5>
+                      </div>
+                      <ul id="notices-list" class="list-group list-group-flush"></ul>
+                    </div>
+                  </div>
+                </div>
               <h2 class="accordion-header" id="headingOne">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
                   aria-expanded="true" aria-controls="collapseOne">
@@ -1184,6 +1205,25 @@
     crossorigin="anonymous"></script>
 
   <script>
+        // Estatísticas reais nos cards
+        async function carregarEstatisticasEmpresa() {
+          try {
+            const res = await fetch('../back-end/get_estatisticas.php');
+            const stats = await res.json();
+            // Vagas ativas
+            const vagasCard = document.querySelector('.stats-card .card-text:contains("Vagas Ativas")');
+            if (vagasCard) vagasCard.previousElementSibling.textContent = stats.vagas_ativas || '0';
+            // Candidatos
+            const candidatosCard = document.querySelector('.stats-card .card-text:contains("Candidatos")');
+            if (candidatosCard) candidatosCard.previousElementSibling.textContent = stats.candidatos || '0';
+            // Candidaturas pendentes
+            const pendentesCard = document.querySelector('.stats-card .card-text:contains("Candidaturas Pendentes")');
+            if (pendentesCard) pendentesCard.previousElementSibling.textContent = stats.candidaturas_pendentes || '0';
+          } catch (err) {
+            // Se erro, mantém valores default
+          }
+        }
+        window.addEventListener('DOMContentLoaded', carregarEstatisticasEmpresa);
     // Função placeholder para carregar páginas (substitua por AJAX real se necessário)
     function carregarPagina(pagina) {
       console.log('Carregando página: ' + pagina);
@@ -1358,6 +1398,35 @@
       });
     });
 
+    // Avisos publicados para empresas
+    function escapeHtml(text) {
+      if (!text) return '';
+      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+    async function carregarAvisos() {
+      const noticesList = document.getElementById('notices-list');
+      if (!noticesList) return;
+      noticesList.innerHTML = '<li class="list-group-item">Carregando avisos...</li>';
+      try {
+        const res = await fetch('../back-end/get_avisos.php');
+        const avisos = await res.json();
+        noticesList.innerHTML = '';
+        if (!avisos || avisos.length === 0) {
+          noticesList.innerHTML = '<li class="list-group-item">Nenhum aviso publicado.</li>';
+        } else {
+          avisos.forEach(aviso => {
+            const li = document.createElement('li');
+            li.className = 'list-group-item';
+            li.innerHTML = `<strong>${escapeHtml(aviso.titulo||'(sem título)')}</strong><br><span class="small">${escapeHtml(aviso.mensagem||'')}</span>`;
+            noticesList.appendChild(li);
+          });
+        }
+      } catch (err) {
+        noticesList.innerHTML = '<li class="list-group-item">Erro ao carregar avisos.</li>';
+      }
+    }
+    window.addEventListener('DOMContentLoaded', carregarAvisos);
     // Manter funcionalidade normal para desktop (placeholders caso precise)
     document.querySelectorAll('[data-bs-toggle="modal"]').forEach(modalTrigger => {
       modalTrigger.addEventListener('click', function (e) {

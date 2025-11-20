@@ -1258,61 +1258,50 @@
 
     <script>
                 // --- Vagas: renderização ---
-        const vagas = [
-            { titulo: "Desenvolvedor Full-Stack", empresa: "Tech Solutions", descricao: "Desenvolvimento de aplicações web.", requisitos: "Conhecimento em HTML, CSS, JavaScript, Node.js", beneficios: "Salário competitivo, benefícios", localizacao: "São Paulo, SP" },
-            { titulo: "Analista de Sistemas", empresa: "Tech Solutions", descricao: "Análise e desenvolvimento de sistemas.", requisitos: "Experiência em análise de requisitos, SQL", beneficios: "Vale refeição, plano de saúde", localizacao: "São Paulo, SP" },
-            { titulo: "Estagiário em Desenvolvimento", empresa: "Tech Solutions", descricao: "Auxílio no desenvolvimento de software.", requisitos: "Estudante de TI, conhecimento básico em programação", beneficios: "Bolsa auxílio, certificado", localizacao: "São Paulo, SP" }
-        ];
+                // Busca vagas do backend e renderiza
+                async function carregarVagas() {
+                        const container = document.getElementById("listaVagas");
+                        if (!container) return;
+                        container.innerHTML = '<div class="text-center py-5">Carregando vagas...</div>';
 
-        function renderizarVagas() {
-            const container = document.getElementById("listaVagas");
-            if (!container) return;
-            container.innerHTML = "";
+                        try {
+                                const res = await fetch('../back-end/get_vagas.php');
+                                if (!res.ok) throw new Error('Status ' + res.status);
+                                const vagas = await res.json();
+                                renderizarVagas(vagas);
+                        } catch (err) {
+                                container.innerHTML = `<div class='alert alert-danger'>Erro ao carregar vagas: ${err.message}</div>`;
+                        }
+                }
 
-            if (vagas.length === 0) {
-                container.innerHTML = "<div class='alert alert-warning'>Nenhuma vaga encontrada.</div>";
-                return;
-            }
+                function renderizarVagas(vagas = []) {
+                        const container = document.getElementById("listaVagas");
+                        if (!container) return;
+                        container.innerHTML = '';
+                        if (!Array.isArray(vagas) || vagas.length === 0) {
+                                container.innerHTML = "<div class='alert alert-warning'>Nenhuma vaga encontrada.</div>";
+                                return;
+                        }
+                        vagas.forEach(vaga => {
+                                const card = document.createElement("div");
+                                card.className = "col";
+                                card.innerHTML = `
+            <div class=\"card vaga-card\">
+                <div class=\"card-body\">
+                    <h3 class=\"card-title mb-3\">${vaga.titulo}</h3>
+                    <p class=\"card-text\"><strong>Empresa:</strong> ${vaga.empresa_nome}</p>
+                    <p class=\"card-text\"><strong>Descrição:</strong> ${vaga.descricao}</p>
+                    <div class=\"d-flex gap-2\">
+                        <button class=\"btn btn-modern\" onclick=\"visualizarVaga('${vaga.titulo}')\">Visualizar</button>
+                    </div>
+                </div>
+            </div>
+        `;
+                                container.appendChild(card);
+                        });
+                }
 
-            vagas.forEach(vaga => {
-                const card = document.createElement("div");
-                card.className = "col";  // Usa o sistema de grid automático do Bootstrap
-                card.innerHTML = `
-      <div class="card vaga-card">
-        <div class="card-body">
-          <h3 class="card-title mb-3">${vaga.titulo}</h3>
-          <p class="card-text"><strong>Empresa:</strong> ${vaga.empresa}</p>
-          <p class="card-text"><strong>Descrição:</strong> ${vaga.descricao}</p>
-          <div class="d-flex gap-2">
-            <button class="btn btn-modern" onclick="visualizarVaga('${vaga.titulo}')">Visualizar</button>
-            <button class="btn btn-outline-danger" onclick="editarVaga('${vaga.titulo}')">Editar</button>
-          </div>
-        </div>
-      </div>
-    `;
-                container.appendChild(card);
-            });
-        }
-
-        function visualizarVaga(titulo) {
-            const vaga = vagas.find(v => v.titulo === titulo);
-            if (!vaga) return;
-
-            document.getElementById('modalVagaTitulo').textContent = vaga.titulo;
-            document.getElementById('modalVagaEmpresa').textContent = `Empresa: ${vaga.empresa}`;
-            document.getElementById('modalVagaDescricao').textContent = vaga.descricao;
-            document.getElementById('modalVagaRequisitos').innerHTML = vaga.requisitos.split(',').map(item => `<li>${item.trim()}</li>`).join('');
-            document.getElementById('modalVagaBeneficios').textContent = vaga.beneficios;
-            document.getElementById('modalVagaLocalizacao').textContent = vaga.localizacao;
-
-            const modal = new bootstrap.Modal(document.getElementById('visualizarVagaModal'));
-            modal.show();
-        }
-
-        function editarVaga(titulo) {
-            alert(`Editar vaga: ${titulo}`);
-            // Aqui você pode implementar a lógica para editar a vaga
-        }
+                window.addEventListener('load', carregarVagas);
 
         function excluirVaga(titulo) {
             if (confirm(`Deseja excluir a vaga: ${titulo}?`)) {
