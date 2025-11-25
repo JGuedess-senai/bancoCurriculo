@@ -57,6 +57,21 @@ if (!$bindOk) {
 
 // Executar
 if ($stmt->execute()) {
+    // Inseriu empresa com sucesso -> criar registro inicial no perfil (linhas vazias) para ser preenchido depois
+    $empresa_id = $conexao->insert_id;
+
+    // Tentar inserir perfil inicial (se já existir, ignora)
+    $stmt2 = $conexao->prepare("INSERT INTO empresa_perfil (empresa_id, cnpj, nome_fantasia, razao_social) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE empresa_id = empresa_id");
+    if ($stmt2) {
+        // usar alguns valores já conhecidos (cnpj e nome)
+        $nome_fantasia = $nome;
+        $razao_social = null;
+        $cnpj_val = $cnpj;
+        $stmt2->bind_param("isss", $empresa_id, $cnpj_val, $nome_fantasia, $razao_social);
+        $stmt2->execute();
+        $stmt2->close();
+    }
+
     echo json_encode(["status" => "sucesso", "mensagem" => "Cadastro da empresa realizado com sucesso."]);
 } else {
     echo json_encode(["status" => "erro", "mensagem" => "Erro ao cadastrar: " . $stmt->error]);

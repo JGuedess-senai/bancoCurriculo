@@ -63,3 +63,25 @@ CREATE TABLE avisos (
     mensagem TEXT NOT NULL,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Tabela de perfil das empresas (informações adicionais exibidas no perfil)
+CREATE TABLE IF NOT EXISTS empresa_perfil (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    empresa_id INT NOT NULL,
+    razao_social VARCHAR(255) DEFAULT NULL,
+    nome_fantasia VARCHAR(255) DEFAULT NULL,
+    cnpj VARCHAR(20) DEFAULT NULL,
+    descricao TEXT DEFAULT NULL,
+    site VARCHAR(255) DEFAULT NULL,
+    telefone VARCHAR(50) DEFAULT NULL,
+    endereco VARCHAR(255) DEFAULT NULL,
+    cidade VARCHAR(100) DEFAULT NULL,
+    estado VARCHAR(50) DEFAULT NULL,
+    setor VARCHAR(100) DEFAULT NULL,
+    numero_funcionarios VARCHAR(50) DEFAULT NULL,
+    logo_path VARCHAR(255) DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY uk_empresa_id (empresa_id),
+    CONSTRAINT fk_empresa_perfil_empresa FOREIGN KEY (empresa_id) REFERENCES empresas(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -883,6 +883,11 @@
         <main class="content">
             <!-- Container do perfil -->
             <div class="perfil-container">
+                <!-- Logo (preenchido dinamicamente) -->
+                <div style="text-align:center; margin-bottom:20px;">
+                    <img id="empresaLogo" src="../img/logo3.png" alt="Logo da Empresa" style="max-height:120px; border-radius:8px; display:inline-block;" />
+                </div>
+
                 <h2>Seu Perfil - Empresa</h2>
 
                 <!-- Card de Informações Gerais -->
@@ -890,16 +895,16 @@
                     <h4><i class="fa-solid fa-building text-danger me-2"></i>Informações Gerais</h4>
                     <div class="perfil-info">
                         <div class="info-item">
-                            <strong>Nome da Empresa:</strong> Tech Solutions Ltda
+                            <strong>Nome da Empresa:</strong> <span id="campo_nome">-</span>
                         </div>
                         <div class="info-item">
-                            <strong>CNPJ:</strong> 12.345.678/0001-90
+                            <strong>CNPJ:</strong> <span id="campo_cnpj">-</span>
                         </div>
                         <div class="info-item">
-                            <strong>Setor:</strong> Tecnologia da Informação
+                            <strong>Setor:</strong> <span id="campo_setor">-</span>
                         </div>
                         <div class="info-item">
-                            <strong>Porte:</strong> Pequena Empresa
+                            <strong>Porte:</strong> <span id="campo_porte">-</span>
                         </div>
                     </div>
                 </div>
@@ -909,42 +914,42 @@
                     <h4><i class="fa-solid fa-envelope text-danger me-2"></i>Contato</h4>
                     <div class="perfil-info">
                         <div class="info-item">
-                            <strong>Email:</strong> contato@techsolutions.com
+                            <strong>Email:</strong> <span id="campo_email">-</span>
                         </div>
                         <div class="info-item">
-                            <strong>Telefone:</strong> (11) 99999-9999
+                            <strong>Telefone:</strong> <span id="campo_telefone">-</span>
                         </div>
                         <div class="info-item">
-                            <strong>Website:</strong> www.techsolutions.com
+                            <strong>Website:</strong> <a id="campo_site" href="#">-</a>
                         </div>
                         <div class="info-item">
-                            <strong>Endereço:</strong> Rua das Inovações, 123 - São Paulo, SP
+                            <strong>Endereço:</strong> <span id="campo_endereco">-</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card de Estatísticas -->
+                <!-- Card de Estatísticas (valores dinâmicos podem ser preenchidos posteriormente) -->
                 <div class="perfil-card">
                     <h4><i class="fa-solid fa-chart-line text-danger me-2"></i>Estatísticas</h4>
                     <div class="perfil-info">
                         <div class="info-item">
-                            <strong>Vagas Publicadas:</strong> 15
+                            <strong>Vagas Publicadas:</strong> <span id="campo_vagas">-</span>
                         </div>
                         <div class="info-item">
-                            <strong>Candidatos Recebidos:</strong> 42
+                            <strong>Candidatos Recebidos:</strong> <span id="campo_candidatos">-</span>
                         </div>
                         <div class="info-item">
-                            <strong>Candidaturas Pendentes:</strong> 8
+                            <strong>Candidaturas Pendentes:</strong> <span id="campo_pendentes">-</span>
                         </div>
                         <div class="info-item">
-                            <strong>Membro Desde:</strong> Janeiro 2023
+                            <strong>Membro Desde:</strong> <span id="campo_membro_desde">-</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Botão Editar Perfil -->
-                <button class="btn-editar-perfil" data-bs-toggle="modal" data-bs-target="#configuracoesModal">
-                    <i class="fa-solid fa-edit me-2"></i>Editar Perfil
+                <!-- Botão Adicionar/Editar Informações -->
+                <button id="btnAdicionarInfo" class="btn-editar-perfil" data-bs-toggle="modal" data-bs-target="#adicionarInfoModal">
+                    <i class="fa-solid fa-plus me-2"></i>Adicionar Informações
                 </button>
             </div>
         </main>
@@ -1077,6 +1082,71 @@
         </div>
     </div>
 
+    <!-- Modal Adicionar/Editar Informações do Perfil -->
+    <div class="modal fade" id="adicionarInfoModal" tabindex="-1" aria-labelledby="adicionarInfoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="adicionarInfoModalLabel">
+                        <i class="fa-solid fa-building"></i> Adicionar / Editar Informações
+                    </h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formPerfilEmpresa" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="inputNomeEmpresa" class="form-label">Nome da Empresa</label>
+                                <input type="text" class="form-control" id="inputNomeEmpresa" name="nome" disabled>
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="inputCNPJ" class="form-label">CNPJ</label>
+                                <input type="text" class="form-control" id="inputCNPJ" name="cnpj" placeholder="Somente números" disabled>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="inputSetor" class="form-label">Setor</label>
+                                <input type="text" class="form-control" id="inputSetor" name="setor">
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="inputNumeroFuncionarios" class="form-label">Porte / Nº de Funcionários</label>
+                                <input type="text" class="form-control" id="inputNumeroFuncionarios" name="numero_funcionarios">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="inputEmailEmpresa" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="inputEmailEmpresa" name="email" disabled>
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <label for="inputTelefone" class="form-label">Telefone</label>
+                                <input type="text" class="form-control" id="inputTelefone" name="telefone">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputSite" class="form-label">Website</label>
+                            <input type="text" class="form-control" id="inputSite" name="site" placeholder="https://...">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="inputEndereco" class="form-label">Endereço</label>
+                            <input type="text" class="form-control" id="inputEndereco" name="endereco">
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-danger">Salvar Informações</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
@@ -1185,14 +1255,12 @@
             });
         });
 
-        // --- Buscar nome da empresa e preencher spans (usa get_empresa.php se existir) ---
-        (function carregarNomeEmpresa() {
+    // --- Buscar dados da empresa e preencher o perfil ---
+    function carregarNomeEmpresa() {
             const endpoint = '../back-end/get_empresa.php';
-            // Tenta buscar, mas falha silenciosamente se não existir
             fetch(endpoint, { method: 'GET', credentials: 'include' })
                 .then(response => {
                     if (!response.ok) {
-                        // Não faz nada se endpoint não existir ou retornar erro
                         console.warn('get_empresa.php não disponível ou retornou erro:', response.status);
                         return null;
                     }
@@ -1200,18 +1268,71 @@
                 })
                 .then(data => {
                     if (!data) return;
-                    if (data.nome || data.email) {
-                        const nome = data.nome || data.email || 'Sua Conta';
-                        const span = document.getElementById('empresaNome');
-                        const spanMobile = document.getElementById('empresaNomeMobile');
-                        if (span) span.textContent = nome;
-                        if (spanMobile) spanMobile.textContent = nome;
+
+                    // Preencher nome nos spans da sidebar
+                    const nomeExibicao = data.nome || data.nome_fantasia || data.razao_social || data.email || 'Sua Conta';
+                    const span = document.getElementById('empresaNome');
+                    const spanMobile = document.getElementById('empresaNomeMobile');
+                    if (span) span.textContent = nomeExibicao;
+                    if (spanMobile) spanMobile.textContent = nomeExibicao;
+
+                    // Preencher campos do perfil
+                    if (data.nome) document.getElementById('campo_nome').textContent = data.nome;
+                    if (data.cnpj) document.getElementById('campo_cnpj').textContent = data.cnpj;
+                    if (data.setor) document.getElementById('campo_setor').textContent = data.setor;
+                    if (data.numero_funcionarios) document.getElementById('campo_porte').textContent = data.numero_funcionarios;
+                    if (data.email) document.getElementById('campo_email').textContent = data.email;
+                    if (data.telefone) document.getElementById('campo_telefone').textContent = data.telefone;
+                    if (data.site) {
+                        const siteEl = document.getElementById('campo_site');
+                        siteEl.textContent = data.site;
+                        siteEl.setAttribute('href', data.site.startsWith('http') ? data.site : ('http://' + data.site));
+                    }
+                    // Endereço composto
+                    const enderecoParts = [];
+                    if (data.endereco) enderecoParts.push(data.endereco);
+                    if (data.cidade) enderecoParts.push(data.cidade);
+                    if (data.estado) enderecoParts.push(data.estado);
+                    if (enderecoParts.length) document.getElementById('campo_endereco').textContent = enderecoParts.join(' - ');
+
+                    // Logo
+                    if (data.logo_path) {
+                        const logo = document.getElementById('empresaLogo');
+                        logo.src = data.logo_path;
+                    }
+
+                    // Preencher valores no formulário do modal caso exista (apenas campos de Informações Gerais e Contato)
+                    if (document.getElementById('formPerfilEmpresa')) {
+                        const setIf = (id, value) => { const el = document.getElementById(id); if (el && value !== undefined && value !== null) el.value = value; };
+                        setIf('inputNomeEmpresa', data.nome || data.nome_fantasia || data.razao_social || '');
+                        setIf('inputCNPJ', data.cnpj || '');
+                        setIf('inputSetor', data.setor || '');
+                        setIf('inputNumeroFuncionarios', data.numero_funcionarios || '');
+                        setIf('inputEmailEmpresa', data.email || '');
+                        setIf('inputTelefone', data.telefone || '');
+                        setIf('inputSite', data.site || '');
+                        setIf('inputEndereco', data.endereco || '');
+                    }
+
+                    // Estatísticas (se houver endpoints futuros, podemos preencher melhor)
+                    // Mantemos placeholders por enquanto
+                    // Ex.: campo_vagas, campo_candidatos, campo_pendentes, campo_membro_desde
+                    if (data.created_at) {
+                        try {
+                            const d = new Date(data.created_at);
+                            document.getElementById('campo_membro_desde').textContent = d.toLocaleString();
+                        } catch (e) {
+                            document.getElementById('campo_membro_desde').textContent = data.created_at;
+                        }
                     }
                 })
                 .catch(err => {
-                    console.debug('Ignorado: erro ao tentar obter nome da empresa (provavelmente endpoint ausente):', err);
+                    console.debug('Erro ao obter dados da empresa:', err);
                 });
-        })();
+        }
+
+        // Carregar agora
+        carregarNomeEmpresa();
 
         // Controle específico para modais no mobile
         document.querySelectorAll('.mobile-modal-trigger').forEach(modalTrigger => {
@@ -1249,6 +1370,46 @@
                 }
             });
         });
+        
+        // Enviar formulário do modal de adicionar/editar perfil
+        (function setupFormSalvarPerfil() {
+            const form = document.getElementById('formPerfilEmpresa');
+            if (!form) return;
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) submitBtn.disabled = true;
+
+                const fd = new FormData(form);
+
+                fetch('../back-end/atualizar_perfil_empresa.php', { method: 'POST', body: fd, credentials: 'include' })
+                    .then(resp => resp.json())
+                    .then(json => {
+                        if (!json) throw new Error('Resposta inválida do servidor');
+                        if (json.status && json.status === 'sucesso') {
+                            // fechar modal
+                            const modalEl = document.getElementById('adicionarInfoModal');
+                            const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
+                            modal.hide();
+
+                            // atualizar campos visíveis com novos valores
+                            // Reusar a função de carregamento para atualizar a UI: recarrega dados do servidor
+                            if (typeof carregarNomeEmpresa === 'function') carregarNomeEmpresa();
+                        } else {
+                            alert('Erro ao salvar informações: ' + (json.mensagem || JSON.stringify(json)));
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Erro ao salvar perfil:', err);
+                        alert('Erro ao salvar informações. Veja console para detalhes.');
+                    })
+                    .finally(() => {
+                        if (submitBtn) submitBtn.disabled = false;
+                    });
+            });
+        })();
     </script>
 </body>
 

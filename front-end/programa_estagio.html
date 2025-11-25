@@ -788,7 +788,6 @@
                 <h2>Área da Empresa</h2>
                 <ul>
                     <li><a href="painel_empresa.html"><i class="fa-solid fa-house"></i>Inicio</a></li>
-                    <li><a href="verVagas.html"><i class="fa-solid fa-briefcase"></i>Vagas</a></li>
                 </ul>
             </div>
 
@@ -829,13 +828,7 @@
                     <li class="mb-3">
                         <a href="painel_empresa.html"
                             class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
-                            <i class="fa-solid fa-user me-3"></i>Seu Perfil
-                        </a>
-                    </li>
-                    <li class="mb-3">
-                        <a href="#"
-                            class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
-                            <i class="fa-solid fa-briefcase me-3"></i>Vagas
+                            <i class="fa-solid fa-house me-3"></i>Inicio
                         </a>
                     </li>
                 </ul>
@@ -1272,11 +1265,6 @@
             if (inicioLink) {
                 inicioLink.setAttribute('href', (role === 'aluno') ? 'painel_aluno.html' : 'painel_empresa.html');
             }
-            // Vagas
-            const vagasLink = document.querySelector('.sidebar .sidebar-top ul li a[href="verVagas.html"]') || document.querySelector('.sidebar .sidebar-top ul li a[href="vagasDisponiveis.html"]');
-            if (vagasLink) {
-                vagasLink.setAttribute('href', (role === 'aluno') ? 'vagasDisponiveis.html' : 'verVagas.html');
-            }
 
             // Ajustar nomes dos spans do perfil (empresaNome / alunoNome)
             const spanEmpresa = document.getElementById('empresaNome');
@@ -1289,12 +1277,6 @@
                 if (spanEmpresaMobile) {
                     spanEmpresaMobile.id = 'alunoNomeMobile';
                     spanEmpresaMobile.textContent = 'Seu Nome';
-                }
-                // Ajustar CTA para aluno (ver vagas)
-                const cta = document.querySelector('.programa-container .btn-modern');
-                if (cta) {
-                    cta.setAttribute('href', 'vagasDisponiveis.html');
-                    cta.textContent = 'Ver Vagas';
                 }
             } else {
                 // garantir ids padrão empresa
