@@ -32,52 +32,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // Upload do arquivo (currículo) - somente PDF até 5MB
-    $nomeArquivo = "";
-    if (isset($_FILES['curriculo']) && $_FILES['curriculo']['error'] !== UPLOAD_ERR_NO_FILE) {
-        $file = $_FILES['curriculo'];
-
-        if ($file['error'] !== UPLOAD_ERR_OK) {
-            echo "<script>alert('Erro no upload do arquivo. Código: " . $file['error'] . "'); window.history.back();</script>";
-            exit;
-        }
-
-        // Limite de 5 MB
-        $maxSize = 5 * 1024 * 1024;
-        if ($file['size'] > $maxSize) {
-            echo "<script>alert('Arquivo muito grande. Máximo permitido: 5 MB.'); window.history.back();</script>";
-            exit;
-        }
-
-        // Verifica MIME via finfo
-        $finfo = new finfo(FILEINFO_MIME_TYPE);
-        $mime = $finfo->file($file['tmp_name']);
-        $allowed = ['application/pdf'];
-        if (!in_array($mime, $allowed, true)) {
-            echo "<script>alert('Formato inválido. Envie apenas arquivos PDF.'); window.history.back();</script>";
-            exit;
-        }
-
-        // Cria pasta de uploads (caminho absoluto)
-        $uploadDir = __DIR__ . '/uploads/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
-
-        // Gera nome seguro e único
-        $ext = '.pdf';
-        $novoNome = time() . '_' . bin2hex(random_bytes(8)) . $ext;
-        $destino = $uploadDir . $novoNome;
-
-        if (!move_uploaded_file($file['tmp_name'], $destino)) {
-            echo "<script>alert('Falha ao salvar o arquivo no servidor.'); window.history.back();</script>";
-            exit;
-        }
-
-        // Armazenar apenas o nome do arquivo no banco
-        $nomeArquivo = $novoNome;
-    }
-
     // Determine o email do aluno autenticado (se disponível na sessão)
     $emailAluno = '';
     if (isset($_SESSION['aluno'])) {

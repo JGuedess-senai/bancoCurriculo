@@ -36,7 +36,6 @@ CREATE TABLE IF NOT EXISTS curriculos (
     habilidades TEXT,
     experiencia TEXT,
     cursos TEXT,
-    curriculo VARCHAR(255),
     data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
