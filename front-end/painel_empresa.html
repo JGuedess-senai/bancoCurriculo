@@ -10,8 +10,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
   <style>
     /* ----- layout base ----- */
     body {
@@ -32,7 +32,7 @@
       top: 0;
       bottom: 0;
       /* ocupa 100% da altura */
-      width: 293px; /* alinhado com painel_aluno */
+      width: 293px;
       /* Aumentado de 260px para mais espaço */
       background: linear-gradient(180deg, #000 0%, #1a1a1a 100%);
       /* Gradiente sutil para modernidade */
@@ -112,91 +112,15 @@
       margin-top: auto;
       /* vai pro rodapé da sidebar */
       position: relative;
-      padding: 0 15px 25px;
-      /* Ajustado para o novo width */
+      padding: 0 25px 25px;
+      /* Aumentado padding para acomodar área expandida */
       border-top: 1px solid rgba(255, 255, 255, 0.1);
       /* Linha sutil */
       overflow: visible;
       /* Permite que o dropdown "vaze" sem afetar o scroll da sidebar */
     }
 
-    .profile-section .dropdown-toggle {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      padding: 14px 0;
-      /* Ajustado para consistência */
-      cursor: pointer;
-      border-radius: 8px;
-      transition: background-color 0.3s ease;
-    }
-
-    .profile-section .dropdown-toggle:hover {
-      background-color: rgba(255, 0, 0, 0.2);
-    }
-
-    .profile-section .dropdown-toggle::after {
-      color: white;
-      margin-left: auto;
-      border-top-color: white;
-    }
-
-    .profile-section .dropdown-menu {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      margin-top: 5px;
-      background-color: #ff0000;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      box-shadow: 0 8px 25px rgba(255, 0, 0, 0.4);
-      z-index: 1050;
-      min-width: auto;
-      padding: 10px 0;
-      animation: slideDown 0.3s ease forwards;
-    }
-
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .profile-section .dropdown-item {
-      color: white;
-      padding: 12px 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-    }
-
-    .profile-section .dropdown-item:last-child {
-      border-bottom: none;
-    }
-
-    .profile-section .dropdown-item:hover {
-      background-color: #e00000;
-      transform: translateX(5px);
-    }
-
-    .profile-section .dropdown-item i {
-      margin-right: 10px;
-      width: 18px;
-    }
-
-    /* Custom Dropdown (copiado do painel_aluno) */
+    /* Custom Dropdown */
     .custom-dropdown {
       position: relative;
     }
@@ -254,6 +178,471 @@
       opacity: 1;
       transform: translateY(0);
       visibility: visible;
+    }
+
+    /* Para o fechamento suave (opcional, mas melhora a experiência) */
+    .profile-section .dropdown-menu:not(.show) {
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    /* Forçar posicionamento correto - sobrescrever Bootstrap */
+    .profile-section .dropdown-menu[data-bs-popper] {
+      left: 0 !important;
+      right: 0 !important;
+      margin-bottom: 12px !important;
+      transform: translateY(30px) !important;
+      opacity: 0 !important;
+      transition: all 0.4s ease-out !important;
+    }
+
+    .profile-section .dropdown-menu.show[data-bs-popper] {
+      transform: translateY(0) !important;
+      opacity: 1 !important;
+    }
+
+    /* Sobrescrever qualquer estilo do Bootstrap */
+    .profile-section .dropdown-menu {
+      animation: none !important;
+    }
+
+    .profile-section .dropdown-menu.show {
+      animation: none !important;
+    }
+
+    /* Animação de entrada mais elaborada */
+    @keyframes dropdownBounce {
+      0% {
+        opacity: 0;
+        transform: translateY(30px) translateX(0) scale(0.8);
+      }
+
+      50% {
+        opacity: 0.8;
+        transform: translateY(-5px) translateX(0) scale(1.05);
+      }
+
+      70% {
+        opacity: 0.9;
+        transform: translateY(2px) translateX(0) scale(0.98);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) translateX(0) scale(1);
+      }
+    }
+
+    /* Animação simples e direta - apenas transição */
+    .profile-section .dropdown-menu.show {
+      opacity: 1 !important;
+      transform: translateY(0) scale(1) !important;
+      visibility: visible !important;
+    }
+
+    .custom-dropdown-item {
+      color: white;
+      text-decoration: none;
+      padding: 12px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      transition: background-color 0.2s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .custom-dropdown-item:last-child {
+      border-bottom: none;
+    }
+
+    .custom-dropdown-item:hover {
+      background-color: #e00000;
+      color: white;
+    }
+
+    .custom-dropdown-item i {
+      margin-right: 10px;
+      width: 18px;
+    }
+
+    /* ----- área de conteúdo (rola independente) ----- */
+    .content {
+      margin-left: 290px;
+      /* Ajustado para compensar o novo width da sidebar */
+      min-height: 100vh;
+      /* Mudei para min-height para flexibilidade */
+      padding: 40px;
+      /* Reduzido para mais espaço */
+      background: #f4f6f9;
+      box-sizing: border-box;
+    }
+
+    .content h1 {
+      color: #000;
+      margin-bottom: 30px;
+      font-size: 2.5rem;
+    }
+
+    .content p {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 40px;
+    }
+
+    /* Cards modernos no content */
+    .stats-card {
+      background: linear-gradient(135deg, #1c1c1c 0%, #2c2c2c 100%);
+      color: white;
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: none;
+    }
+
+    .stats-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(255, 0, 0, 0.2);
+    }
+
+    .stats-card i {
+      font-size: 3rem;
+      color: #ff0000;
+      margin-bottom: 15px;
+    }
+
+    .stats-card h3 {
+      font-family: 'Russo One';
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: white;
+    }
+
+    .stats-card p {
+      color: #ccc;
+      font-size: 1.1rem;
+    }
+
+    .action-card {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+      border-left: 5px solid #ff0000;
+    }
+
+    .action-card:hover {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .action-card h4 {
+      color: #000;
+      margin-bottom: 15px;
+      font-family: 'Russo One';
+    }
+
+    .action-card p {
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .btn-modern {
+      background: linear-gradient(135deg, #ff0000 0%, #e00000 100%);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-modern:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+      color: white;
+    }
+
+    /* ----- modal ----- */
+    .modal {
+      z-index: 1060;
+      /* acima do dropdown e offcanvas */
+    }
+
+    .modal-backdrop {
+      background-color: rgba(0, 0, 0, 0.6);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modal-content {
+      background-color: #1c1c1c;
+      color: white;
+      border-radius: 15px;
+      border: none;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      animation: scaleIn 0.3s ease;
+      margin-top: 50px;
+      /* Ajuste para centralizar melhor */
+    }
+
+    @keyframes scaleIn {
+      from {
+        transform: scale(0.8);
+      }
+
+      to {
+        transform: scale(1);
+      }
+    }
+
+    .modal-header {
+      border-bottom: none;
+      padding: 30px 30px 0;
+    }
+
+    .modal-header h2 {
+      color: white;
+      font-family: 'Russo One';
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .modal-header i {
+      color: #ff0000;
+    }
+
+    .modal-body {
+      padding: 0 30px 30px;
+    }
+
+    .modal-body hr {
+      border-color: #333;
+      margin: 20px 0;
+    }
+
+    .modal-body h3,
+    .modal-body h4 {
+      color: #fff;
+      margin-bottom: 10px;
+      font-family: 'Russo One';
+    }
+
+    .btn-close {
+      filter: invert(1);
+      /* torna branco */
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+
+    .btn-close:hover {
+      opacity: 1;
+    }
+
+
+    /* ----- responsivo ----- */
+    @media (max-width: 1199.98px) {
+      .sidebar {
+        width: 250px;
+      }
+
+      .content {
+        margin-left: 250px;
+        padding: 30px;
+      }
+      /* Aumentar largura do menu de opções (profile dropdown) em tablets e telas pequenas */
+      .profile-section .custom-dropdown-menu {
+        min-width: 200px; /* ligeiro aumento para caber 'Configurações' */
+        left: auto;
+        right: -25px; /* posicionar mais centralizado relativo à sidebar */
+        padding: 8px 10px;
+      }
+
+      /* Ajuste para o menu mobile (offcanvas) quando exibido em telas menores que 1199px */
+      .custom-dropdown-menu-mobile {
+        min-width: 200px;
+        left: auto;
+        right: 10px;
+        padding: 8px 10px;
+      }
+      /* Ajustes visuais para cards em telas menores que 1200px */
+      .stats-card,
+      .action-card {
+        max-width: 100%;
+        padding: 20px; /* reduzir padding para evitar aspecto esticado */
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      }
+
+      .stats-card h3 {
+        font-size: 1.6rem; /* menor para se ajustar ao espaço */
+      }
+
+      .stats-card i {
+        font-size: 2.2rem;
+      }
+
+      .action-card h4 {
+        font-size: 1.05rem;
+      }
+
+      /* Garantir alinhamento e espaçamento das colunas */
+      .row.mb-5.g-3 > .col-12,
+      .row.g-4 > .col-12 {
+        padding-left: 6px;
+        padding-right: 6px;
+      }
+    }
+
+    @media (max-width: 991.98px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        box-shadow: none;
+        display: none !important;
+      }
+
+      .content {
+        margin-left: 0;
+        padding: 20px;
+        margin-top: 0;
+      }
+
+      .stats-card,
+      .action-card {
+        margin-bottom: 20px;
+      }
+
+      .profile-section .dropdown-menu {
+        position: static;
+        top: auto;
+        margin-top: 10px;
+        box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+      }
+
+      /* Ajustes para mobile */
+      .content h1 {
+        font-size: 2rem;
+      }
+
+      .content p {
+        font-size: 16px;
+      }
+
+      .stats-card {
+        padding: 20px;
+      }
+
+      .stats-card i {
+        font-size: 2.5rem;
+      }
+
+      .stats-card h3 {
+        font-size: 1.5rem;
+      }
+
+      .action-card {
+        padding: 20px;
+      }
+
+      .img-boas-vindas-desktop {
+        max-width: 120px !important;
+      }
+
+      .navbar-logo-mobile {
+        height: 50px !important;
+      }
+    }
+
+    /* Desktop: garantir cards com mesma altura e conteúdo alinhado */
+    @media (min-width: 992px) {
+      /* Forçar as colunas a usar altura igual baseada na linha */
+      .row > [class*="col-"] {
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Garantir que os cards ocupem toda a altura da coluna */
+      .card.h-100 {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Body do card se expande para alinhar rodapés/ações */
+      .card .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      /* Ajustes finos de tipografia para evitar que títulos quebrem linhas inesperadamente */
+      .stats-card h3, .action-card h4 {
+        line-height: 1.05;
+      }
+    }
+
+    @media (max-width: 575.98px) {
+      .content {
+        padding: 15px;
+      }
+
+      .content h1 {
+        font-size: 1.75rem;
+      }
+
+      .stats-card,
+      .action-card {
+        padding: 15px;
+        /* reduzir largura dos cards em telas muito pequenas */
+        max-width: 320px;
+        width: calc(100% - 24px); /* menos padding lateral efetivo */
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .btn-modern {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+
+      .modal-dialog {
+        margin: 10px;
+      }
+
+      /* Tornar o modal de configurações mais estreito em telas pequenas */
+      #configuracoesModal .modal-dialog {
+        max-width: 360px; /* largura confortável em mobile */
+        margin: 12px auto !important;
+      }
+
+      #configuracoesModal .modal-content {
+        padding: 18px;
+        border-radius: 12px;
+      }
+
+      /* Ajuste similar para o modal de Ajuda */
+      #ajudaModal .modal-dialog {
+        max-width: 360px;
+        margin: 12px auto !important;
+      }
+
+      #ajudaModal .modal-content {
+        padding: 18px;
+        border-radius: 12px;
+      }
     }
 
     /* Custom Dropdown Mobile */
@@ -350,520 +739,31 @@
       overflow: visible !important;
     }
 
-    /* ----- área de conteúdo (rola independente) ----- */
-    .content {
-      margin-left: 290px;
-      /* Ajustado para compensar o novo width da sidebar */
-      min-height: 100vh;
-      /* Mudei para min-height para flexibilidade */
-      padding: 40px;
-      /* Reduzido para mais espaço */
-      background: #f4f6f9;
-      box-sizing: border-box;
-    }
-
-    .content h1 {
-      color: #000;
-      margin-bottom: 30px;
-      font-size: 2.5rem;
-    }
-
-    .content p {
-      font-size: 18px;
-      color: #333;
-      margin-bottom: 40px;
-    }
-
-    /* Cards modernos no content */
-    .stats-card {
-      background: linear-gradient(135deg, #1c1c1c 0%, #2c2c2c 100%);
-      color: white;
-      border-radius: 15px;
-      padding: 30px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border: none;
-      /* manter estrutura de card padrão e garantir que ocupe altura disponível via .h-100 */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      box-sizing: border-box;
-    }
-
-    .stats-card i {
-      font-size: 3rem;
-      color: #ff0000;
-      margin-bottom: 15px;
-    }
-
-    .stats-card h3 {
-      font-family: 'Russo One';
-      font-size: 2rem;
-      margin-bottom: 10px;
-      color: white;
-    }
-
-    .stats-card p {
-      color: #ccc;
-      font-size: 1.1rem;
-      margin: 0;
-    }
-
-    .stats-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 40px rgba(255, 0, 0, 0.2);
-    }
-
-    .action-card {
-      background: white;
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-      transition: box-shadow 0.3s ease;
-      border-left: 5px solid #ff0000;
-    }
-
-    .action-card:hover {
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    }
-
-    .action-card h4 {
-      color: #000;
-      margin-bottom: 15px;
-      font-family: 'Russo One';
-    }
-
-    .action-card p {
-      color: #666;
-      margin-bottom: 20px;
-    }
-
-    /* Ícone separado no topo do card e textos alinhados à esquerda */
-    .action-card .card-body {
-      align-items: flex-start; /* alinha textos (títulos/paragraphs) à esquerda */
-      text-align: left;
-    }
-    
-    .action-card .card-icon {
-      font-size: 2.4rem;
-      color: #ff0000;
-      margin-bottom: 14px;
-      width: 100%;
-      display: flex;
-      justify-content: center; /* ícone no topo centralizado */
-    }
-    
-    /* título e texto com espaçamentos consistentes */
-    .action-card .card-title,
-    .action-card h4 {
-      width: 100%;
-      margin-bottom: 8px;
-    }
-    .action-card .card-text,
-    .action-card p {
-      width: 100%;
-      margin-bottom: 12px;
-    }
-
-    /* Garantir alinhamento consistente dos botões dentro dos cards em todas as larguras */
-    .action-card.h-100 .card-body,
-    .action-card .card-body {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between; /* empurra o botão para o rodapé do card */
-      height: 100%;
-      box-sizing: border-box;
-      gap: 12px;
-    }
-
-    /* Evita que o botão altere posição; mantêm alinhamento à esquerda (mudar para w-100 se preferir largura total) */
-    .action-card .btn-modern {
-      align-self: flex-start;
-      max-width: 100%;
-      box-sizing: border-box; /* garante que padding não extrapole a largura */
-      white-space: normal; /* permite quebra se necessário */
-      overflow-wrap: anywhere;
-    }
-
-    .btn-modern {
-      background: linear-gradient(135deg, #ff0000 0%, #e00000 100%);
-      color: white;
-      border: none;
-      padding: 12px 30px;
-      border-radius: 25px;
-      font-weight: bold;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    /* ----- modal ----- */
-    .modal {
-      z-index: 1060; /* alinhado com painel_aluno (acima do dropdown e offcanvas) */
-    }
-
-    .modal-backdrop {
-      background-color: rgba(0, 0, 0, 0.6);
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    .modal-content {
-      background-color: #1c1c1c;
-      color: white;
-      border-radius: 15px;
-      border: none;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-      animation: scaleIn 0.3s ease;
-      margin-top: 50px;
-      /* Ajuste para centralizar melhor */
-    }
-
-    @keyframes scaleIn {
-      from {
-        transform: scale(0.8);
-      }
-
-      to {
-        transform: scale(1);
-      }
-    }
-
-    .modal-header {
-      border-bottom: none;
-      padding: 30px 30px 0;
-    }
-
-    .modal-header h2 {
-      color: white;
-      font-family: 'Russo One';
-      margin: 0;
-      font-size: 1.8rem;
-    }
-
-    .modal-header i {
-      color: #ff0000;
-    }
-
-    .modal-body {
-      padding: 0 30px 30px;
-    }
-
-    .modal-body hr {
-      border-color: #333;
-      margin: 20px 0;
-    }
-
-    .modal-body h3 {
-      color: #fff;
-      margin-bottom: 10px;
-      font-family: 'Russo One';
-    }
-
-    .btn-close {
-      filter: invert(1);
-      /* torna branco */
-      opacity: 0.7;
-      transition: opacity 0.3s ease;
-    }
-
-    .btn-close:hover {
-      opacity: 1;
-    }
-
-    /* ----- responsivo ----- */
-    @media (max-width: 1199.98px) {
-      .sidebar {
-        width: 250px;
-      }
-      .content {
-        margin-left: 250px;
-        padding: 30px;
-      }
-
-      .custom-dropdown .custom-dropdown-menu {
-        left: auto !important;
-        right: -20px !important;
-        width: 200px;
-        min-width: 200px;
-      }
-
-      /* Igualar altura dos action-cards em telas <= 1199px */
-      .action-card {
-        min-height: 260px; /* ajuste se quiser aumentar/diminuir */
-        display: flex;
-        flex-direction: column;
-        box-sizing: border-box;
-      }
-      .action-card .card-body {
-        flex: 1 1 auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-      }
-
-      /* reduzir padding do botão próximo ao breakpoint para evitar overflow horizontal */
-      .action-card .btn-modern {
-        padding: 10px 20px;
-      }
-      /* comportamento padrão para telas menores permanece (sem forçar layout em linha) */
-    }
-
-    /* Alinhamento específico para telas entre 992px e 1199.98px
-       garante que as colunas fiquem com mesma altura e os textos fiquem top-alinhados */
-    @media (min-width: 992px) and (max-width: 1199.98px) {
-      /* faz com que as colunas do row.g-4 se estiquem igualmente */
-      .row.g-4 > [class*="col-"] {
-        display: flex;
-        align-items: stretch;
-      }
-
-      /* garante que o card ocupe todo o espaço da coluna e seja um flex container em coluna */
-      .row.g-4 .card.action-card {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-      }
-
-      /* card-body organiza conteúdo em coluna e empurra o botão para o rodapé
-         Mantemos justify-content: space-between para manter os botões alinhados
-         em toda a faixa entre 992px e 1199.98px */
-      .row.g-4 .card.action-card .card-body {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between; /* garante botão no rodapé do card */
-        height: 100%; /* força o card-body a ocupar toda a altura da coluna */
-        flex: 1 1 auto;
-        gap: 12px;
-        box-sizing: border-box;
-      }
-
-      /* garantir consistência do espaçamento de título/texto */
-      .row.g-4 .card.action-card .card-title,
-      .row.g-4 .card.action-card h4 {
-        margin-bottom: 8px;
-      }
-      .row.g-4 .card.action-card .card-text,
-      .row.g-4 .card.action-card p {
-        margin-bottom: 12px;
-        color: #666;
-      }
-
-      /* Dispor action-cards em linha e permitir quebra automática (wrap).
-         Cada card é um quadrado fixo (300x300) dentro deste intervalo (992px - 1199.98px).
-         Isso não afetará telas <= 991.98px, que continuam com o comportamento anterior. */
-      .row.g-4 {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap; /* permite quebrar para a próxima linha */
-        justify-content: center;
-        gap: 20px;
-      }
-
-      .row.g-4 > [class*="col-"] {
-        flex: 0 0 300px; /* largura fixa 300px */
-        max-width: 300px;
-        margin: 0;
-      }
-
-      .action-card {
-        width: 300px;
-        height: 300px;
-        padding: 12px 16px;
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between; /* mantém o botão na base do card */
-        align-items: center;
-      }
-
-      .row.g-4 .card.action-card .card-body {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between; /* título/texto em cima, botão embaixo */
-        align-items: center;
-        text-align: center;
-        gap: 8px;
-      }
-
-      .action-card .btn-modern {
-        align-self: center;
-        width: calc(100% - 32px);
-        padding: 10px 12px;
-      }
-
-      .action-card .card-icon i {
-        font-size: 1.6rem;
-      }
-    }
-
-    @media (max-width: 991.98px) {
-      .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        box-shadow: none;
-        display: none !important;
-      }
-
-      /* Reduzir largura dos action-cards em telas menores */
-      .action-card {
-        max-width: 100%; /* garante que não extrapola o contêiner */
-      }
-
-      .content {
-        margin-left: 0;
-        padding: 20px;
-        margin-top: 0;
-      }
-    }
-
-    @media (max-width: 767.98px) {
-      .action-card {
-        max-width: 90%;
-        margin: 10px auto;
-      }
-    }
-
-      .stats-card,
-      .action-card {
-        margin-bottom: 20px;
-      }
-
-      .profile-section .dropdown-menu {
-        position: static;
-        top: auto;
-        margin-top: 10px;
-        box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
-      }
-
-      /* em larguras < 992px fazer o botão ocupar toda a largura do card e ficar alinhado */
-      .action-card .btn-modern {
-        width: 100%;
-        align-self: stretch;
-        padding: 12px 20px;
-        text-align: center;
-      }
-      
-      /* Ajustes para mobile */
-      .content h1 {
-        font-size: 2rem;
-      }
-
-      .content p {
-        font-size: 16px;
-      }
-
-      .stats-card {
-        padding: 20px;
-      }
-
-      .stats-card i {
-        font-size: 2.5rem;
-      }
-
-      .stats-card h3 {
-        font-size: 1.5rem;
-      }
-
-      .action-card {
-        padding: 20px;
-      }
-
-      .img-boas-vindas-desktop {
-        max-width: 120px !important;
-      }
-
-      .navbar-logo-mobile {
-        height: 50px !important;
-      }
-
-    @media (max-width: 767.98px) {
-      .action-card {
-        max-width: 90%;
-        margin: 10px auto;
-      }
-    }
-
-    @media (max-width: 575.98px) {
-      .content {
-        padding: 15px;
-      }
-
-      /* Igualar largura dos stats-cards com os action-cards */
-      .stats-card {
-        max-width: 90%;
-        margin: 10px auto;
-      }
-
-      /* Diminuir largura do modal de configurações em phones muito estreitos */
-      #configuracoesModal .modal-dialog {
-        max-width: 360px;
-        width: calc(100% - 30px);
-        margin: 10px auto;
-      }
-
-      /* Diminuir largura do modal de ajuda em phones muito estreitos */
-      #ajudaModal .modal-dialog {
-        max-width: 360px;
-        width: calc(100% - 30px);
-        margin: 10px auto;
-      }
-
-      .content h1 {
-        font-size: 1.75rem;
-      }
-
-      .stats-card,
-      .action-card {
-        padding: 15px;
-      }
-
-      .btn-modern {
-        padding: 10px 20px;
-        font-size: 14px;
-      }
-
-      .modal-dialog {
-        margin: 10px;
-      }
-    }
-
-    /* Estilo dos links na sidebar mobile */
+    /* Animação de hover/touch para links de navegação mobile */
     .nav-link-mobile {
       transition: all 0.3s ease;
-      border-radius: 8px;
+      cursor: pointer;
     }
 
-    .nav-link-mobile:hover {
-      background-color: #ff0000;
-      transform: translateX(5px);
-      box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+    .nav-link-mobile:hover,
+    .nav-link-mobile:active,
+    .nav-link-mobile:focus {
+      transform: scale(1.05);
+      background-color: rgba(255, 0, 0, 0.2) !important;
+      box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
     }
 
-    /* Logo na navbar mobile (copiado do painel_aluno) */
+    .nav-link-mobile:active {
+      transform: scale(1.02);
+    }
+
+
+    /* Logo na navbar mobile */
     .navbar-logo-mobile {
       height: 80px;
       width: auto;
       transition: transform 0.3s ease;
       filter: brightness(1.1);
-    }
-
-    .navbar-logo-mobile:hover {
-      transform: scale(1.1);
     }
   </style>
 </head>
@@ -898,8 +798,8 @@
       <div class="profile-section">
         <div class="custom-dropdown">
           <a class="custom-dropdown-toggle" href="#" role="button">
-            <span id="empresaNome">Nome da Empresa</span>
-            <i class="fa-solid fa-chevron-up"></i>  
+            <span id="empresaNome">Seu Nome</span>
+            <i class="fa-solid fa-chevron-up"></i>
           </a>
           <ul class="custom-dropdown-menu">
             <li><a class="custom-dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#configuracoesModal">
@@ -921,19 +821,23 @@
       aria-labelledby="sidebarOffcanvasLabel">
       <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="sidebarOffcanvasLabel">Área da Empresa</h5>
-        <!-- Alterado data-bs-dismiss de "modal" para "offcanvas" -->
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">
         <ul class="list-unstyled">
           <li class="mb-3">
-            <a href="perfilEmpresa.html" class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
-              <i class="fa-solid fa-user me-3"></i>Seu Perfil
+            <a href="currriculo.html" class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
+              <i class="fa-solid fa-file-alt me-3"></i>Currículo
             </a>
           </li>
           <li class="mb-3">
-            <a href="verVagas.html" class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
+            <a href="vagasDisponiveis.html" class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
               <i class="fa-solid fa-briefcase me-3"></i>Vagas
+            </a>
+          </li>
+          <li class="mb-3">
+            <a href="minhasCandidaturas.html" class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
+              <i class="fa-solid fa-user me-3"></i>Minhas Candidaturas
             </a>
           </li>
         </ul>
@@ -943,7 +847,7 @@
         <!-- Profile Section Mobile -->
         <div class="custom-dropdown-mobile">
           <a class="custom-dropdown-toggle-mobile" href="#" role="button">
-            <i class="fa-solid fa-circle-user me-2"></i><span id="empresaNomeMobile">Nome da Empresa</span>
+            <i class="fa-solid fa-circle-user me-2"></i><span id="empresaNomeMobile">Seu Nome</span>
             <i class="fa-solid fa-chevron-up"></i>
           </a>
           <ul class="custom-dropdown-menu-mobile">
@@ -964,100 +868,100 @@
 
     <!-- Main Content -->
     <main class="content">
-      <div class="container-fluid"><!-- adicionado para seguir estrutura do painel_aluno -->
-      <div class="row mb-5">
-         <div class="col-12">
-           <!-- Layout desktop: textos à esquerda, imagem à direita -->
-           <div class="d-none d-lg-flex align-items-center justify-content-center mb-4" style="gap: 32px;">
-             <div>
-               <h1 class="display-4 mb-3">Bem-vindo à sua área de Empresa!</h1>
-               <p class="lead">Aqui você pode consultar currículo, acompanhar seus candidatos de estágio e atualizar suas informações. Vamos começar!</p>
-             </div>
-             <img src="../img/logo3.png" alt="etec-conecta"
-               style="max-width: 230px; width: 100%; height: auto; flex-shrink: 0; margin-bottom: 15px;"
-               class="img-boas-vindas-desktop">
-           </div>
+      <div class="container-fluid">
+        <div class="row mb-3">
+          <div class="col-12">
+            <!-- Imagem de boas-vindas Desktop -->
+            <!-- Layout horizontal desktop: textos à esquerda, imagem à direita maior -->
+            <div class="d-none d-lg-flex align-items-center justify-content-center mb-4" style="gap: 32px;">
+              <div>
+                <h1 class="display-4 mb-3">Bem-vindo à sua área da Empresa!</h1>
+                <p class="lead">Aqui você pode consultar currículo, acompanhar seus candidatos de estágio e atualizar suas informações. Vamos começar!</p>
+              </div>
+              <img src="../img/logo3.png" alt="etec-conecta"
+                style="max-width: 230px; width: 100%; height: auto; flex-shrink: 0; margin-bottom: 15px;"
+                class="img-boas-vindas-desktop">
+            </div>
+            <!-- Layout mobile/tablet: textos normais -->
+            <div class="d-block d-lg-none">
+              <h1 class="display-4 mb-3">Bem-vindo à sua área da Empresa!</h1>
+              <p class="lead">Aqui você pode cadastrar seu currículo, acompanhar oportunidades de estágio e atualizar
+                suas informações.
+                Vamos começar!</p>
+            </div>
+          </div>
+        </div>
 
-           <!-- Layout mobile/tablet: textos normais -->
-           <div class="d-block d-lg-none">
-            <h1 class="display-4 mb-3">Bem-vindo à sua área de Empresa!</h1>
-            <p class="lead">Aqui você pode consultar currículo, acompanhar seus candidatos de estágio e atualizar suas informações. Vamos começar!</p>
+        <!-- Seção de Estatísticas (Cards Modernos) -->
+        <div class="row mb-5 g-3">
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card stats-card h-100">
+              <div class="card-body text-center">
+                <i class="fa-solid fa-briefcase"></i>
+                <h3 class="card-title">15</h3>
+                <p class="card-text">Vagas Ativas</p>
+              </div>
+            </div>
           </div>
-         </div>
-      </div>
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card stats-card h-100">
+              <div class="card-body text-center">
+                <i class="fa-solid fa-users"></i>
+                <h3 class="card-title">42</h3>
+                <p class="card-text">Candidatos</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card stats-card h-100">
+              <div class="card-body text-center">
+                <i class="fa-solid fa-clock"></i>
+                <h3 class="card-title">8</h3>
+                <p class="card-text">Candidaturas Pendentes</p>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <!-- Seção de Estatísticas (Cards Modernos) -->
-      <div class="row mb-5 g-3">
-        <div class="col-12 col-sm-6 col-lg-4">
-          <div class="card stats-card h-100">
-            <div class="card-body text-center">
-              <i class="fa-solid fa-briefcase"></i>
-              <h3 class="card-title">15</h3>
-              <p class="card-text">Vagas Ativas</p>
+        <!-- Seção de Ações Rápidas -->
+        <div class="row g-4">
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card action-card h-100">
+              <div class="card-body">
+                <h4 class="card-title"><i class="fa-solid fa-plus text-danger me-2"></i>Criar Nova Vaga</h4>
+                <p class="card-text">Publique uma nova oportulidade de estágio e atraia os melhores talentos.</p>
+                <a href="criarVagas.html" class="btn-modern">Criar Vaga</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card action-card h-100">
+              <div class="card-body">
+                <h4 class="card-title"><i class="fa-solid fa-search text-danger me-2"></i>Visualizar Currículos</h4>
+                <p class="card-text">Explore os perfis dos candidatos que se candidataram às suas vagas.</p>
+                <a href="verCurriculos.html" class="btn-modern">Ver Currículo</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card action-card h-100">
+              <div class="card-body">
+                <h4 class="card-title"><i class="fa-solid fa-info-circle text-danger me-2"></i>Programa de Estágio</h4>
+                  <p class="card-text">Veja todas as informações necessárias sobre o programa de estágio.</p>
+                  <a href="programa_estagio.html?role=empresa" class="btn-modern">Informações sobre</a>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-12 col-sm-6 col-lg-4">
-          <div class="card stats-card h-100">
-            <div class="card-body text-center">
-              <i class="fa-solid fa-users"></i>
-              <h3 class="card-title">42</h3>
-              <p class="card-text">Candidatos</p>
+        <!-- Avisos publicados: desktop e mobile -->
+        <div class="row justify-content-center mt-4">
+          <div class="col-lg-8 col-md-10">
+            <div class="card shadow-sm mb-4">
+              <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-bullhorn me-2"></i>Avisos publicados</h5>
+              </div>
+              <ul id="notices-list" class="list-group list-group-flush"></ul>
             </div>
-          </div>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-4">
-          <div class="card stats-card h-100">
-            <div class="card-body text-center">
-              <i class="fa-solid fa-clock"></i>
-              <h3 class="card-title">8</h3>
-              <p class="card-text">Candidaturas Pendentes</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Seção de Ações Rápidas -->
-      <div class="row g-4">
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="card action-card h-100">
-            <div class="card-body">
-             <div class="card-icon"><i class="fa-solid fa-plus"></i></div>
-              <h4 class="card-title">Criar Nova Vaga</h4>
-              <p class="card-text">Publique uma nova oportulidade de estágio e atraia os melhores talentos.</p>
-              <a href="criarVagas.html" class="btn-modern">Criar Vaga</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="card action-card h-100">
-            <div class="card-body">
-             <div class="card-icon"><i class="fa-solid fa-search"></i></div>
-              <h4 class="card-title">Visualizar Currículos</h4>
-              <p class="card-text">Explore os perfis dos candidatos que se candidataram às suas vagas.</p>
-              <a href="verCurriculos.html" class="btn-modern">Ver Currículo</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 col-md-6 col-lg-4">
-          <div class="card action-card h-100">
-            <div class="card-body">
-             <div class="card-icon"><i class="fa-solid fa-info-circle"></i></div>
-              <h4 class="card-title">Programa de Estágio</h4>
-              <p class="card-text">Veja todas as informações necessárias sobre o programa de estágio.</p>
-              <a href="programa_estagio.html?role=empresa" class="btn-modern">Informações sobre</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Avisos publicados: desktop e mobile -->
-      <div class="row justify-content-center mt-4">
-        <div class="col-lg-8 col-md-10">
-          <div class="card shadow-sm mb-4">
-            <div class="card-header bg-danger text-white">
-              <h5 class="mb-0"><i class="fas fa-bullhorn me-2"></i>Avisos publicados</h5>
-            </div>
-            <ul id="notices-list" class="list-group list-group-flush"></ul>
           </div>
         </div>
       </div>
@@ -1079,61 +983,49 @@
           <form>
             <div class="row">
               <div class="col-12 col-md-6 mb-3">
-                <label for="inputNomeEmpresa" class="form-label">Nome da Empresa</label>
-                <input type="text" class="form-control" id="inputNomeEmpresa" placeholder="Nome da sua empresa">
+                <label for="inputNome" class="form-label">Nome Completo</label>
+                <input type="text" class="form-control" id="inputNome" placeholder="Seu nome">
               </div>
               <div class="col-12 col-md-6 mb-3">
-                <label for="inputEmailEmpresa" class="form-label">Email</label>
-                <input type="email" class="form-control" id="inputEmailEmpresa" placeholder="contato@empresa.com"
-                  disabled>
+                <label for="inputEmail" class="form-label">Email</label>
+                <input type="email" class="form-control" id="inputEmail" placeholder="seu@email.com" disabled>
               </div>
             </div>
             <div class="mb-3">
-              <label for="inputSenhaEmpresa" class="form-label">Alterar Senha</label>
-              <input type="password" class="form-control" id="inputSenhaEmpresa" placeholder="Nova senha">
+              <label for="inputSenha" class="form-label">Alterar Senha</label>
+              <input type="password" class="form-control" id="inputSenha" placeholder="Nova senha">
             </div>
             <div class="row">
               <div class="col-12 col-md-6 mb-3">
-                <div class="row g-4">
-                  <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card action-card h-100">
-                      <div class="card-body">
-                        <h4 class="card-title"><i class="fa-solid fa-plus text-danger me-2"></i>Criar Vaga</h4>
-                        <p class="card-text">Publique uma nova vaga de estágio para alunos se candidatarem.</p>
-                        <a href="criarVagas.html" class="btn-modern">Criar Vaga</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card action-card h-100">
-                      <div class="card-body">
-                        <h4 class="card-title"><i class="fa-solid fa-edit text-danger me-2"></i>Editar Perfil</h4>
-                        <p class="card-text">Mantenha os dados da sua empresa sempre atualizados.</p>
-                        <a href="perfilEmpresa.html" class="btn-modern">Editar Perfil</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card action-card h-100">
-                      <div class="card-body">
-                        <h4 class="card-title"><i class="fa-solid fa-info-circle text-danger me-2"></i>Programa de Estágio</h4>
-                          <p class="card-text">Veja todas as informações necessárias sobre o programa de estágio.</p>
-                          <a href="programa_estagio.html?role=empresa" class="btn-modern">Informações sobre</a>
-                      </div>
-                    </div>
-                  </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="notificacoesEmail" checked>
+                  <label class="form-check-label" for="notificacoesEmail">Receber notificações por email</label>
                 </div>
-                <!-- Avisos publicados: desktop e mobile -->
-                <div class="row justify-content-center mt-4">
-                  <div class="col-lg-8 col-md-10">
-                    <div class="card shadow-sm mb-4">
-                      <div class="card-header bg-danger text-white">
-                        <h5 class="mb-0"><i class="fas fa-bullhorn me-2"></i>Avisos publicados</h5>
-                      </div>
-                      <ul id="notices-list" class="list-group list-group-flush"></ul>
-                    </div>
-                  </div>
-                </div>
+              </div>
+            </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-danger">Salvar Configurações</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Ajuda -->
+  <div class="modal fade" id="ajudaModal" tabindex="-1" aria-labelledby="ajudaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="ajudaModalLabel">
+            <i class="fa-solid fa-circle-info"></i> Ajuda
+          </h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="accordion" id="accordionAjuda">
+            <div class="accordion-item">
               <h2 class="accordion-header" id="headingOne">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
                   aria-expanded="true" aria-controls="collapseOne">
@@ -1145,16 +1037,16 @@
                 <div class="accordion-body">
                   <ul class="list-unstyled">
                     <li class="mb-3">
-                      <strong>Como buscar currículos?</strong><br>
-                      Acesse "Vagas" ou "Visualizar Currículos" e utilize os filtros.
+                      <strong>Como criar meu currículo?</strong><br>
+                      Clique em "Criar Currículo" na área principal e preencha os campos.
                     </li>
                     <li class="mb-3">
-                      <strong>Como publicar uma vaga?</strong><br>
-                      Clique em "Criar Vaga" na área principal e preencha os detalhes.
+                      <strong>Como me candidatar a uma vaga?</strong><br>
+                      Acesse a seção "Vagas" e clique em "Candidatar-se".
                     </li>
                     <li class="mb-3">
-                      <strong>Posso atualizar meus dados da empresa?</strong><br>
-                      Sim, no modal de configurações você pode alterar nome e senha.
+                      <strong>Posso atualizar meus dados pessoais?</strong><br>
+                      Sim, no modal de configurações você pode alterar seu nome e senha.
                     </li>
                   </ul>
                 </div>
@@ -1198,7 +1090,6 @@
       </div>
     </div>
   </div>
-
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
@@ -1210,12 +1101,12 @@
           try {
             const res = await fetch('../back-end/get_estatisticas.php');
             const stats = await res.json();
-            // Vagas ativas
-            const vagasCard = document.querySelector('.stats-card .card-text:contains("Vagas Ativas")');
-            if (vagasCard) vagasCard.previousElementSibling.textContent = stats.vagas_ativas || '0';
-            // Candidatos
-            const candidatosCard = document.querySelector('.stats-card .card-text:contains("Candidatos")');
-            if (candidatosCard) candidatosCard.previousElementSibling.textContent = stats.candidatos || '0';
+            // Vagas disponíveis
+            const vagasCard = document.querySelector('.stats-card .card-text:contains("Vagas Disponíveis")');
+            if (vagasCard) vagasCard.previousElementSibling.textContent = stats.vagas || '0';
+            // Candidaturas enviadas
+            const enviadasCard = document.querySelector('.stats-card .card-text:contains("Candidaturas Enviadas")');
+            if (enviadasCard) enviadasCard.previousElementSibling.textContent = stats.candidaturas_enviadas || '0';
             // Candidaturas pendentes
             const pendentesCard = document.querySelector('.stats-card .card-text:contains("Candidaturas Pendentes")');
             if (pendentesCard) pendentesCard.previousElementSibling.textContent = stats.candidaturas_pendentes || '0';
@@ -1230,7 +1121,7 @@
       // Aqui você pode adicionar lógica para carregar conteúdo dinamicamente no #conteudo
     }
 
-    // Adicione onclick nos links da sidebar/offcanvas para simular navegação (exceto dropdowns)
+    // Adicione onclick nos links da sidebar para simular navegação (exceto dropdowns)
     document.querySelectorAll('.sidebar a[href="#"], .offcanvas a[href="#"]').forEach(link => {
       // Pular links que são dropdown-toggle ou dropdown-item
       if (link.classList.contains('dropdown-toggle') ||
@@ -1245,7 +1136,8 @@
         const texto = this.textContent.trim();
         carregarPagina(texto.toLowerCase() + '.html');
 
-        // Comportamento igual painel_aluno: fechar offcanvas em mobile (mesma lógica)
+        // Só fechar offcanvas em mobile se não for um link de navegação principal
+        // (Currículo e Vagas devem manter a sidebar aberta)
         if (!this.closest('.offcanvas')) {
           const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('sidebarOffcanvas'));
           if (offcanvas) {
@@ -1255,7 +1147,7 @@
       });
     });
 
-    // Evento para o botão sair - restrito aos botões com classe .btn-sair
+    // Evento para o botão sair - restrito ao dropdown correto
     document.querySelectorAll('.btn-sair').forEach(sairBtn => {
       sairBtn.addEventListener('click', function (e) {
         e.preventDefault();
@@ -1265,25 +1157,29 @@
       });
     });
 
-    // Fechar offcanvas quando clicar fora dele (exceto dropdown mobile)
+    // Fechar offcanvas quando clicar fora dele (exceto dropdown)
     document.addEventListener('click', function (e) {
       const offcanvas = document.getElementById('sidebarOffcanvas');
       const toggle = document.querySelector('[data-bs-target="#sidebarOffcanvas"]');
       const customDropdownMobile = document.querySelector('.custom-dropdown-mobile');
 
+      // Não fechar se clicar no dropdown mobile (incluindo o menu)
       if (customDropdownMobile && customDropdownMobile.contains(e.target)) {
         return;
       }
 
+      // Não fechar se clicar no menu dropdown mobile especificamente
       if (e.target.closest('.custom-dropdown-menu-mobile')) {
         return;
       }
 
+      // Não fechar se clicar no toggle do dropdown mobile
       if (e.target.closest('.custom-dropdown-toggle-mobile')) {
         return;
       }
 
-      if (offcanvas && !offcanvas.contains(e.target) && toggle && !toggle.contains(e.target)) {
+      // Só fechar se clicar fora do offcanvas e não for o toggle
+      if (offcanvas && !offcanvas.contains(e.target) && !toggle.contains(e.target)) {
         const offcanvasInstance = bootstrap.Offcanvas.getInstance(offcanvas);
         if (offcanvasInstance) {
           offcanvasInstance.hide();
@@ -1291,7 +1187,7 @@
       }
     });
 
-    // Indicar mobile view com classe no body
+    // Adicionar classe para indicar que é mobile
     function checkMobile() {
       if (window.innerWidth < 992) {
         document.body.classList.add('mobile-view');
@@ -1300,25 +1196,40 @@
       }
     }
 
+    // Verificar no carregamento e no redimensionamento
     checkMobile();
     window.addEventListener('resize', checkMobile);
 
+    // Debug para o dropdown do mobile
+    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+      toggle.addEventListener('click', function (e) {
+        console.log('Dropdown toggle clicked:', this);
+        console.log('Has data-bs-toggle:', this.getAttribute('data-bs-toggle'));
+        console.log('Href:', this.getAttribute('href'));
+      });
+    });
+
     // Controle dos dropdowns customizados
     document.addEventListener('DOMContentLoaded', function () {
+      // Dropdown desktop
       const customDropdown = document.querySelector('.custom-dropdown');
       const customToggle = document.querySelector('.custom-dropdown-toggle');
 
+      // Dropdown mobile
       const customDropdownMobile = document.querySelector('.custom-dropdown-mobile');
       const customToggleMobile = document.querySelector('.custom-dropdown-toggle-mobile');
 
+      // Função para controlar dropdown
       function setupDropdown(dropdown, toggle) {
         if (dropdown && toggle) {
           toggle.addEventListener('click', function (e) {
             e.preventDefault();
-            e.stopPropagation();
+            e.stopPropagation(); // Evitar que o evento se propague
 
+            // Toggle da classe active
             dropdown.classList.toggle('active');
 
+            // Fechar outros dropdowns
             document.querySelectorAll('.custom-dropdown, .custom-dropdown-mobile').forEach(otherDropdown => {
               if (otherDropdown !== dropdown) {
                 otherDropdown.classList.remove('active');
@@ -1328,37 +1239,40 @@
         }
       }
 
+      // Configurar ambos os dropdowns
       setupDropdown(customDropdown, customToggle);
       setupDropdown(customDropdownMobile, customToggleMobile);
 
       // Fechar dropdowns ao clicar fora
       document.addEventListener('click', function (e) {
+        // Só fechar dropdown desktop se não estiver clicando nele
         if (customDropdown && !customDropdown.contains(e.target)) {
           customDropdown.classList.remove('active');
         }
+        // Só fechar dropdown mobile se não estiver clicando nele ou no menu
         if (customDropdownMobile && !customDropdownMobile.contains(e.target) && !e.target.closest('.custom-dropdown-menu-mobile')) {
           customDropdownMobile.classList.remove('active');
         }
       });
     });
 
-    // --- Buscar nome da empresa e preencher spans (usa get_empresa.php se existir) ---
+    // --- Buscar nome do empresa e preencher spans ---
     (function carregarNomeEmpresa() {
-      const endpoint = '../back-end/get_empresa.php';
-      // Tenta buscar, mas falha silenciosamente se não existir
-      fetch(endpoint, { method: 'GET', credentials: 'include' })
+      // Usa credentials para enviar cookies de sessão
+      fetch('../back-end/get_empresa.php', { method: 'GET', credentials: 'include' })
         .then(response => {
-          if (!response.ok) {
-            // Não faz nada se endpoint não existir ou retornar erro
-            console.warn('get_empresa.php não disponível ou retornou erro:', response.status);
+          if (response.status === 401) {
+            // Não autenticado - redirecionar para login
+            console.warn('Usuário não autenticado, redirecionando para login.');
+            window.location.href = 'login_empresa.html';
             return null;
           }
           return response.json();
         })
         .then(data => {
           if (!data) return;
-          if (data.nome || data.email) {
-            const nome = data.nome || data.email || 'Sua Conta';
+          if (data.nome) {
+            const nome = data.nome;
             const span = document.getElementById('empresaNome');
             const spanMobile = document.getElementById('empresaNomeMobile');
             if (span) span.textContent = nome;
@@ -1366,39 +1280,11 @@
           }
         })
         .catch(err => {
-          console.debug('Ignorado: erro ao tentar obter nome da empresa (provavelmente endpoint ausente):', err);
+          console.error('Erro ao obter nome do empresa:', err);
         });
     })();
 
-    // Controle específico para modais no mobile
-    document.querySelectorAll('.mobile-modal-trigger').forEach(modalTrigger => {
-      modalTrigger.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const modalId = this.getAttribute('data-modal-target');
-        const modalElement = document.querySelector(modalId);
-
-        if (modalElement) {
-          const dropdown = this.closest('.custom-dropdown-mobile');
-          if (dropdown) dropdown.classList.remove('active');
-
-          const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('sidebarOffcanvas'));
-          if (offcanvas) {
-            offcanvas.hide();
-            setTimeout(() => {
-              const modal = new bootstrap.Modal(modalElement);
-              modal.show();
-            }, 300);
-          } else {
-            const modal = new bootstrap.Modal(modalElement);
-            modal.show();
-          }
-        }
-      });
-    });
-
-    // Avisos publicados para empresas
+    // Avisos publicados para empresa
     function escapeHtml(text) {
       if (!text) return '';
       const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
@@ -1427,10 +1313,54 @@
       }
     }
     window.addEventListener('DOMContentLoaded', carregarAvisos);
-    // Manter funcionalidade normal para desktop (placeholders caso precise)
+    // Controle específico para modais no mobile
+    document.querySelectorAll('.mobile-modal-trigger').forEach(modalTrigger => {
+      modalTrigger.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation(); // Evitar que o evento se propague
+        console.log('Mobile modal trigger clicked:', this.getAttribute('data-modal-target'));
+
+        const modalId = this.getAttribute('data-modal-target');
+        const modalElement = document.querySelector(modalId);
+        console.log('Looking for modal:', modalId, modalElement);
+
+        if (modalElement) {
+          // Fechar o dropdown primeiro
+          const dropdown = this.closest('.custom-dropdown-mobile');
+          if (dropdown) {
+            dropdown.classList.remove('active');
+          }
+
+          // Fechar o offcanvas primeiro
+          const offcanvas = bootstrap.Offcanvas.getInstance(document.getElementById('sidebarOffcanvas'));
+          if (offcanvas) {
+            console.log('Closing offcanvas...');
+            offcanvas.hide();
+
+            // Aguardar o offcanvas fechar e então abrir o modal
+            setTimeout(() => {
+              console.log('Opening modal after offcanvas close...');
+              const modal = new bootstrap.Modal(modalElement);
+              modal.show();
+            }, 300);
+          } else {
+            // Se não há offcanvas aberto, abrir modal diretamente
+            console.log('No offcanvas open, opening modal directly...');
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+          }
+        } else {
+          console.error('Modal element not found:', modalId);
+        }
+      });
+    });
+
+    // Manter funcionalidade normal para desktop
     document.querySelectorAll('[data-bs-toggle="modal"]').forEach(modalTrigger => {
       modalTrigger.addEventListener('click', function (e) {
+        // Só aplicar lógica especial se estiver em mobile
         if (window.innerWidth < 992) {
+          // Se for um trigger mobile, deixar o handler acima cuidar
           if (this.classList.contains('mobile-modal-trigger')) {
             return;
           }
@@ -1438,6 +1368,6 @@
       });
     });
   </script>
-</body>
 
+</body>
 </html>
