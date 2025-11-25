@@ -1160,10 +1160,11 @@
         });
 
         // --- Buscar nome da empresa e preencher spans (usa get_empresa.php se existir) ---
-        (function carregarNomeEmpresa() {
-            const endpoint = '../back-end/get_empresa.php';
+        function carregarNomeEmpresa(role) {
+            // role: 'aluno' or 'empresa' (fallback to empresa)
+            const endpoint = (role === 'aluno') ? '../back-end/get_aluno.php' : '../back-end/get_empresa.php';
             // Tenta buscar, mas falha silenciosamente se não existir
-            fetch(endpoint, { method: 'GET', credentials: 'include' })
+            return fetch(endpoint, { method: 'GET', credentials: 'include' })
                 .then(response => {
                     if (!response.ok) {
                         // Não faz nada se endpoint não existir ou retornar erro
@@ -1176,16 +1177,23 @@
                     if (!data) return;
                     if (data.nome || data.email) {
                         const nome = data.nome || data.email || 'Sua Conta';
-                        const span = document.getElementById('empresaNome');
-                        const spanMobile = document.getElementById('empresaNomeMobile');
-                        if (span) span.textContent = nome;
-                        if (spanMobile) spanMobile.textContent = nome;
+                        // preencher possíveis spans (empresa ou aluno, desktop e mobile)
+                        const ids = ['empresaNome', 'alunoNome'];
+                        const idsMobile = ['empresaNomeMobile', 'alunoNomeMobile'];
+                        ids.forEach(id => {
+                            const s = document.getElementById(id);
+                            if (s) s.textContent = nome;
+                        });
+                        idsMobile.forEach(id => {
+                            const s = document.getElementById(id);
+                            if (s) s.textContent = nome;
+                        });
                     }
                 })
                 .catch(err => {
                     console.debug('Ignorado: erro ao tentar obter nome da empresa (provavelmente endpoint ausente):', err);
                 });
-        })();
+        }
 
         // Controle específico para modais no mobile
         document.querySelectorAll('.mobile-modal-trigger').forEach(modalTrigger => {
@@ -1312,6 +1320,9 @@
                 const a = document.querySelector('.sidebar a[href="painel_empresa.html"]');
                 if (a) a.classList.add('active');
             }
+
+            // Após ajustar IDs/textos de acordo com role, carregar nome (empresa/aluno)
+                if (typeof carregarNomeEmpresa === 'function') carregarNomeEmpresa(role);
         })();
     </script>
 </body>

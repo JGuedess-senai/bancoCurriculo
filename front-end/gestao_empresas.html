@@ -149,9 +149,7 @@
     </div>
 
     <div class="table-card">
-      <div class="d-flex justify-content-end mb-2">
-        <button class="btn-modern" id="btn-refresh">Atualizar</button>
-      </div>
+      <!-- botão de atualizar removido -->
       <div class="table-responsive">
         <table class="table table-hover align-middle">
           <thead>
@@ -223,7 +221,6 @@
     });
 
     window.addEventListener('load', carregarEmpresas);
-    document.getElementById('btn-refresh').addEventListener('click', carregarEmpresas);
 
     // custom dropdowns
     document.addEventListener('DOMContentLoaded', function(){
@@ -275,7 +272,7 @@
       });
     }
 
-    document.getElementById('btn-refresh').addEventListener('click', function(e){ e.preventDefault(); carregarEmpresas(); });
+    // Listener para botão de atualizar removido (botão removido do HTML)
     // init
     carregarEmpresas();
   </script>

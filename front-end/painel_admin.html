@@ -126,11 +126,6 @@
 								<i class="fa-solid fa-building me-3"></i>Gestão de Empresas
 							</a>
 						</li>
-						<li class="mb-3">
-							<a href="gestao_alunos.html" class="text-white text-decoration-none d-flex align-items-center p-2 rounded nav-link-mobile">
-								<i class="fa-solid fa-user-graduate me-3"></i>Gestão de Alunos
-							</a>
-						</li>
 					</ul>
 					<hr class="text-white">
 					<div class="custom-dropdown-mobile">
@@ -150,7 +145,6 @@
 			<main class="content">
 				<div class="d-flex align-items-start justify-content-between mb-3">
 					<h2 class="mb-1">Publicar / Gerenciar Avisos</h2>
-					<button id="btn-refresh" class="btn-modern">Atualizar dados</button>
 				</div>
 
 				<section id="section-admin">
@@ -175,7 +169,6 @@
 					<div class="card">
 						<div class="d-flex align-items-center justify-content-between mb-3">
 							<h5 class="mb-0">Estatísticas</h5>
-							<button id="btn-refresh" class="btn-modern">Atualizar</button>
 						</div>
 						<div class="row g-3">
 							<div class="col-12">
@@ -231,7 +224,17 @@
 					noticesList.innerHTML = '';
 					avisos.forEach(aviso => {
 						const li = document.createElement('li');
-						li.innerHTML = `<div class="d-flex justify-content-between"><div><strong>${escapeHtml(aviso.titulo||'(sem título)')}</strong><div class="small">${escapeHtml(aviso.mensagem)}</div></div></div>`;
+						li.innerHTML = `
+							<div class="d-flex justify-content-between align-items-center">
+								<div>
+									<strong>${escapeHtml(aviso.titulo||'(sem título)')}</strong>
+									<div class="small">${escapeHtml(aviso.mensagem)}</div>
+								</div>
+								<div>
+									<button class="btn btn-sm btn-danger btn-remove d-none d-md-inline-block" data-id="${aviso.id}">Remover</button>
+								</div>
+							</div>
+						`;
 						noticesList.appendChild(li);
 					});
 				} catch (err) {
@@ -257,8 +260,27 @@
 
 			window.addEventListener('load', carregarAvisos);
 
-
 			// Charts
+
+		// Handle remove notice button clicks (delegated)
+		document.addEventListener('click', async function (e) {
+			if (e.target && e.target.matches('.btn-remove')) {
+				e.preventDefault();
+				const id = e.target.getAttribute('data-id');
+				if (!id) return alert('ID do aviso inválido.');
+				if (!confirm('Remover este aviso?')) return;
+				try {
+					const res = await fetch('../back-end/remover_aviso.php', { method: 'POST', body: new URLSearchParams({ id }) });
+					const json = await res.json();
+					alert(json.message || (json.success ? 'Removido' : 'Erro'));
+					if (json.success) carregarAvisos();
+				} catch (err) {
+					alert('Erro ao remover aviso.');
+				}
+			}
+		});
+
+		// Charts
 			const ctxCompanies = document.getElementById('chartCompanies').getContext('2d');
 			const ctxStudents = document.getElementById('chartStudents').getContext('2d');
 			let companiesChart = null, studentsChart = null;
@@ -300,7 +322,7 @@
 					renderCharts(null);
 				}
 			}
-			document.getElementById('btn-refresh').addEventListener('click',(e)=>{e.preventDefault(); loadStats()});
+			// Botão de atualizar removido — chamadas manuais ativam `loadStats()` quando necessário.
 
 			// util
 			function escapeHtml(s){return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')}
