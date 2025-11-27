@@ -285,8 +285,8 @@
 			const ctxStudents = document.getElementById('chartStudents').getContext('2d');
 			let companiesChart = null, studentsChart = null;
 			function renderCharts(data){
-				const comp = data?.companies ?? {approved:12,pending:4};
-				const studs = data?.students ?? {labels:['Informática','Administração','Desenvolvimento de Sistemas','Agropecuária','Zootecnia','Recursos Humanos'],values:[24,12,18,8,6,10]};
+				const comp = data?.companies ?? {approved:8,pending:4};
+				const studs = data?.students ?? {labels:['Informática','Administração','Desenvolvimento de Sistemas','Agropecuária','Zootecnia','Recursos Humanos'],values:[5,3,18,2,6,1]};
 				if(companiesChart) companiesChart.destroy();
 				companiesChart = new Chart(ctxCompanies,{
 					type:'doughnut',
