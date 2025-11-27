@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ver Currículos</title>
+  <script src="https://kit.fontawesome.com/e66b0e408d.js" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Poppins&display=swap" rel="stylesheet">
+  <style>
+    /* Base */
+    body { 
+      font-family: 'Poppins', sans-serif; 
+      background:#f4f6f9; 
+      margin: 0;
+    }
+    
+    .page-header { 
+      margin: 28px 0; 
+    }
+    
+    /* Botões */
+    .btn-modern { 
+      background: linear-gradient(135deg,#ff0000 0%,#e00000 100%); 
+      color:#fff; 
+      border:none;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-modern:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+      color: white;
+    }
+    
+    /* Cards */
+    .card.curriculo-card { 
+      border-radius:12px; 
+      box-shadow:0 6px 20px rgba(0,0,0,0.06);
+      border: 1px solid #dfe6ec;
+      border-left: 6px solid #ff0000;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .card.curriculo-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    }
+    
+    .card.curriculo-card .card-title {
+      color: #ff0000;
+      font-weight: 600;
+      font-size: 18px;
+    }
+    
+    .card.curriculo-card p {
+      color: #444;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    .card.curriculo-card p strong {
+      color: #2c3e50;
+    }
+    
+    /* Filtros */
+    .filter-row { 
+      margin-bottom: 18px; 
+    }
+    
+    .filter-row .form-select,
+    .filter-row .form-control {
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    
+    /* Mensagens */
+    .no-results { 
+      margin-top: 18px; 
+    }
+    
+    /* Texto auxiliar */
+    .small-muted { 
+      color: #666; 
+      font-size: .95rem; 
+    }
+    
+    /* Modal */
+    .modal-content { 
+      background:#1c1c1c; 
+      color:#fff;
+      border-radius: 15px;
+      border: none;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+    
+    .modal-header {
+      border-bottom: none;
+      padding: 30px 30px 0;
+    }
+    
+    .modal-header h5 {
+      color: white;
+      font-family: 'Russo One';
+      font-size: 1.8rem;
+    }
+    
+    .modal-body {
+      padding: 0 30px 30px;
+      color: #fff;
+    }
+    
+    .modal-body h6 {
+      color: #ff0000;
+      font-family: 'Russo One';
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    
+    .modal-body p,
+    .modal-body ul {
+      color: #ccc;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    
+    .modal-body ul {
+      list-style-position: inside;
+    }
+    
+    .modal-body ul li {
+      margin-bottom: 8px;
+    }
+    
+    .modal-footer {
+      border-top: 1px solid #333;
+      padding: 20px 30px;
+    }
+    
+    .btn-close-white {
+      filter: invert(1);
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+    
+    .btn-close-white:hover {
+      opacity: 1;
+    }
+    
+    /* Loading e empty states */
+    .text-center.py-5 {
+      padding: 40px 20px;
+    }
+    
+    .alert {
+      border-radius: 8px;
+    }
+    
+    .alert-warning {
+      background-color: #fff3cd;
+      border-color: #ffc107;
+      color: #856404;
+    }
+    
+    .alert-danger {
+      background-color: #f8d7da;
+      border-color: #f5c6cb;
+      color: #721c24;
+    }
+    
+    /* Responsivo */
+    @media (max-width: 768px) {
+      .page-header {
+        margin: 15px 0;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .page-header div:last-child {
+        margin-top: 10px;
+      }
+      
+      .filter-row {
+        margin-bottom: 15px;
+      }
+      
+      .card.curriculo-card {
+        padding: 15px;
+      }
+      
+      .modal-header {
+        padding: 20px 20px 0;
+      }
+      
+      .modal-body {
+        padding: 0 20px 20px;
+      }
+      
+      .modal-footer {
+        padding: 15px 20px;
+      }
+    }
+    
+    @media (max-width: 575px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .page-header h1 {
+        font-size: 1.5rem;
+      }
+      
+      .card.curriculo-card {
+        padding: 12px;
+      }
+      
+      .card.curriculo-card .card-title {
+        font-size: 16px;
+      }
+      
+      .btn.btn-sm {
+        font-size: 12px;
+        padding: 6px 10px;
+      }
+      
+      .btn-outline-secondary {
+        font-size: 12px;
+        padding: 6px 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <div class="page-header d-flex align-items-center justify-content-between">
+      <div>
+        <h1 class="h3">Currículos Disponíveis</h1>
+        <p class="small-muted">Filtre por curso e visualize detalhes dos currículos.</p>
+      </div>
+      <div>
+        <a href="painel_empresa.html" class="btn btn-outline-secondary">Voltar</a>
+      </div>
+    </div>
+
+    <div class="row filter-row">
+      <div class="col-sm-6 col-md-4">
+        <label for="filtroCurso" class="form-label">Filtrar por curso</label>
+        <select id="filtroCurso" class="form-select">
+          <option value="todos">Todos os cursos</option>
+        </select>
+      </div>
+      <div class="col-sm-6 col-md-4">
+        <label for="buscarNome" class="form-label">Buscar por nome</label>
+        <input id="buscarNome" class="form-control" placeholder="Digite um nome..." />
+      </div>
+    </div>
+
+    <div id="listaCurriculos" class="row g-4">
+      <!-- Cards serão inseridos aqui -->
+    </div>
+
+    <div id="mensagem" class="no-results"></div>
+  </main>
+
+  <!-- Modal Visualizar Currículo -->
+  <div class="modal fade" id="visualizarCurriculoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <h5 class="modal-title" id="modalCurriculoNome"></h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <p id="modalCurriculoContato" class="small-muted"></p>
+          <h6>Formação</h6>
+          <p id="modalCurriculoEducacao"></p>
+          <h6>Objetivo</h6>
+          <p id="modalCurriculoObjetivo"></p>
+          <h6>Habilidades</h6>
+          <ul id="modalCurriculoHabilidades"></ul>
+          <h6>Experiência</h6>
+          <p id="modalCurriculoExperiencia"></p>
+          <h6>Cursos e Complementos</h6>
+          <p id="modalCurriculoCursos"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Fechar</button>
+          <a id="modalBtnContatar" class="btn btn-modern" href="#">Contatar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <script>
+    // Simple HTML escaper
+    function escapeHtml (unsafe) {
+      if (unsafe === null || unsafe === undefined) return '';
+      return String(unsafe)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Cache global
+    window.curriculosCache = [];
+
+    // Fetch currículos e inicializa filtros
+    async function carregarCurriculos () {
+      const container = document.getElementById('listaCurriculos');
+      const mensagem = document.getElementById('mensagem');
+      container.innerHTML = '<div class="text-center py-5">Carregando currículos...</div>';
+      mensagem.textContent = '';
+
+      try {
+        const res = await fetch('../back-end/listar_curriculos.php', { credentials: 'include' });
+        if (!res.ok) throw new Error('Resposta inválida: ' + res.status);
+        const data = await res.json();
+        window.curriculosCache = Array.isArray(data) ? data : [];
+        popularFiltroCursos();
+        aplicarFiltros();
+      } catch (err) {
+        container.innerHTML = '';
+        mensagem.innerHTML = '<div class="alert alert-danger">Erro ao carregar currículos: ' + escapeHtml(err.message) + '</div>';
+        console.error(err);
+      }
+    }
+
+    function popularFiltroCursos () {
+      const select = document.getElementById('filtroCurso');
+      // limpar opções exceto 'todos'
+      Array.from(select.options).forEach(opt => { if (opt.value !== 'todos') opt.remove(); });
+      const cursos = new Set();
+      (window.curriculosCache || []).forEach(c => {
+        const curso = (c.curso || '').trim();
+        if (curso) cursos.add(curso);
+      });
+      Array.from(cursos).sort().forEach(curso => {
+        const opt = document.createElement('option');
+        opt.value = curso;
+        opt.textContent = curso;
+        select.appendChild(opt);
+      });
+    }
+
+    function aplicarFiltros () {
+      const curso = document.getElementById('filtroCurso').value || 'todos';
+      const busca = document.getElementById('buscarNome').value.trim().toLowerCase();
+      const lista = (window.curriculosCache || []).filter(c => {
+        const matchCurso = (curso === 'todos') || ((c.curso || '') === curso);
+        const matchNome = !busca || ((c.nome || '').toLowerCase().includes(busca));
+        return matchCurso && matchNome;
+      });
+      renderizarCurriculos(lista);
+    }
+
+    function renderizarCurriculos (curriculos) {
+      const container = document.getElementById('listaCurriculos');
+      const mensagem = document.getElementById('mensagem');
+      container.innerHTML = '';
+      mensagem.textContent = '';
+
+      if (!Array.isArray(curriculos) || curriculos.length === 0) {
+        mensagem.innerHTML = '<div class="alert alert-warning">Nenhum currículo encontrado.</div>';
+        return;
+      }
+
+      curriculos.forEach(c => {
+        const cardCol = document.createElement('div');
+        cardCol.className = 'col-12 col-md-6 col-lg-4';
+
+        const nome = escapeHtml(c.nome || '(sem nome)');
+        const curso = escapeHtml(c.curso || '');
+        const periodo = escapeHtml(c.periodo || '');
+        const habilidades = escapeHtml(c.habilidades || '');
+        const email = escapeHtml(c.email || '');
+        const telefone = escapeHtml(c.telefone || '');
+
+        cardCol.innerHTML = `
+          <div class="card curriculo-card h-100">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">${nome}</h5>
+              <p class="mb-1"><strong>Curso:</strong> ${curso} <span class="text-muted">${periodo ? '• ' + periodo : ''}</span></p>
+              <p class="mb-2 small-muted"><strong>Habilidades:</strong> ${habilidades ? (habilidades.length > 120 ? escapeHtml(habilidades).slice(0,120) + '...' : escapeHtml(habilidades)) : '-'}</p>
+              <div class="mt-auto d-flex gap-2">
+                <button class="btn btn-modern btn-sm" onclick="contatar('${email}','${nome.replace(/'/g,"\\'")}")">Contatar</button>
+                <button class="btn btn-outline-danger btn-sm" onclick="visualizarCurriculo('${c.id}')">Visualizar</button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(cardCol);
+      });
+    }
+
+    function contatar (email, nome) {
+      if (!email) { alert('Email não disponível.'); return; }
+      const subject = encodeURIComponent('Contato sobre vaga de estágio');
+      const body = encodeURIComponent('Olá ' + nome + ',%0D%0A%0D%0AVi seu currículo no portal de estágios e gostaria de conversar.%0D%0A%0D%0AAtenciosamente,');
+      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    }
+
+    function visualizarCurriculo (id) {
+      const curriculo = (window.curriculosCache || []).find(x => String(x.id) === String(id));
+      if (!curriculo) return;
+      document.getElementById('modalCurriculoNome').textContent = curriculo.nome || '';
+      const contatoParts = [];
+      if (curriculo.idade) contatoParts.push('Idade: ' + curriculo.idade);
+      if (curriculo.telefone) contatoParts.push('Telefone: ' + curriculo.telefone);
+      if (curriculo.email) contatoParts.push('E-mail: ' + curriculo.email);
+      document.getElementById('modalCurriculoContato').textContent = contatoParts.join(' | ');
+      document.getElementById('modalCurriculoEducacao').textContent = (curriculo.curso ? curriculo.curso + (curriculo.periodo ? ' • ' + curriculo.periodo : '') : '');
+      document.getElementById('modalCurriculoObjetivo').textContent = curriculo.objetivo || '';
+
+      const habEl = document.getElementById('modalCurriculoHabilidades');
+      habEl.innerHTML = '';
+      const habilidades = (curriculo.habilidades || '');
+      if (habilidades) {
+        habilidades.split(',').map(s => s.trim()).filter(Boolean).forEach(h => {
+          const li = document.createElement('li'); li.textContent = h; habEl.appendChild(li);
+        });
+      }
+
+      document.getElementById('modalCurriculoExperiencia').textContent = curriculo.experiencia || '';
+      document.getElementById('modalCurriculoCursos').textContent = curriculo.cursos || '';
+
+      const btn = document.getElementById('modalBtnContatar');
+      if (curriculo.email) {
+        btn.href = `mailto:${encodeURIComponent(curriculo.email)}?subject=${encodeURIComponent('Contato sobre seu currículo')}`;
+        btn.classList.remove('disabled');
+      } else {
+        btn.href = '#'; btn.classList.add('disabled');
+      }
+
+      const modal = new bootstrap.Modal(document.getElementById('visualizarCurriculoModal'));
+      modal.show();
+    }
+
+    // Event bindings
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('filtroCurso').addEventListener('change', aplicarFiltros);
+      document.getElementById('buscarNome').addEventListener('input', function () { setTimeout(aplicarFiltros, 150); });
+      carregarCurriculos();
+    });
+  </script>
+</body>
+
+</html>

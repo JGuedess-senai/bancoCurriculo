@@ -893,7 +893,7 @@
             <div class="card stats-card h-100">
               <div class="card-body text-center">
                 <i class="fa-solid fa-briefcase"></i>
-                <h3 class="card-title">15</h3>
+                <h3 id="estat-vagas-ativas" class="card-title">0</h3>
                 <p class="card-text">Vagas Ativas</p>
               </div>
             </div>
@@ -902,7 +902,7 @@
             <div class="card stats-card h-100">
               <div class="card-body text-center">
                 <i class="fa-solid fa-users"></i>
-                <h3 class="card-title">42</h3>
+                <h3 id="estat-candidatos" class="card-title">0</h3>
                 <p class="card-text">Candidatos</p>
               </div>
             </div>
@@ -911,7 +911,7 @@
             <div class="card stats-card h-100">
               <div class="card-body text-center">
                 <i class="fa-solid fa-clock"></i>
-                <h3 class="card-title">8</h3>
+                <h3 id="estat-pendentes" class="card-title">0</h3>
                 <p class="card-text">Candidaturas Pendentes</p>
               </div>
             </div>
@@ -934,7 +934,7 @@
               <div class="card-body">
                 <h4 class="card-title"><i class="fa-solid fa-search text-danger me-2"></i>Visualizar Currículos</h4>
                 <p class="card-text">Explore os perfis dos candidatos que se candidataram às suas vagas.</p>
-                <a href="verCurriculos.html" class="btn-modern">Ver Currículo</a>
+                <a href="verCurriculos_new.html" class="btn-modern">Ver Currículo</a>
               </div>
             </div>
           </div>
@@ -1091,22 +1091,22 @@
     crossorigin="anonymous"></script>
 
   <script>
-        // Estatísticas reais nos cards
+        // Estatísticas reais nos cards (painel da empresa)
         async function carregarEstatisticasEmpresa() {
           try {
-            const res = await fetch('../back-end/get_estatisticas.php');
+            const res = await fetch('../back-end/get_estatisticas.php', { credentials: 'include' });
+            if (!res.ok) return;
             const stats = await res.json();
-            // Vagas disponíveis
-            const vagasCard = document.querySelector('.stats-card .card-text:contains("Vagas Disponíveis")');
-            if (vagasCard) vagasCard.previousElementSibling.textContent = stats.vagas || '0';
-            // Candidaturas enviadas
-            const enviadasCard = document.querySelector('.stats-card .card-text:contains("Candidaturas Enviadas")');
-            if (enviadasCard) enviadasCard.previousElementSibling.textContent = stats.candidaturas_enviadas || '0';
-            // Candidaturas pendentes
-            const pendentesCard = document.querySelector('.stats-card .card-text:contains("Candidaturas Pendentes")');
-            if (pendentesCard) pendentesCard.previousElementSibling.textContent = stats.candidaturas_pendentes || '0';
+
+            const vagasAtivasEl = document.getElementById('estat-vagas-ativas');
+            const candidatosEl = document.getElementById('estat-candidatos');
+            const pendentesEl = document.getElementById('estat-pendentes');
+
+            if (vagasAtivasEl) vagasAtivasEl.textContent = (stats.vagas_ativas ?? stats.vagas ?? 0).toString();
+            if (candidatosEl) candidatosEl.textContent = (stats.candidatos ?? 0).toString();
+            if (pendentesEl) pendentesEl.textContent = (stats.candidaturas_pendentes_empresa ?? stats.candidaturas_pendentes ?? 0).toString();
           } catch (err) {
-            // Se erro, mantém valores default
+            console.error('Erro ao carregar estatísticas:', err);
           }
         }
         window.addEventListener('DOMContentLoaded', carregarEstatisticasEmpresa);

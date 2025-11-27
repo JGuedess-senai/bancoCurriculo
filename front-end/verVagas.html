@@ -1234,6 +1234,14 @@
                             <ul id="modalVagaRequisitos" class="list-unstyled"></ul>
                         </div>
                         <div class="vaga-section">
+                            <h3>Carga Horária</h3>
+                            <p id="modalVagaCarga">Carregando...</p>
+                        </div>
+                        <div class="vaga-section">
+                            <h3>Salário</h3>
+                            <p id="modalVagaSalario">Carregando...</p>
+                        </div>
+                        <div class="vaga-section">
                             <h3>Benefícios</h3>
                             <p id="modalVagaBeneficios">Carregando benefícios...</p>
                         </div>
@@ -1241,15 +1249,83 @@
                             <h3>Localização</h3>
                             <p id="modalVagaLocalizacao">Carregando localização...</p>
                         </div>
+                        <div class="vaga-section">
+                            <h3>Curso de Preferência</h3>
+                            <p id="modalVagaTipo">Carregando...</p>
+                        </div>
+                        <div class="vaga-section">
+                            <h3>Data de Expiração</h3>
+                            <p id="modalVagaDataExpiracao">Carregando...</p>
+                        </div>
+                        <div class="vaga-section">
+                            <h3>Informações Adicionais</h3>
+                            <div id="modalVagaDetalhes"><small class="text-muted">Carregando...</small></div>
+                        </div>
                         <div class="d-flex gap-2">
-                            <button class="btn btn-modern" onclick="editarVaga('')">Editar</button>
-                            <button class="btn btn-outline-danger" onclick="excluirVaga('')">Excluir</button>
+                            <button id="modalEditarBtn" class="btn btn-modern">Editar</button>
+                            <button id="modalExcluirBtn" class="btn btn-outline-danger">Excluir</button>
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+                        <!-- Modal Editar Vaga -->
+                        <div class="modal fade" id="editarVagaModal" tabindex="-1" aria-labelledby="editarVagaModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h2 class="modal-title" id="editarVagaModalLabel"><i class="fa-solid fa-pen-to-square"></i> Editar Vaga</h2>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="formEditarVaga">
+                                            <input type="hidden" name="vaga_id" value="">
+                                            <div class="row">
+                                                <div class="col-12 mb-3">
+                                                    <label class="form-label">Título</label>
+                                                    <input name="titulo" class="form-control" required>
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <label class="form-label">Descrição</label>
+                                                    <textarea name="descricao" class="form-control" rows="4"></textarea>
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <label class="form-label">Requisitos (uma por linha ou separados por vírgula)</label>
+                                                    <textarea name="requisitos" class="form-control" rows="3"></textarea>
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label class="form-label">Carga Horária</label>
+                                                    <input name="carga_horaria" class="form-control">
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label class="form-label">Salário</label>
+                                                    <input name="salario" class="form-control">
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label class="form-label">Local</label>
+                                                    <input name="local" class="form-control">
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label class="form-label">Curso / Tipo</label>
+                                                    <input name="tipo" class="form-control">
+                                                </div>
+                                                <div class="col-6 mb-3">
+                                                    <label class="form-label">Data de Expiração</label>
+                                                    <input type="date" name="data_expiracao" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-end gap-2 mt-3">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                <button type="submit" class="btn btn-modern">Salvar Alterações</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -1275,43 +1351,178 @@
                 }
 
                 function renderizarVagas(vagas = []) {
-                        const container = document.getElementById("listaVagas");
-                        if (!container) return;
-                        container.innerHTML = '';
-                        if (!Array.isArray(vagas) || vagas.length === 0) {
-                                container.innerHTML = "<div class='alert alert-warning'>Nenhuma vaga encontrada.</div>";
-                                return;
-                        }
-                        vagas.forEach(vaga => {
-                                const card = document.createElement("div");
-                                card.className = "col";
-                                card.innerHTML = `
-            <div class=\"card vaga-card\">
-                <div class=\"card-body\">
-                    <h3 class=\"card-title mb-3\">${vaga.titulo}</h3>
-                    <p class=\"card-text\"><strong>Empresa:</strong> ${vaga.empresa_nome}</p>
-                    <p class=\"card-text\"><strong>Descrição:</strong> ${vaga.descricao}</p>
-                    <div class=\"d-flex gap-2\">
-                        <button class=\"btn btn-modern\" onclick=\"visualizarVaga('${vaga.titulo}')\">Visualizar</button>
-                    </div>
-                </div>
-            </div>
-        `;
-                                container.appendChild(card);
-                        });
+                    const container = document.getElementById("listaVagas");
+                    if (!container) return;
+                    container.innerHTML = '';
+                    if (!Array.isArray(vagas) || vagas.length === 0) {
+                        container.innerHTML = "<div class='alert alert-warning'>Nenhuma vaga encontrada.</div>";
+                        return;
+                    }
+                    // cache global para uso em modais/editar
+                    window.vagasCache = vagas;
+                    vagas.forEach(vaga => {
+                        const card = document.createElement("div");
+                        card.className = "col";
+                        card.innerHTML = `
+                <div class=\"card vaga-card\">\n                <div class=\"card-body\">\n                    <h3 class=\"card-title mb-3\">${vaga.titulo}</h3>\n                    <p class=\"card-text\"><strong>Empresa:</strong> ${vaga.empresa_nome}</p>\n                    <p class=\"card-text\"><strong>Descrição:</strong> ${vaga.descricao}</p>\n                    <div class=\"d-flex gap-2\">\n                        <button class=\"btn btn-modern\" onclick=\"visualizarVaga(${vaga.id})\">Visualizar</button>\n                        <button class=\"btn btn-outline-primary\" onclick=\"editarVaga(${vaga.id})\">Editar</button>\n                        <button class=\"btn btn-outline-danger\" onclick=\"excluirVaga(${vaga.id})\">Excluir</button>\n                    </div>\n                </div>\n            </div>\n        `;
+                        container.appendChild(card);
+                    });
                 }
 
                 window.addEventListener('load', carregarVagas);
 
-        function excluirVaga(titulo) {
-            if (confirm(`Deseja excluir a vaga: ${titulo}?`)) {
-                // Lógica para excluir a vaga
-                alert(`Vaga ${titulo} excluída.`);
+        // Função para mostrar modal com dados completos da vaga
+        let __currentVagaId = null;
+        function visualizarVaga(id) {
+            const vagas = window.vagasCache || [];
+            const vaga = vagas.find(v => Number(v.id) === Number(id));
+            if (!vaga) {
+                alert('Detalhes da vaga não encontrados.');
+                return;
+            }
+            __currentVagaId = Number(id);
+
+            const empresa = vaga.empresa_nome || vaga.empresa || '';
+            const local = vaga.local || vaga.localizacao || '';
+
+            document.getElementById('modalVagaTitulo').textContent = vaga.titulo || '';
+            document.getElementById('modalVagaEmpresa').textContent = `Empresa: ${empresa}`;
+            document.getElementById('modalVagaDescricao').textContent = vaga.descricao || '';
+
+            // Requisitos como lista (suporta quebra de linha ou vírgula)
+            const reqEl = document.getElementById('modalVagaRequisitos');
+            if (reqEl) {
+                const requisitos = vaga.requisitos || '';
+                if (requisitos.includes('\n')) {
+                    reqEl.innerHTML = requisitos.split('\n').filter(i => i.trim()).map(i => `<li>${i.trim()}</li>`).join('');
+                } else if (requisitos.includes(',')) {
+                    reqEl.innerHTML = requisitos.split(',').filter(i => i.trim()).map(i => `<li>${i.trim()}</li>`).join('');
+                } else {
+                    reqEl.innerHTML = requisitos ? `<li>${requisitos}</li>` : '';
+                }
+            }
+
+            const cargaEl = document.getElementById('modalVagaCarga'); if (cargaEl) cargaEl.textContent = vaga.carga_horaria || '';
+            const salarioEl = document.getElementById('modalVagaSalario'); if (salarioEl) salarioEl.textContent = vaga.salario || 'Não informado';
+            const benEl = document.getElementById('modalVagaBeneficios'); if (benEl) benEl.textContent = vaga.beneficios || '';
+            const locEl = document.getElementById('modalVagaLocalizacao'); if (locEl) locEl.textContent = local || '';
+            const tipoEl = document.getElementById('modalVagaTipo'); if (tipoEl) tipoEl.textContent = vaga.tipo || 'Não especificado';
+            const dataExpEl = document.getElementById('modalVagaDataExpiracao'); if (dataExpEl) dataExpEl.textContent = vaga.data_expiracao ? new Date(vaga.data_expiracao).toLocaleDateString('pt-BR') : 'Não informada';
+
+            // detalhes adicionais
+            const detalhesEl = document.getElementById('modalVagaDetalhes');
+            if (detalhesEl) {
+                detalhesEl.innerHTML = '';
+                const skip = new Set(['id','empresa_id','titulo','descricao','requisitos','carga_horaria','salario','local','localizacao','tipo','data_criacao','data_expiracao','ativo','empresa_nome','beneficios','curso']);
+                Object.keys(vaga).forEach(k => {
+                    if (skip.has(k)) return;
+                    let val = vaga[k];
+                    if (val === null || val === undefined || val === '') return;
+                    const label = k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                    const row = document.createElement('div');
+                    row.className = 'mb-2';
+                    row.innerHTML = `<strong>${label}:</strong> ${escapeHtml(String(val))}`;
+                    detalhesEl.appendChild(row);
+                });
+                if (detalhesEl.children.length === 0) detalhesEl.innerHTML = '<small class="text-muted">Nenhum detalhe adicional.</small>';
+            }
+
+            // configurar botões do modal
+            const editBtn = document.getElementById('modalEditarBtn');
+            const delBtn = document.getElementById('modalExcluirBtn');
+            if (editBtn) editBtn.onclick = () => editarVaga(id);
+            if (delBtn) delBtn.onclick = () => excluirVaga(id);
+
+            const modal = new bootstrap.Modal(document.getElementById('visualizarVagaModal'));
+            modal.show();
+        }
+
+        // Função para abrir modal de edição com formulário preenchido
+        function editarVaga(id) {
+            const vagas = window.vagasCache || [];
+            const vaga = vagas.find(v => Number(v.id) === Number(id));
+            if (!vaga) { alert('Vaga não encontrada para edição'); return; }
+
+            // preencher form
+            const form = document.getElementById('formEditarVaga');
+            if (!form) return;
+            form.querySelector('[name=vaga_id]').value = vaga.id;
+            form.querySelector('[name=titulo]').value = vaga.titulo || '';
+            form.querySelector('[name=descricao]').value = vaga.descricao || '';
+            form.querySelector('[name=requisitos]').value = vaga.requisitos || '';
+            form.querySelector('[name=carga_horaria]').value = vaga.carga_horaria || '';
+            form.querySelector('[name=salario]').value = vaga.salario || '';
+            form.querySelector('[name=local]').value = vaga.local || '';
+            form.querySelector('[name=tipo]').value = vaga.tipo || '';
+            form.querySelector('[name=data_expiracao]').value = vaga.data_expiracao ? vaga.data_expiracao.split(' ')[0] : '';
+
+            const modal = new bootstrap.Modal(document.getElementById('editarVagaModal'));
+            modal.show();
+        }
+
+        // Envia atualização para o backend
+        async function submitEditarVaga(e) {
+            e.preventDefault();
+            const form = document.getElementById('formEditarVaga');
+            const data = new FormData(form);
+            try {
+                const res = await fetch('../back-end/editar_vaga.php', { method: 'POST', body: data, credentials: 'same-origin' });
+                const json = await res.json();
+                if (res.ok && (json.status === 'sucesso' || json.status === 'ok')) {
+                    alert(json.mensagem || 'Vaga atualizada com sucesso');
+                    // recarregar lista
+                    carregarVagas();
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('editarVagaModal'));
+                    if (modal) modal.hide();
+                } else {
+                    alert(json.mensagem || 'Erro ao atualizar vaga');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro ao atualizar vaga');
+            }
+        }
+
+        // Excluir vaga (chama backend)
+        async function excluirVaga(id) {
+            if (!confirm('Confirma exclusão desta vaga?')) return;
+            try {
+                const form = new FormData();
+                form.append('vaga_id', id);
+                const res = await fetch('../back-end/excluir_vaga.php', { method: 'POST', body: form, credentials: 'same-origin' });
+                const json = await res.json();
+                if (res.ok && (json.status === 'ok' || json.status === 'sucesso')) {
+                    alert(json.mensagem || 'Vaga excluída');
+                    carregarVagas();
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('visualizarVagaModal'));
+                    if (modal) modal.hide();
+                } else {
+                    alert(json.mensagem || 'Erro ao excluir vaga');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Erro ao excluir vaga');
             }
         }
 
         // Iniciar renderização de vagas após carregar a página
-        window.addEventListener('load', () => renderizarVagas());
+        window.addEventListener('load', () => carregarVagas());
+
+        // Pequeno helper para escapar HTML
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // Vincula envio do formulário de edição ao handler já existente
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('formEditarVaga');
+            if (form) form.addEventListener('submit', submitEditarVaga);
+        });
 
         /* ----------------- Scripts de UI do painel (copiados de painel_aluno.html, adaptados) ----------------- */
 
