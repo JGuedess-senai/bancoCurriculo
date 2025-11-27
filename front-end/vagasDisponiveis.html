@@ -1074,33 +1074,79 @@
             }
         }
 
-        function renderizarVagas(vagas = []) {
-            const container = document.getElementById('listaVagas');
-            if (!container) return;
-            container.innerHTML = '';
-            if (!Array.isArray(vagas) || vagas.length === 0) {
-                container.innerHTML = "<div class='alert alert-warning'>Nenhuma vaga encontrada.</div>";
-                return;
-            }
-            vagas.forEach(vaga => {
-                const card = document.createElement('div');
-                card.className = 'col-12 col-md-6 col-lg-4';
-                card.innerHTML = `
-          <div class=\"card vaga-card\">
-            <div class=\"card-body\">
-              <h3 class=\"card-title\">${vaga.titulo}</h3>
-              <p class=\"card-text\"><strong>Empresa:</strong> ${vaga.empresa_nome}</p>
-              <p class=\"card-text\"><strong>Local:</strong> ${vaga.local}</p>
-              <p class=\"card-text\">${vaga.descricao}</p>
-              <div class=\"d-flex gap-2\">
-                <button class=\"btn btn-modern\" onclick=\"visualizarVaga(${vaga.id})\">Visualizar</button>
-              </div>
-            </div>
-          </div>
-        `;
-                container.appendChild(card);
-            });
-        }
+                function renderizarVagas(vagas = []) {
+                        const container = document.getElementById('listaVagas');
+                        if (!container) return;
+                        container.innerHTML = '';
+                        if (!Array.isArray(vagas) || vagas.length === 0) {
+                                container.innerHTML = "<div class='alert alert-warning'>Nenhuma vaga encontrada.</div>";
+                                return;
+                        }
+                        // cache para reutilizar em modais
+                        window.vagasCache = vagas;
+                        vagas.forEach(vaga => {
+                                const card = document.createElement('div');
+                                card.className = 'col-12 col-md-6 col-lg-4';
+                                card.innerHTML = `
+                    <div class="card vaga-card">
+                        <div class="card-body">
+                            <h3 class="card-title">${vaga.titulo}</h3>
+                            <p class="card-text"><strong>Empresa:</strong> ${vaga.empresa_nome}</p>
+                            <p class="card-text"><strong>Local:</strong> ${vaga.local}</p>
+                            <p class="card-text">${vaga.descricao}</p>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-modern" onclick="visualizarVaga(${vaga.id})">Visualizar</button>
+                                <button class="btn btn-outline-danger btn-candidatar" onclick="candidatarVaga(${vaga.id}, ${vaga.empresa_id ?? 'null'}, this)">Candidatar</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                                container.appendChild(card);
+                        });
+                }
+
+                // Função para candidatar o aluno a uma vaga
+                async function candidatarVaga(vagaId, empresaId, btn) {
+                        if (!confirm('Deseja realmente se candidatar a esta vaga?')) return;
+                        if (btn) {
+                                btn.disabled = true;
+                        }
+                        const originalText = btn ? btn.textContent : '';
+                        try {
+                                if (btn) btn.textContent = 'Enviando...';
+
+                                const res = await fetch('../back-end/candidatar.php', {
+                                        method: 'POST',
+                                        credentials: 'same-origin',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({ vaga_id: vagaId, empresa_id: empresaId })
+                                });
+
+                                if (res.status === 401) {
+                                        alert('Você precisa estar logado como aluno para se candidatar. Faça login e tente novamente.');
+                                        if (btn) { btn.disabled = false; btn.textContent = originalText; }
+                                        return;
+                                }
+
+                                const data = await res.json();
+                                if (res.ok && data.status === 'ok') {
+                                        alert(data.mensagem || 'Candidatura enviada com sucesso.');
+                                        if (btn) {
+                                                btn.textContent = 'Candidatado';
+                                                btn.classList.remove('btn-outline-danger');
+                                                btn.classList.add('btn-success');
+                                                btn.disabled = true;
+                                        }
+                                } else {
+                                        alert(data.mensagem || 'Erro ao enviar candidatura.');
+                                        if (btn) { btn.disabled = false; btn.textContent = originalText; }
+                                }
+                        } catch (err) {
+                                console.error('Erro ao candidatar:', err);
+                                alert('Erro ao enviar candidatura. Tente novamente.');
+                                if (btn) { btn.disabled = false; btn.textContent = originalText; }
+                        }
+                }
 
         function mostrarInteresse(titulo, empresa) {
             alert(`Seu interesse na vaga "${titulo}" da empresa "${empresa}" foi registrado!`);
@@ -1136,24 +1182,41 @@
             document.getElementById('modalVagaEmpresa').textContent = `Empresa: ${empresa}`;
             document.getElementById('modalVagaDescricao').textContent = vaga.descricao || '';
 
-            // Requisitos como lista
+            // Requisitos (formatar como lista)
             const reqEl = document.getElementById('modalVagaRequisitos');
             if (reqEl) {
                 const requisitos = vaga.requisitos || '';
-                reqEl.innerHTML = requisitos ? requisitos.split(',').map(item => `<li>${item.trim()}</li>`).join('') : '';
+                if (requisitos.includes('\n')) {
+                    reqEl.innerHTML = requisitos.split('\n').filter(item => item.trim()).map(item => `<li>${item.trim()}</li>`).join('');
+                } else if (requisitos.includes(',')) {
+                    reqEl.innerHTML = requisitos.split(',').filter(item => item.trim()).map(item => `<li>${item.trim()}</li>`).join('');
+                } else {
+                    reqEl.innerHTML = requisitos ? `<li>${requisitos}</li>` : '';
+                }
             }
 
-            // Benefícios e localização
-            const benEl = document.getElementById('modalVagaBeneficios');
-            if (benEl) benEl.textContent = vaga.beneficios || '';
+            // Carga Horária
+            const cargaEl = document.getElementById('modalVagaCarga');
+            if (cargaEl) cargaEl.textContent = vaga.carga_horaria || '';
+
+            // Salário
+            const salarioEl = document.getElementById('modalVagaSalario');
+            if (salarioEl) salarioEl.textContent = vaga.salario || 'Não informado';
+
+            // Localização
             const locEl = document.getElementById('modalVagaLocalizacao');
             if (locEl) locEl.textContent = local || '';
 
-            // Campos adicionais (exibidos em seções menores)
-            const cargaEl = document.getElementById('modalVagaCarga'); if (cargaEl) cargaEl.textContent = vaga.carga_horaria || '';
-            const salarioEl = document.getElementById('modalVagaSalario'); if (salarioEl) salarioEl.textContent = vaga.salario || '';
-            const tipoEl = document.getElementById('modalVagaTipo'); if (tipoEl) tipoEl.textContent = vaga.tipo || '';
-            const dataExpEl = document.getElementById('modalVagaDataExpiracao'); if (dataExpEl) dataExpEl.textContent = vaga.data_expiracao || '';
+            // Curso de Preferência (tipo)
+            const tipoEl = document.getElementById('modalVagaTipo');
+            if (tipoEl) tipoEl.textContent = vaga.tipo || 'Não especificado';
+
+            // Data de Expiração
+            const dataExpEl = document.getElementById('modalVagaDataExpiracao');
+            if (dataExpEl) {
+                const dataParsed = vaga.data_expiracao ? new Date(vaga.data_expiracao).toLocaleDateString('pt-BR') : '';
+                dataExpEl.textContent = dataParsed || 'Não informada';
+            }
 
             // Preencher seção de detalhes com quaisquer outros campos cadastrados
             const detalhesEl = document.getElementById('modalVagaDetalhes');
@@ -1175,6 +1238,17 @@
             }
 
             const modal = new bootstrap.Modal(document.getElementById('visualizarVagaModal'));
+
+            // Configurar botão de candidatar dentro do modal para usar a vaga atual
+            const candidatarBtn = document.getElementById('modalCandidatarBtn');
+            if (candidatarBtn) {
+                candidatarBtn.onclick = function () { candidatarVaga(vaga.id, vaga.empresa_id ?? null, this); };
+                // restaurar estilo caso estivesse alterado
+                candidatarBtn.classList.remove('btn-success');
+                candidatarBtn.classList.add('btn-outline-danger');
+                candidatarBtn.disabled = false;
+            }
+
             modal.show();
         }
 
@@ -1392,20 +1466,32 @@
                             <ul id="modalVagaRequisitos" class="list-unstyled"></ul>
                         </div>
                         <div class="vaga-section">
-                            <h3>Benefícios</h3>
-                            <p id="modalVagaBeneficios">Carregando benefícios...</p>
+                            <h3>Carga Horária</h3>
+                            <p id="modalVagaCarga">Carregando...</p>
+                        </div>
+                        <div class="vaga-section">
+                            <h3>Salário</h3>
+                            <p id="modalVagaSalario">Carregando...</p>
                         </div>
                         <div class="vaga-section">
                             <h3>Localização</h3>
                             <p id="modalVagaLocalizacao">Carregando localização...</p>
                         </div>
                         <div class="vaga-section">
-                            <h3>Detalhes</h3>
+                            <h3>Curso de Preferência</h3>
+                            <p id="modalVagaTipo">Carregando...</p>
+                        </div>
+                        <div class="vaga-section">
+                            <h3>Data de Expiração</h3>
+                            <p id="modalVagaDataExpiracao">Carregando...</p>
+                        </div>
+                        <div class="vaga-section">
+                            <h3>Informações Adicionais</h3>
                             <div id="modalVagaDetalhes"><small class="text-muted">Carregando...</small></div>
                         </div>
                         <div class="d-flex gap-2">
-                            <button class="btn btn-modern" onclick="editarVaga('')">Editar</button>
-                            <button class="btn btn-outline-danger" onclick="excluirVaga('')">Excluir</button>
+                            <button id="modalCandidatarBtn" class="btn btn-outline-danger">Candidatar</button>
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                         </div>
                     </div>
                 </div>

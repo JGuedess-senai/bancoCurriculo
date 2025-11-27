@@ -901,7 +901,7 @@
             <div class="card stats-card h-100">
               <div class="card-body text-center">
                 <i class="fa-solid fa-briefcase"></i>
-                <h3 class="card-title">25</h3>
+                <h3 id="estat-vagas" class="card-title">25</h3>
                 <p class="card-text">Vagas Disponíveis</p>
               </div>
             </div>
@@ -910,7 +910,7 @@
             <div class="card stats-card h-100">
               <div class="card-body text-center">
                 <i class="fa-solid fa-users"></i>
-                <h3 class="card-title">3</h3>
+                <h3 id="estat-enviadas" class="card-title">3</h3>
                 <p class="card-text">Candidaturas Enviadas</p>
               </div>
             </div>
@@ -919,7 +919,7 @@
             <div class="card stats-card h-100">
               <div class="card-body text-center">
                 <i class="fa-solid fa-clock"></i>
-                <h3 class="card-title">2</h3>
+                <h3 id="estat-pendentes" class="card-title">2</h3>
                 <p class="card-text">Candidaturas Pendentes</p>
               </div>
             </div>
@@ -1102,19 +1102,24 @@
         // Estatísticas reais nos cards
         async function carregarEstatisticasAluno() {
           try {
-            const res = await fetch('../back-end/get_estatisticas.php');
+            const res = await fetch('../back-end/get_estatisticas.php', { credentials: 'same-origin' });
+            if (!res.ok) {
+              // Se retornar 401/403 ou outro erro, apenas não alteramos os valores
+              return;
+            }
             const stats = await res.json();
-            // Vagas disponíveis
-            const vagasCard = document.querySelector('.stats-card .card-text:contains("Vagas Disponíveis")');
-            if (vagasCard) vagasCard.previousElementSibling.textContent = stats.vagas || '0';
-            // Candidaturas enviadas
-            const enviadasCard = document.querySelector('.stats-card .card-text:contains("Candidaturas Enviadas")');
-            if (enviadasCard) enviadasCard.previousElementSibling.textContent = stats.candidaturas_enviadas || '0';
-            // Candidaturas pendentes
-            const pendentesCard = document.querySelector('.stats-card .card-text:contains("Candidaturas Pendentes")');
-            if (pendentesCard) pendentesCard.previousElementSibling.textContent = stats.candidaturas_pendentes || '0';
+
+            // Atualiza elementos por ID criados no HTML
+            const vagasEl = document.getElementById('estat-vagas');
+            const enviadasEl = document.getElementById('estat-enviadas');
+            const pendentesEl = document.getElementById('estat-pendentes');
+
+            if (vagasEl) vagasEl.textContent = (stats.vagas !== undefined ? stats.vagas : 0);
+            if (enviadasEl) enviadasEl.textContent = (stats.candidaturas_enviadas !== undefined ? stats.candidaturas_enviadas : 0);
+            if (pendentesEl) pendentesEl.textContent = (stats.candidaturas_pendentes !== undefined ? stats.candidaturas_pendentes : 0);
           } catch (err) {
             // Se erro, mantém valores default
+            console.error('Erro ao carregar estatísticas:', err);
           }
         }
         window.addEventListener('DOMContentLoaded', carregarEstatisticasAluno);

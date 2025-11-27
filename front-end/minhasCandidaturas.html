@@ -964,45 +964,59 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
   <script>
-    const candidaturas = [
-      {
-        titulo: "Estágio em Suporte Técnico",
-        empresa: "Tech Solutions",
-        curso: "Informática",
-        status: "Aguardando resposta"
-      },
-      {
-        titulo: "Desenvolvedor Júnior",
-        empresa: "SoftCode",
-        curso: "Desenvolvimento de Sistemas",
-        status: "Aprovado"
-      },
-      {
-        titulo: "Estagiário Administrativo",
-        empresa: "Empresa ABC",
-        curso: "Administração",
-        status: "Reprovado"
+    // Carrega candidaturas do backend
+    async function carregarCandidaturas() {
+      const container = document.getElementById('candidaturasLista');
+      if (!container) return;
+      container.innerHTML = '<div class="text-center py-5">Carregando candidaturas...</div>';
+
+      try {
+        const res = await fetch('../back-end/get_candidaturas.php');
+        if (!res.ok) throw new Error('Status ' + res.status);
+        const candidaturas = await res.json();
+        renderizarCandidaturas(candidaturas);
+      } catch (err) {
+        container.innerHTML = `<div class='alert alert-danger'>Erro ao carregar candidaturas: ${err.message}</div>`;
       }
-    ];
+    }
 
-    function renderizarCandidaturas() {
-      const container = document.getElementById("candidaturasLista");
-
-      if (candidaturas.length === 0) {
-        container.innerHTML = "<div class='col-12'><div class='alert alert-warning'>Você ainda não se candidatou a nenhuma vaga.</div></div>";
+    function renderizarCandidaturas(candidaturas = []) {
+      const container = document.getElementById('candidaturasLista');
+      if (!container) return;
+      container.innerHTML = '';
+      
+      if (!Array.isArray(candidaturas) || candidaturas.length === 0) {
+        container.innerHTML = "<div class='col-12'><div class='alert alert-warning'>Nenhuma candidatura encontrada.</div></div>";
         return;
       }
 
       candidaturas.forEach(c => {
         const card = document.createElement("div");
-        card.className = "col-12 col-md-6 col-lg-4";  // Responsivo com Bootstrap
+        card.className = "col-12 col-md-6 col-lg-4";
+        
+        // Traduzir status do banco para formato legível
+        let statusDisplay = c.status;
+        let statusClass = '';
+        if (c.status === 'em_analise') {
+          statusDisplay = 'Aguardando resposta';
+          statusClass = 'status-aguardando';
+        } else if (c.status === 'aprovado') {
+          statusDisplay = 'Aprovado';
+          statusClass = 'status-aprovado';
+        } else if (c.status === 'rejeitado') {
+          statusDisplay = 'Reprovado';
+          statusClass = 'status-reprovado';
+        }
+        
         card.innerHTML = `
           <div class="card candidatura-card">
             <div class="card-body">
               <h3 class="card-title">${c.titulo}</h3>
-              <p class="card-text"><strong>Empresa:</strong> ${c.empresa}</p>
-              <p class="card-text"><strong>Curso:</strong> ${c.curso}</p>
-              <p class="candidatura-status ${c.status.toLowerCase().includes('aprovado') ? 'status-aprovado' : ''} ${c.status.toLowerCase().includes('aguardando') ? 'status-aguardando' : ''} ${c.status.toLowerCase().includes('reprovado') ? 'status-reprovado' : ''}"><strong>Status:</strong> ${c.status}</p>
+              <p class="card-text"><strong>Empresa:</strong> ${c.empresa_nome}</p>
+              <p class="card-text"><strong>Local:</strong> ${c.local || 'Não informado'}</p>
+              <p class="card-text"><strong>Salário:</strong> ${c.salario || 'A combinar'}</p>
+              <p class="candidatura-status ${statusClass}"><strong>Status:</strong> ${statusDisplay}</p>
+              <small class="text-muted">Candidatura em: ${new Date(c.data_candidatura).toLocaleDateString('pt-BR')}</small>
             </div>
           </div>
         `;
@@ -1010,7 +1024,7 @@
       });
     }
 
-    window.onload = renderizarCandidaturas;
+    window.addEventListener('load', carregarCandidaturas);
   </script>
   
   <script>

@@ -64,6 +64,20 @@ CREATE TABLE avisos (
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Tabela de candidaturas (registro de candidatos em vagas)
+CREATE TABLE IF NOT EXISTS candidaturas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    aluno_id INT NOT NULL,
+    vaga_id INT NOT NULL,
+    empresa_id INT NOT NULL,
+    data_candidatura TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('em_analise','aprovado','rejeitado') DEFAULT 'em_analise',
+    FOREIGN KEY (aluno_id) REFERENCES alunos(id) ON DELETE CASCADE,
+    FOREIGN KEY (vaga_id) REFERENCES vagas(id) ON DELETE CASCADE,
+    FOREIGN KEY (empresa_id) REFERENCES empresas(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_candidatura (aluno_id, vaga_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Tabela de perfil das empresas (informações adicionais exibidas no perfil)
 CREATE TABLE IF NOT EXISTS empresa_perfil (
     id INT AUTO_INCREMENT PRIMARY KEY,
