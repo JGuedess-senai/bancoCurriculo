@@ -55,6 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $check->execute();
     $resCheck = $check->get_result();
 
+    // Preparar dados para inserção/atualização (não inserimos arquivos pois a tabela atual não tem coluna)
     $params = [
         'nome' => $nome,
         'idade' => $idade,
@@ -67,19 +68,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         'objetivo' => $objetivo,
         'habilidades' => $habilidades,
         'experiencia' => $experiencia,
-        'cursos' => $cursos,
-        'curriculo' => $nomeArquivo
+        'cursos' => $cursos
     ];
 
     if ($rowCheck = $resCheck->fetch_assoc()) {
         // Atualizar o registro existente
         $idExistente = intval($rowCheck['id']);
-        $sql = "UPDATE curriculos SET nome = ?, idade = ?, telefone = ?, email = ?, curso = ?, periodo = ?, ano_ingresso = ?, turno = ?, objetivo = ?, habilidades = ?, experiencia = ?, cursos = ?, curriculo = ? WHERE id = ?";
+        $sql = "UPDATE curriculos SET nome = ?, idade = ?, telefone = ?, email = ?, curso = ?, periodo = ?, ano_ingresso = ?, turno = ?, objetivo = ?, habilidades = ?, experiencia = ?, cursos = ? WHERE id = ?";
         $stmt = $conexao->prepare($sql);
         if ($stmt === false) {
             die('Erro ao preparar statement: ' . $conexao->error);
         }
-        $types = 'sissssissssssi';
+        $types = 'sissssisssssi';
         $stmt->bind_param(
             $types,
             $params['nome'],
@@ -94,18 +94,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $params['habilidades'],
             $params['experiencia'],
             $params['cursos'],
-            $params['curriculo'],
             $idExistente
         );
 
     } else {
         // Inserir novo registro
-        $sql = "INSERT INTO curriculos (nome, idade, telefone, email, curso, periodo, ano_ingresso, turno, objetivo, habilidades, experiencia, cursos, curriculo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO curriculos (nome, idade, telefone, email, curso, periodo, ano_ingresso, turno, objetivo, habilidades, experiencia, cursos) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conexao->prepare($sql);
         if ($stmt === false) {
             die('Erro ao preparar statement: ' . $conexao->error);
         }
-        $types = 'sissssissssss';
+        $types = 'sissssisssss';
         $stmt->bind_param(
             $types,
             $params['nome'],
@@ -119,13 +118,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $params['objetivo'],
             $params['habilidades'],
             $params['experiencia'],
-            $params['cursos'],
-            $params['curriculo']
+            $params['cursos']
         );
     }
 
     if ($stmt->execute()) {
-        echo "<script>alert('Currículo salvo com sucesso!'); window.location.href='../front-end/verCurriculos.html';</script>";
+        echo "<script>alert('Currículo salvo com sucesso!'); window.location.href='../front-end/painel_aluno.html';</script>";
     } else {
         echo "Erro ao salvar: " . $stmt->error;
     }

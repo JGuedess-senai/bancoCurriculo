@@ -25,7 +25,7 @@ if ($row = $result->fetch_assoc()) {
     exit;
 }
 
-$stmt = $conexao->prepare("SELECT nome, idade, telefone, email, curso, periodo, ano_ingresso, turno, objetivo, habilidades, experiencia, cursos, curriculo FROM curriculos WHERE email = ? ORDER BY data_envio DESC LIMIT 1");
+$stmt = $conexao->prepare("SELECT nome, idade, telefone, email, curso, periodo, ano_ingresso, turno, objetivo, habilidades, experiencia, cursos FROM curriculos WHERE email = ? ORDER BY data_envio DESC LIMIT 1");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
