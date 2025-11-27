@@ -915,9 +915,11 @@
                     <select id="filtroCurso" class="form-select" onchange="filtrarVagas()">
                         <option value="todas">Todas</option>
                         <option value="Administração">Administração</option>
-                        <option value="Informática">Informática</option>
-                        <option value="Desenvolvimento de Sistemas">Desenvolvimento de Sistemas</option>
                         <option value="Agropecuária">Agropecuária</option>
+                        <option value="Desenvolvimento de Sistemas">Desenvolvimento de Sistemas</option>
+                        <option value="Informática">Informática</option>
+                        <option value="Recursoso Humanos">Recursoso Humanos</option>
+                        <option value="Zootecnia">Zootecnia</option>
                     </select>
                 </div>
 
@@ -1072,6 +1074,22 @@
             } catch (err) {
                 container.innerHTML = `<div class='alert alert-danger'>Erro ao carregar vagas: ${err.message}</div>`;
             }
+        }
+
+        // Função para filtrar vagas por curso
+        function filtrarVagas() {
+            const cursoSelecionado = document.getElementById('filtroCurso').value;
+            const vagas = window.vagasCache || [];
+
+            let vagasFiltradas = vagas;
+            if (cursoSelecionado !== 'todas') {
+                vagasFiltradas = vagas.filter(vaga => {
+                    const tipoCurso = vaga.tipo || '';
+                    return tipoCurso.toLowerCase() === cursoSelecionado.toLowerCase();
+                });
+            }
+
+            renderizarVagas(vagasFiltradas);
         }
 
                 function renderizarVagas(vagas = []) {
